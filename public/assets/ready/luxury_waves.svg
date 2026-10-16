@@ -1,0 +1,43 @@
+<svg xmlns='http://www.w3.org/2000/svg' width='1600' height='1000' viewBox='0 0 1600 1000' fill='none'>
+  <defs>
+    <linearGradient id='champagne-grad' x1='0%' y1='0%' x2='100%' y2='100%'>
+      <stop offset='0%' stop-color='#cbbca4' stop-opacity='0.16'/>
+      <stop offset='50%' stop-color='#00c982' stop-opacity='0.10'/>
+      <stop offset='100%' stop-color='#cbbca4' stop-opacity='0.14'/>
+    </linearGradient>
+    <linearGradient id='mint-grad' x1='0%' y1='0%' x2='100%' y2='0%'>
+      <stop offset='0%' stop-color='#085442' stop-opacity='0.12'/>
+      <stop offset='100%' stop-color='#00c982' stop-opacity='0.15'/>
+    </linearGradient>
+    <linearGradient id='sweep-champagne' x1='0%' y1='0%' x2='100%' y2='100%'>
+      <stop offset='0%' stop-color='#f0e6d6' stop-opacity='0.4'/>
+      <stop offset='50%' stop-color='#d5ede2' stop-opacity='0.25'/>
+      <stop offset='100%' stop-color='#faf4ec' stop-opacity='0.4'/>
+    </linearGradient>
+    <linearGradient id='sweep-mint' x1='0%' y1='0%' x2='100%' y2='0%'>
+      <stop offset='0%' stop-color='#d8f3e5' stop-opacity='0.35'/>
+      <stop offset='100%' stop-color='#f5eee3' stop-opacity='0.25'/>
+    </linearGradient>
+  </defs>
+
+  <!-- Flowing Ribbon 1 (Top Wave Flow) -->
+  <path d='M-100 120 C320 280 620 20 1050 160 C1380 270 1560 90 1700 130' stroke='url(#champagne-grad)' stroke-width='1.75' stroke-dasharray='10 14'/>
+  <path d='M-100 160 C340 320 640 60 1070 200 C1400 310 1580 130 1700 170' stroke='url(#mint-grad)' stroke-width='1.75'/>
+  <path d='M-100 200 C360 360 660 100 1090 240 C1420 350 1600 170 1700 210' stroke='#cbbca4' stroke-opacity='0.12' stroke-width='1.5'/>
+
+  <!-- Soft Translucent Filled Wave Sweep 1 -->
+  <path d='M-100 180 C360 340 660 80 1090 220 C1420 330 1600 150 1700 190 L1700 260 C1600 220 1420 380 1090 270 C660 130 360 390 -100 240 Z' fill='url(#sweep-champagne)'/>
+
+  <!-- Flowing Ribbon 2 (Mid-Page Organic Swell) -->
+  <path d='M-100 460 C260 320 580 620 1000 440 C1320 300 1540 520 1700 470' stroke='url(#mint-grad)' stroke-width='1.75'/>
+  <path d='M-100 500 C280 360 600 660 1020 480 C1340 340 1560 560 1700 510' stroke='#cbbca4' stroke-opacity='0.14' stroke-width='1.75' stroke-dasharray='8 12'/>
+  <path d='M-100 540 C300 400 620 700 1040 520 C1360 380 1580 600 1700 550' stroke='#085442' stroke-opacity='0.10' stroke-width='1.5'/>
+
+  <!-- Soft Translucent Filled Wave Sweep 2 -->
+  <path d='M-100 480 C280 340 600 640 1020 460 C1340 320 1560 540 1700 490 L1700 550 C1560 600 1340 380 1020 510 C600 680 280 390 -100 530 Z' fill='url(#sweep-mint)'/>
+
+  <!-- Flowing Ribbon 3 (Lower Harmonic Wave) -->
+  <path d='M-100 780 C360 640 720 920 1140 740 C1420 620 1580 840 1700 800' stroke='#cbbca4' stroke-opacity='0.14' stroke-width='1.75'/>
+  <path d='M-100 820 C380 680 740 960 1160 780 C1440 660 1600 880 1700 840' stroke='url(#champagne-grad)' stroke-width='1.75' stroke-dasharray='12 16'/>
+  <path d='M-100 860 C400 720 760 1000 1180 820 C1460 700 1620 920 1700 880' stroke='#085442' stroke-opacity='0.09' stroke-width='1.5'/>
+</svg>

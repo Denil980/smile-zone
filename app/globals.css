@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg-dark: #041f1a;
+    --color-primary-mint: #00e599;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #faf8f5;
+    background-image: 
+      /* Subtle flowing organic wave pattern */
+      url("/assets/ready/luxury_waves.svg"),
+      /* Soft champagne & warm ivory ambient lighting */
+      radial-gradient(ellipse 90% 50% at 50% -10%, rgba(0, 201, 130, 0.05), transparent 60%),
+      radial-gradient(circle 700px at 5% 20%, rgba(235, 222, 198, 0.28), transparent 55%),
+      radial-gradient(circle 750px at 95% 35%, rgba(0, 168, 107, 0.04), transparent 50%),
+      radial-gradient(ellipse 85% 45% at 50% 60%, rgba(245, 238, 228, 0.35), transparent 60%),
+      radial-gradient(circle 650px at 8% 80%, rgba(0, 201, 130, 0.04), transparent 45%),
+      radial-gradient(circle 750px at 92% 92%, rgba(235, 222, 198, 0.28), transparent 50%);
+    background-attachment: fixed;
+    background-size: 1600px 1000px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+    background-repeat: repeat-y, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+    color: #0e2922;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 15px rgba(0, 229, 153, 0.45);
+  }
+  .box-glow {
+    box-shadow: 0 0 25px rgba(0, 229, 153, 0.25);
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(231, 223, 213, 0.85);
+  }
+  .glass-card-hover {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .glass-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(13, 56, 48, 0.08), 0 2px 6px rgba(0, 0, 0, 0.02);
+    border-color: rgba(8, 84, 66, 0.4);
+  }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hide scrollbars for carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,475 @@
+"use client";
+
+import React, { useState } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import BookingModal from "@/components/BookingModal";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Calendar,
+  Clock,
+  ArrowRight,
+  X,
+  CheckCircle2,
+  Stethoscope,
+} from "lucide-react";
+
+interface BlogPost {
+  id: string;
+  title: string;
+  category: string;
+  readTime: string;
+  date: string;
+  author: string;
+  image: string;
+  excerpt: string;
+  content: string[];
+  keyTakeaways: string[];
+}
+
+const blogPosts: BlogPost[] = [
+  {
+    id: "pain-free-root-canals",
+    title: "Dispelling Root Canal Myths: Why Rotary Endodontics Is Completely Pain-Free in 2026",
+    category: "Root Canals & Endodontics",
+    readTime: "5 min read",
+    date: "October 10, 2026",
+    author: "Dr. Lajja Kamdar",
+    image: "/assets/site_images/Root-Canal-400x400_c.png",
+    excerpt: "Root canals have historically carried an unfair reputation for pain. Learn how computerized rotary instruments, digital apex locators, and gentle localized anesthetics make modern treatment painless.",
+    content: [
+      "For decades, the phrase 'root canal' struck fear into the hearts of patients. However, dental science has advanced tremendously. At SmileZone Dental Studio in Tilak Nagar, Chembur, Dr. Lajja Kamdar utilizes modern rotary endodontics that eliminates the discomfort traditionally associated with the procedure.",
+      "A root canal treatment becomes necessary when deep decay, trauma, or a cracked tooth allows oral bacteria to infect the living dental pulp inside the tooth canals. Left untreated, this infection causes throbbing pain and abscesses. The root canal procedure simply cleans out the infected pulp tissue, disinfects the microscopic canal walls, and seals the chamber with a sterile biocompatible material called gutta-percha.",
+      "Why is modern treatment painless? First, advanced pH-buffered local anesthetics completely numb the tooth and surrounding periodontal fibers before the procedure even begins. Second, flexible nickel-titanium (NiTi) rotary files operate quietly and smoothly, clearing infected canals in a fraction of the time required by traditional manual hand files. Finally, digital apex locators and low-dose digital sensors ensure pinpoint precision without irritating the bone at the tooth tip.",
+      "Most patients report feeling nothing more than gentle vibration during the procedure, and immediately experience relief from the severe toothache they had arrived with.",
+    ],
+    keyTakeaways: [
+      "Root canal therapy cures pain; it does not cause it.",
+      "Modern rotary nickel-titanium instruments ensure faster, quieter, and smoother canal disinfection.",
+      "Capping the treated tooth with a ceramic or zirconia crown protects it from fracture for decades.",
+    ],
+  },
+  {
+    id: "clear-aligners-vs-braces",
+    title: "Clear Aligners vs. Traditional Braces: What Is the Best Choice for Your Lifestyle?",
+    category: "Cosmetic Dentistry",
+    readTime: "6 min read",
+    date: "September 28, 2026",
+    author: "Dr. Lajja Kamdar",
+    image: "/assets/site_images/braces-400x400_c.png",
+    excerpt: "Want straight teeth without noticeable metal wires? Discover how transparent aligners work, what cases they can treat, and when traditional braces might still be recommended.",
+    content: [
+      "Crooked, rotated, or crowded teeth do more than affect your self-esteem when smiling in photographs; they also create tight food traps where plaque accumulates, drastically increasing your risk of gingivitis and interdental decay.",
+      "Orthodontics has evolved past the days when metal brackets with colorful elastic bands were the only option. Clear aligners—custom-fabricated transparent medical-grade thermoplastic trays—gradually shift your teeth in microscopic increments into optimal alignment.",
+      "The primary advantage of clear aligners is their discreet aesthetics. They are virtually invisible from conversational distance. Furthermore, because they are removable, you can eat all your favorite foods without worrying about breaking brackets, and maintain perfect flossing and brushing hygiene.",
+      "However, discipline is paramount: aligners must be worn for 20 to 22 hours per day to achieve the predicted clinical outcomes. For complex skeletal bite discrepancies or extreme rotations, modern ceramic or self-ligating brackets may still provide the most predictable outcome.",
+    ],
+    keyTakeaways: [
+      "Clear aligners allow you to straighten your smile discreetly without dietary restrictions.",
+      "Aligners require strict compliance: 20-22 hours of daily wear for optimal tooth movement.",
+      "A 3D digital intraoral scan at SmileZone can preview your final smile before starting treatment.",
+    ],
+  },
+  {
+    id: "bruxism-teeth-grinding",
+    title: "5 Subtle Signs You Might Be Grinding Your Teeth at Night (Bruxism)",
+    category: "Preventive Care",
+    readTime: "4 min read",
+    date: "September 15, 2026",
+    author: "Dr. Lajja Kamdar",
+    image: "/assets/ready/clinic_chair.jpg",
+    excerpt: "Morning headaches, unexplained tooth sensitivity, or chipped enamel? You may be grinding or clenching your jaws during sleep without realizing it.",
+    content: [
+      "Bruxism—the involuntary clenching or grinding of teeth, most commonly during sleep—affects nearly one in three adults. Because it happens while you are unconscious, many patients have no idea they suffer from it until significant dental damage has already occurred.",
+      "The forces exerted during nocturnal bruxism can exceed 250 pounds of pressure per square inch. Over time, this constant grinding wears down protective tooth enamel, flattens chewing cusps, and can cause micro-fractures in healthy teeth and existing fillings.",
+      "Key warning signs include: waking up with a dull tension headache radiating around the temples, stiffness or popping in the jaw joint (TMJ), sudden sensitivity to hot and cold foods, and chipped or jagged edges on your front teeth.",
+      "At SmileZone, Dr. Lajja Kamdar fabricates custom-fit nocturnal occlusal splints (nightguards) that cushion the teeth, redistribute jaw forces, and protect your precious natural enamel while you sleep.",
+    ],
+    keyTakeaways: [
+      "Bruxism can exert over 200 lbs of grinding pressure, flattening enamel and causing fractures.",
+      "Morning jaw soreness, temple headaches, and heightened cold sensitivity are classic indicators.",
+      "A custom dental nightguard protects teeth and relieves TMJ muscle tension effectively.",
+    ],
+  },
+  {
+    id: "pediatric-dental-milestones",
+    title: "Pediatric Dental Milestones: Caring for Milk Teeth and Preventing Childhood Cavities",
+    category: "Pediatric Dental Care",
+    readTime: "5 min read",
+    date: "August 30, 2026",
+    author: "Dr. Lajja Kamdar",
+    image: "/assets/ready/treatment_pediatric_photo.jpg",
+    excerpt: "Why are baby teeth so important if they eventually fall out? Practical advice for parents on cavity prevention, pit sealants, and positive dental visits.",
+    content: [
+      "A common misconception among parents is that milk teeth (primary teeth) don't matter because they will eventually be replaced by permanent adult teeth. In reality, primary teeth serve crucial roles in childhood development.",
+      "Milk teeth hold the exact space required for the permanent teeth growing beneath the gums. If a baby tooth is lost prematurely to rampant decay, adjacent teeth drift into the gap, causing severe crowding and impaction of the adult tooth.",
+      "Furthermore, infected milk teeth can transmit bacteria to developing permanent teeth and cause intense pain that disrupts sleep, nutrition, and school performance.",
+      "Preventive pediatric care at SmileZone includes child-friendly fluoride varnish applications, painless pit and fissure sealants that seal chewing grooves against cavity-causing bacteria, and gentle, fun-filled visits that instill lifelong positive attitudes toward oral wellness.",
+    ],
+    keyTakeaways: [
+      "Primary teeth preserve space for adult teeth and guide proper speech and nutrition.",
+      "Preventive pit & fissure sealants reduce molar cavities in children by up to 80%.",
+      "Bringing children for checkups by age 2 builds confidence and eliminates fear.",
+    ],
+  },
+  {
+    id: "dental-implants-vs-dentures",
+    title: "Dental Implants vs. Dentures: What Senior Citizens and Adult Patients Should Know",
+    category: "Dental Implants",
+    readTime: "6 min read",
+    date: "August 14, 2026",
+    author: "Dr. Lajja Kamdar",
+    image: "/assets/site_images/Dental-Implants_image-400x400_c.png",
+    excerpt: "Missing teeth affect nutrition, speech, and jawbone health. Discover the clinical differences between titanium dental implants and modern flexible dentures.",
+    content: [
+      "Losing a natural tooth—whether due to severe periodontal disease, deep fractures, or age-related tooth wear—has an immediate impact on your ability to chew your favorite foods and speak with clarity.",
+      "Historically, removable acrylic dentures were the standard replacement. While modern flexible dentures have improved dramatically in comfort, they do not prevent bone resorption: the jawbone gradually shrinks beneath the gums because there is no tooth root stimulating the bone.",
+      "Dental implants are the gold standard for tooth replacement because they replicate both the crown and the root. Made of biocompatible titanium, the implant fuses directly with the jawbone in a biological process called osseointegration.",
+      "Once restored with a custom ceramic crown, a dental implant looks, feels, and functions exactly like your natural tooth. You can bite into crunchy apples, nuts, and healthy vegetables without fear of slippage.",
+    ],
+    keyTakeaways: [
+      "Implants stimulate jawbone density and prevent facial collapse caused by tooth loss.",
+      "Unlike removable dentures, dental implants never slip, click, or require messy adhesives.",
+      "With good oral hygiene, dental implants can last a lifetime.",
+    ],
+  },
+  {
+    id: "ultrasonic-scaling-gum-health",
+    title: "Why Ultrasonic Teeth Scaling Is Essential for Preventing Gum Disease and Bone Loss",
+    category: "Preventive Care",
+    readTime: "4 min read",
+    date: "July 29, 2026",
+    author: "Dr. Lajja Kamdar",
+    image: "/assets/ready/clinic_reception.jpg",
+    excerpt: "Think brushing twice daily is enough? Discover why professional ultrasonic scaling every 6 months is critical for removing hardened tartar that toothbrushes cannot budge.",
+    content: [
+      "Even the most diligent brushers cannot clean every millimeter of tooth surface. Over time, salivary minerals calcify soft dental plaque into rock-hard calculus (tartar), particularly behind the lower front teeth and along the gum margins.",
+      "Once tartar forms, it acts like a coral reef for harmful anaerobic bacteria. These bacteria release toxins that trigger chronic gum inflammation (gingivitis), leading to bleeding while brushing, persistent bad breath, and swollen red gums.",
+      "If left unaddressed, the inflammation progresses to periodontitis: the gums detach from the teeth, forming deep pockets where bacteria destroy the underlying jawbone supporting the teeth. Periodontitis is the leading cause of adult tooth loss worldwide.",
+      "At SmileZone, our painless ultrasonic scalers use gentle acoustic vibrations combined with fine cooling water jets to safely shatter hardened tartar without harming tooth enamel. Regular cleanings every 6 months keep your gums tight, pink, and healthy.",
+    ],
+    keyTakeaways: [
+      "Tartar cannot be brushed off with a toothbrush; it requires ultrasonic dental scaling.",
+      "Untreated gum inflammation destroys supporting jawbone, leading to tooth mobility.",
+      "Professional cleaning every 6 months prevents bad breath, bleeding gums, and expensive treatments.",
+    ],
+  },
+];
+
+const categories = [
+  "All Articles",
+  "Preventive Care",
+  "Root Canals & Endodontics",
+  "Cosmetic Dentistry",
+  "Pediatric Dental Care",
+  "Dental Implants",
+];
+
+export default function BlogPage() {
+  const [selectedCategory, setSelectedCategory] = useState("All Articles");
+  const [activeArticle, setActiveArticle] = useState<BlogPost | null>(null);
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
+
+  const filteredPosts =
+    selectedCategory === "All Articles"
+      ? blogPosts
+      : blogPosts.filter((item) => item.category === selectedCategory);
+
+  return (
+    <div className="min-h-screen bg-transparent text-[#0A261F] relative selection:bg-mint selection:text-emerald-950 font-sans">
+      {/* Ambient Luxury Glows */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-emerald-400/5 blur-[120px]" />
+        <div className="absolute top-1/3 -right-32 w-96 h-96 rounded-full bg-teal-400/5 blur-[120px]" />
+        <div className="absolute bottom-1/4 left-1/4 w-96 h-96 rounded-full bg-emerald-500/5 blur-[140px]" />
+      </div>
+
+      {/* Floating Global Navbar */}
+      <Navbar onOpenBookingModal={() => setBookingModalOpen(true)} />
+
+      {/* Booking Modal */}
+      <BookingModal
+        isOpen={bookingModalOpen}
+        onClose={() => setBookingModalOpen(false)}
+      />
+
+      <main className="pt-24 sm:pt-32 relative z-10">
+
+        {/* ========================================================= */}
+        {/* FEATURED ARTICLE SPOTLIGHT                                */}
+        {/* ========================================================= */}
+        <section className="py-12 sm:py-16">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
+            <div className="bg-white/95 backdrop-blur-md rounded-3xl sm:rounded-[36px] overflow-hidden border border-[#E7DFD5] hover:border-[#085442] shadow-luxury hover:shadow-luxury-hover hover:shadow-[0_12px_36px_rgba(8,84,66,0.12)] transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-center">
+              <div className="lg:col-span-5 h-64 sm:h-80 lg:h-full relative overflow-hidden bg-slate-900 group">
+                <img
+                  src={blogPosts[0].image}
+                  alt={blogPosts[0].title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#047857] to-[#0A261F] text-white text-xs font-bold uppercase tracking-wider shadow-sm border border-emerald-500/30">
+                    Featured Guide
+                  </span>
+                </div>
+              </div>
+
+              <div className="lg:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-3 text-xs text-[#6B857D] mb-3">
+                    <span className="font-bold text-[#047857] uppercase tracking-wider">
+                      {blogPosts[0].category}
+                    </span>
+                    <span>•</span>
+                    <span className="flex items-center gap-1">
+                      <Clock className="w-3.5 h-3.5 text-[#047857]" /> {blogPosts[0].readTime}
+                    </span>
+                    <span>•</span>
+                    <span>{blogPosts[0].date}</span>
+                  </div>
+
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#0A261F] tracking-tight leading-snug">
+                    {blogPosts[0].title}
+                  </h2>
+
+                  <p className="text-xs sm:text-sm text-[#4A635B] mt-3 leading-relaxed">
+                    {blogPosts[0].excerpt}
+                  </p>
+                </div>
+
+                <div className="mt-6 pt-5 border-t border-[#F0EAE1] flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-[#047857]/20 flex items-center justify-center text-[#047857]">
+                      <Stethoscope className="w-4 h-4 text-[#047857]" />
+                    </div>
+                    <div>
+                      <div className="text-xs font-bold text-[#0A261F]">
+                        {blogPosts[0].author}
+                      </div>
+                      <div className="text-[10px] text-[#8C9E97]">Chief Dental Surgeon</div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setActiveArticle(blogPosts[0])}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] hover:shadow-[0_8px_24px_rgba(0,201,130,0.35)] text-white font-bold text-xs shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer"
+                  >
+                    <span>Read Full Guide</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================= */}
+        {/* ARTICLES GRID & FILTER                                    */}
+        {/* ========================================================= */}
+        <section className="pb-16 sm:pb-24">
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
+            {/* Filter Pills */}
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10 sm:mb-12">
+              {categories.map((cat) => {
+                const isSelected = selectedCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-gradient-to-r from-[#047857] to-[#0A261F] text-white border border-[#047857] shadow-[0_6px_20px_rgba(4,120,87,0.3)] scale-105"
+                        : "bg-white/90 backdrop-blur-md border border-[#E7DFD5] text-[#0A261F] hover:border-[#047857]/50 hover:text-[#047857] shadow-sm"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Articles Grid */}
+            <motion.div
+              layout
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+            >
+              <AnimatePresence mode="popLayout">
+                {filteredPosts.map((post) => (
+                  <motion.div
+                    key={post.id}
+                    layout
+                    initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 16, scale: 0.94 }}
+                    transition={{
+                      layout: { type: "spring", stiffness: 340, damping: 29, mass: 0.8 },
+                      opacity: { duration: 0.28, ease: "easeOut" },
+                      y: { duration: 0.28, ease: "easeOut" },
+                      scale: { duration: 0.28, ease: "easeOut" },
+                    }}
+                    className="bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden border border-[#E7DFD5] hover:border-[#085442] shadow-luxury hover:shadow-luxury-hover hover:shadow-[0_12px_32px_rgba(8,84,66,0.12)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
+                  >
+                    <div>
+                      {/* Card Thumbnail */}
+                      <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute top-3 left-3">
+                          <span className="px-2.5 py-0.5 rounded-full bg-[#0A261F]/80 backdrop-blur-md text-white font-bold text-[10px] uppercase tracking-wider border border-white/20">
+                            {post.category}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-5 sm:p-6">
+                        <div className="flex items-center gap-2 text-[11px] text-[#6B857D] mb-2">
+                          <Clock className="w-3 h-3 text-[#047857]" />
+                          <span>{post.readTime}</span>
+                          <span>•</span>
+                          <span>{post.date}</span>
+                        </div>
+
+                        <h3 className="text-base sm:text-lg font-bold text-[#0A261F] leading-snug group-hover:text-[#047857] transition-colors line-clamp-2">
+                          {post.title}
+                        </h3>
+
+                        <p className="text-xs text-[#4A635B] mt-2 leading-relaxed line-clamp-3">
+                          {post.excerpt}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="p-5 sm:p-6 pt-0 border-t border-[#F0EAE1] flex items-center justify-between mt-auto">
+                      <span className="text-xs font-bold text-[#6B857D]">
+                        By {post.author}
+                      </span>
+
+                      <button
+                        type="button"
+                        onClick={() => setActiveArticle(post)}
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#047857] hover:text-[#00c982] cursor-pointer"
+                      >
+                        <span>Read More</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ========================================================= */}
+        {/* ARTICLE DETAIL READER MODAL                               */}
+        {/* ========================================================= */}
+        <AnimatePresence>
+          {activeArticle && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setActiveArticle(null)}
+                className="fixed inset-0 bg-[#0A261F]/70 backdrop-blur-md"
+              />
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 15 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 15 }}
+                transition={{ duration: 0.25 }}
+                className="relative w-full max-w-3xl bg-[#FAF8F5] rounded-3xl sm:rounded-[36px] border border-[#E7DFD5] shadow-[0_24px_60px_rgba(10,38,31,0.25)] overflow-hidden z-10 my-auto max-h-[92vh] flex flex-col"
+              >
+                {/* Header */}
+                <div className="relative p-6 sm:p-8 bg-gradient-to-r from-[#0A261F] via-[#08382c] to-[#0A261F] text-white pr-14">
+                  <button
+                    type="button"
+                    onClick={() => setActiveArticle(null)}
+                    aria-label="Close article"
+                    className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-mint/20 border border-mint/40 text-mint text-[11px] font-bold uppercase tracking-wider mb-3">
+                    {activeArticle.category}
+                  </div>
+
+                  <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">
+                    {activeArticle.title}
+                  </h2>
+
+                  <div className="flex items-center gap-3 text-xs text-[#c6e6dd] mt-3">
+                    <span>By {activeArticle.author}</span>
+                    <span>•</span>
+                    <span>{activeArticle.readTime}</span>
+                    <span>•</span>
+                    <span>{activeArticle.date}</span>
+                  </div>
+                </div>
+
+                {/* Article Body */}
+                <div className="p-6 sm:p-8 overflow-y-auto space-y-4 text-xs sm:text-sm text-[#4A635B] leading-relaxed bg-[#FAF8F5]">
+                  {activeArticle.content.map((p, idx) => (
+                    <p key={idx}>{p}</p>
+                  ))}
+
+                  {/* Key Takeaways Box */}
+                  <div className="mt-6 bg-[#FAF7F2] border border-[#E7DFD5] rounded-2xl p-5 shadow-sm">
+                    <h4 className="text-xs font-bold text-[#047857] uppercase tracking-wider mb-2.5 flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-[#00b070]" />
+                      Key Clinical Takeaways
+                    </h4>
+                    <ul className="space-y-2 text-xs text-[#0A261F]">
+                      {activeArticle.keyTakeaways.map((item, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#00b070] mt-1.5 shrink-0" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Article Footer CTA */}
+                  <div className="pt-4 flex flex-wrap items-center justify-between gap-4 border-t border-[#E7DFD5]">
+                    <div>
+                      <div className="text-xs font-bold text-[#0A261F]">
+                        Have questions about this treatment?
+                      </div>
+                      <div className="text-[11px] text-[#6B857D]">
+                        Consult Dr. Lajja Kamdar at SmileZone Dental Studio, Chembur.
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveArticle(null);
+                        setBookingModalOpen(true);
+                      }}
+                      className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] hover:shadow-[0_6px_20px_rgba(0,201,130,0.35)] text-white font-bold text-xs shadow-sm cursor-pointer"
+                    >
+                      <Calendar className="w-3.5 h-3.5 text-white" />
+                      <span>Book Consultation</span>
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
+
+        {/* ========================================================= */}
+
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
