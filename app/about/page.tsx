@@ -433,12 +433,12 @@ export default function AboutPage() {
           </div>
 
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-2 sm:pt-4">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pt-0 sm:pt-2">
               {/* Left Column: Doctor Info */}
-              <div className="lg:col-span-6 space-y-6">
+              <div className="lg:col-span-6 space-y-6 pt-0">
                 {/* Heading with Typewriter Animation */}
                 <TypewriterHeading
-                  part1="Dr. Lajja"
+                  part1="Founder Dr. Lajja"
                   part2="Kamdar"
                   hasBreak={false}
                   className="text-3xl sm:text-5xl lg:text-5xl font-black text-[#0A261F] tracking-tight leading-tight"
@@ -446,28 +446,40 @@ export default function AboutPage() {
                 />
 
                 {/* Single Natural Introduction Paragraph (6-8 lines) */}
-                <p className="text-sm sm:text-base text-[#3B5B52] leading-relaxed font-normal">
+                <motion.p
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-sm sm:text-base text-[#3B5B52] leading-relaxed font-normal"
+                >
                   Dr. Lajja Kamdar is a well-reputed Dentist in Tilak Nagar, Chembur. She acquired her degree of bachelor&apos;s in &apos;Dental Surgery&apos; from the prestigious Nair Hospital Dental College, Mumbai in the year 2000. Dr. Lajja has always kept her skills updated with the latest certified courses related to Cosmetic Dentistry, Restorative Dentistry, and Pediatric Dentistry. She is specialized in Full Mouth Rehabilitation with her expertise in SMILE DESIGN involving the latest in dental technology which includes state-of-the-art Flexible Dentures and Dental Implants. Her journey with private practice started in 2001 with SMILEZONE DENTAL STUDIO, which has been upgraded regularly with the latest techniques, machines, and materials to provide the best treatment to her thousands of happy patients. In her 20+ years of private practice, Dr. Lajja has treated numerous complex cases, giving healthy, confident, and long-lasting smiles with gentle care and a patient-first approach.
-                </p>
+                </motion.p>
 
                 {/* CTA Button: View Certificates and Awards */}
-                <div className="pt-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="pt-2"
+                >
                   <button
                     onClick={() => {
                       setSelectedDoctor(doctors[0]);
                       setCertSlideIndex(0);
                     }}
-                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white font-black text-xs sm:text-sm shadow-[0_10px_30px_rgba(0,201,130,0.35)] hover:shadow-[0_15px_35px_rgba(0,201,130,0.5)] transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white font-black text-xs sm:text-sm shadow-[0_10px_30px_rgba(0,201,130,0.35)] hover:shadow-[0_15px_35px_rgba(0,201,130,0.5)] transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95"
                   >
                     <Award className="w-4 h-4 text-white" />
                     <span>View Certificates and Awards</span>
                     <ArrowRight className="w-4 h-4 text-white" />
                   </button>
-                </div>
+                </motion.div>
               </div>
 
               {/* Right Column: Hero Visual with Circular Backdrop, Cutout & 3 Metric Badges Underneath */}
-              <div className="lg:col-span-6 relative flex flex-col items-center justify-center pt-6 lg:pt-0">
+              <div className="lg:col-span-6 relative flex flex-col items-center justify-start pt-4 lg:pt-0">
                 {/* Glowing Circular Halo */}
                 <div className="relative w-[340px] h-[340px] sm:w-[420px] sm:h-[420px] flex items-center justify-center">
                   <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#00d084]/20 via-[#e8dfc8]/30 to-transparent border border-[#E7DFD5] shadow-luxury" />

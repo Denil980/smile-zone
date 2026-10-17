@@ -11,13 +11,9 @@ export function TypewriterHeading({
   className = "",
   part1ClassName = "",
   part2ClassName = "bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent",
-  cursorClassName = "inline-block w-[3px] sm:w-[4px] h-[0.82em] ml-1 bg-[#00c982] align-middle rounded-full animate-pulse shadow-[0_0_10px_rgba(0,201,130,0.6)]",
-  typeSpeed = 70,
-  deleteSpeed = 35,
-  holdTime = 4000,
-  restartDelay = 600,
-  initialDelay = 250,
-  loop = true,
+  cursorClassName = "",
+  typeSpeed = 48,
+  initialDelay = 300,
 }: {
   part1: string;
   part2: string;
@@ -34,67 +30,64 @@ export function TypewriterHeading({
   loop?: boolean;
 }) {
   const containerRef = useRef<HTMLHeadingElement>(null);
-  const isInView = useInView(containerRef, { amount: 0.1 });
+  const isInView = useInView(containerRef, { amount: 0.15, once: true });
   const [mounted, setMounted] = useState(false);
-  const [started, setStarted] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
+  const [showCursor, setShowCursor] = useState(true);
 
   const totalChars = part1.length + part2.length;
 
   useEffect(() => {
     setMounted(true);
-    const startTimer = setTimeout(() => {
-      setStarted(true);
-    }, initialDelay);
-    return () => clearTimeout(startTimer);
-  }, [initialDelay]);
+  }, []);
 
   useEffect(() => {
-    if (!mounted || !started || !isInView) return;
+    if (!mounted || !isInView) return;
 
-    let timer: ReturnType<typeof setTimeout>;
+    let timeoutId: ReturnType<typeof setTimeout>;
 
-    if (!isDeleting) {
-      if (charIndex < totalChars) {
-        const isAtBreak = hasBreak && charIndex === part1.length;
-        const speed = isAtBreak ? 220 : typeSpeed;
-        timer = setTimeout(() => {
-          setCharIndex((prev) => prev + 1);
-        }, speed);
-      } else if (loop) {
-        timer = setTimeout(() => {
-          setIsDeleting(true);
-        }, holdTime);
-      }
-    } else {
-      if (charIndex > 0) {
-        timer = setTimeout(() => {
-          setCharIndex((prev) => prev - 1);
-        }, deleteSpeed);
-      } else {
-        timer = setTimeout(() => {
-          setIsDeleting(false);
-        }, restartDelay);
-      }
+    // Initial natural hesitation before starting
+    if (charIndex === 0 && !isComplete) {
+      timeoutId = setTimeout(() => {
+        setCharIndex(1);
+      }, initialDelay);
+      return () => clearTimeout(timeoutId);
     }
 
-    return () => clearTimeout(timer);
-  }, [
-    charIndex,
-    isDeleting,
-    mounted,
-    started,
-    isInView,
-    totalChars,
-    typeSpeed,
-    deleteSpeed,
-    holdTime,
-    restartDelay,
-    loop,
-    hasBreak,
-    part1.length,
-  ]);
+    if (charIndex < totalChars) {
+      // Natural human typing rhythm (slight micro-fluctuations)
+      const isAtBreak = charIndex === part1.length;
+      let delay = typeSpeed;
+
+      if (isAtBreak) {
+        delay = 220; // Natural breath before second line/word
+      } else {
+        const char = (charIndex <= part1.length ? part1 : part2)[
+          charIndex <= part1.length ? charIndex - 1 : charIndex - part1.length - 1
+        ];
+        if (char === " ") {
+          delay = typeSpeed + 75; // Brief space hesitation
+        } else {
+          delay = typeSpeed + ((charIndex % 3) * 14 - 10);
+        }
+      }
+
+      timeoutId = setTimeout(() => {
+        setCharIndex((prev) => prev + 1);
+      }, delay);
+    } else {
+      // Typing finished cleanly - stabilize text!
+      setIsComplete(true);
+      // Let the cursor blink gracefully for 3 seconds then fade out
+      const fadeCursorTimer = setTimeout(() => {
+        setShowCursor(false);
+      }, 3000);
+      return () => clearTimeout(fadeCursorTimer);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [mounted, isInView, charIndex, totalChars, part1, part2, typeSpeed, initialDelay, isComplete]);
 
   const text1 = part1.slice(0, Math.min(charIndex, part1.length));
   const text2 =
@@ -107,7 +100,7 @@ export function TypewriterHeading({
 
   return (
     <h1 ref={containerRef} className={`relative ${className}`}>
-      {/* Invisible ghost placeholder to strictly preserve layout dimensions without any layout shift */}
+      {/* Invisible ghost layout to strictly prevent any layout shifting */}
       <span className="invisible select-none pointer-events-none block" aria-hidden="true">
         <span className={part1ClassName}>{part1}</span>
         {hasBreak ? <br /> : " "}
@@ -124,16 +117,30 @@ export function TypewriterHeading({
         {mounted ? (
           <>
             <span className={part1ClassName}>{text1}</span>
-            {isCursorAtLine1 && <span className={cursorClassName} />}
+            {isCursorAtLine1 && showCursor && (
+              <span
+                className={`inline-block w-[3.5px] sm:w-[4px] h-[0.85em] ml-1 bg-[#00c982] align-middle rounded-sm shadow-[0_0_12px_rgba(0,201,130,0.9)] animate-cursor-blink transition-opacity duration-500 ${cursorClassName}`}
+              />
+            )}
             {hasBreak ? (
               charIndex > part1.length && <br />
             ) : (
               charIndex > part1.length && " "
             )}
             {charIndex > part1.length && (
-              <span className={part2ClassName}>{text2}</span>
+              <span
+                className={`${part2ClassName} transition-all duration-300 ${
+                  isComplete ? "drop-shadow-[0_2px_12px_rgba(0,201,130,0.25)]" : ""
+                }`}
+              >
+                {text2}
+              </span>
             )}
-            {isCursorAtLine2 && <span className={cursorClassName} />}
+            {isCursorAtLine2 && showCursor && (
+              <span
+                className={`inline-block w-[3.5px] sm:w-[4px] h-[0.85em] ml-1 bg-[#00c982] align-middle rounded-sm shadow-[0_0_12px_rgba(0,201,130,0.9)] animate-cursor-blink transition-opacity duration-500 ${cursorClassName}`}
+              />
+            )}
           </>
         ) : (
           <>
@@ -168,12 +175,7 @@ export default function Hero({ onOpenVideoModal, onOpenBookingModal }: HeroProps
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 relative z-20">
         <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-center gap-10 lg:gap-12">
           {/* Left Column: Content */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="max-w-xl"
-          >
+          <div className="max-w-xl">
             {/* Headline with Typewriter Animation */}
             <TypewriterHeading
               part1="Healthy Smiles"
@@ -183,19 +185,34 @@ export default function Hero({ onOpenVideoModal, onOpenBookingModal }: HeroProps
               part2ClassName="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent"
             />
 
-            {/* Handwritten Cursive Badge */}
-            <div className="flex items-center gap-2 font-script text-2xl sm:text-3xl text-[#085442] mb-5 -rotate-2 select-none">
+            {/* Handwritten Cursive Badge with Smooth Float-In */}
+            <motion.div
+              initial={{ opacity: 0, y: 14, rotate: -5, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, rotate: -2, scale: 1 }}
+              transition={{ duration: 0.65, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+              className="flex items-center gap-2 font-script text-2xl sm:text-3xl text-[#085442] mb-5 select-none"
+            >
               <span>Your Smile Our Priority</span>
               <Heart className="w-5 h-5 text-[#00c982] fill-[#00c982] inline-block animate-pulse" />
-            </div>
+            </motion.div>
 
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-[#3B5B52] leading-relaxed mb-8 max-w-lg">
+            {/* Subtitle with Soft Fade & Lift */}
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              className="text-base sm:text-lg text-[#3B5B52] leading-relaxed mb-8 max-w-lg"
+            >
               At Smile Zone, we combine advanced technology, expert care and a gentle approach to give you a brighter, healthier smile.
-            </p>
+            </motion.p>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap items-center gap-4 sm:gap-5">
+            {/* Action Buttons with Staggered Entrance */}
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-wrap items-center gap-4 sm:gap-5"
+            >
               {/* Primary: Book Appointment CTA */}
               <button
                 type="button"
@@ -229,8 +246,8 @@ export default function Hero({ onOpenVideoModal, onOpenBookingModal }: HeroProps
                 </div>
                 <span className="tracking-tight">Watch Video</span>
               </button>
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
 
           {/* Right Column: Hero Visual with Patient in Chair */}
           <motion.div

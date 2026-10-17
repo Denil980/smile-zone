@@ -111,20 +111,20 @@ export default function AboutClinic() {
             initial={{ opacity: 0, x: -25 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col items-start"
           >
 
             {/* Main Headline (Strictly 2 lines) */}
-            <h2 className="text-2xl sm:text-3xl lg:text-[32px] xl:text-[36px] font-black text-[#0A261F] leading-tight tracking-tight mb-5 sm:mb-6">
-              <span className="block mb-1">Best Family Dentist</span>
-              <span className="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent block whitespace-nowrap pb-2 pt-0.5 leading-snug">
+            <h2 className="text-2xl sm:text-3xl lg:text-[32px] xl:text-[36px] font-black text-[#0A261F] leading-tight tracking-tight mb-7 sm:mb-8">
+              <span className="block mb-1.5">Best Family Dentist</span>
+              <span className="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent inline-block whitespace-nowrap pt-1 pb-3 px-1 -mx-1 leading-normal overflow-visible">
                 in Tilak Nagar, Chembur
               </span>
             </h2>
 
             {/* Subtitle with Emerald Accent Line */}
-            <div className="relative pl-3 border-l-2 border-[#00c982] mb-4">
+            <div className="relative pl-3 border-l-2 border-[#00c982] mb-5">
               <h4 className="text-xs sm:text-sm font-bold text-[#085442] tracking-wide">
                 Best Quality Dental Care at Dr. Lajja&apos;s SmileZone Dental Studio
               </h4>

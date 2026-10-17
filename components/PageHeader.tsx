@@ -126,14 +126,15 @@ export default function PageHeader({
       <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#00c982]/50 to-transparent" />
 
       <div className="max-w-[1240px] mx-auto px-4 sm:px-6 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="max-w-3xl"
-        >
+        <div className="max-w-3xl">
           {/* Breadcrumb: Home / [Page Name] */}
-          <nav aria-label="Breadcrumb" className="mb-4">
+          <motion.nav
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            aria-label="Breadcrumb"
+            className="mb-4"
+          >
             <ol className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-semibold tracking-wide shadow-sm">
               <li>
                 <Link
@@ -148,18 +149,28 @@ export default function PageHeader({
                 {currentPage}
               </li>
             </ol>
-          </nav>
+          </motion.nav>
 
           {/* Page Heading */}
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight mb-3 sm:mb-4">
+          <motion.h1
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
+            className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight mb-3 sm:mb-4"
+          >
             {renderTitle()}
-          </h1>
+          </motion.h1>
 
           {/* What this page is showing */}
-          <p className="text-sm sm:text-base text-[#D2ECE3] leading-relaxed font-normal">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            className="text-sm sm:text-base text-[#D2ECE3] leading-relaxed font-normal"
+          >
             {description}
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
       </div>
     </section>
   );
