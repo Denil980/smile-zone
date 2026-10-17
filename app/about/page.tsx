@@ -309,12 +309,12 @@ export default function AboutPage() {
             <div className="absolute -top-24 right-10 w-80 h-80 bg-[#e8dfc8]/20 blur-[120px] rounded-full" />
           </div>
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
               {/* Left Column: Clinic Narrative & 6 Features */}
               <div className="lg:col-span-6 space-y-6">
                 {/* Main Heading */}
                 <div>
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#092620] tracking-tight leading-tight">
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#092620] tracking-tight leading-tight sm:leading-none">
                     SmileZone{" "}
                     <span className="text-[#0b8064]">Dental Studio</span>
                   </h2>
