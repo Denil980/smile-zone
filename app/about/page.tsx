@@ -25,7 +25,6 @@ import {
   CheckCircle2,
   GraduationCap,
   Clock,
-  ZoomIn,
 } from "lucide-react";
 
 function MetricCounter({
@@ -91,15 +90,6 @@ export default function AboutPage() {
     journey: string;
     clinicalPhilosophy: string;
     keyProcedures: string[];
-  } | null>(null);
-
-  const [selectedCertificate, setSelectedCertificate] = useState<{
-    title: string;
-    issuer: string;
-    date: string;
-    image: string;
-    badge: string;
-    desc: string;
   } | null>(null);
 
   // =========================================================
@@ -495,23 +485,13 @@ export default function AboutPage() {
                         >
                           {/* Passport-Sized Certificate Frame (3:4 ratio) */}
                           <div
-                            onClick={() => setSelectedCertificate(cert)}
-                            title="Hover to zoom • Click for full screen"
-                            className={`relative w-full max-w-[96px] sm:max-w-[108px] aspect-[3/4] rounded-xl bg-white p-1 border-2 border-[#D6EBE0] group-hover:border-[#00c982] shadow-sm group-hover:shadow-[0_25px_50px_rgba(4,38,30,0.38)] cursor-zoom-in transition-all duration-300 ease-out group-hover:scale-[2.35] sm:group-hover:scale-[2.65] group-hover:z-50 group-hover:-translate-y-1 ${originClass} ${desktopEdgeClass}`}
+                            className={`relative w-full max-w-[96px] sm:max-w-[108px] aspect-[3/4] rounded-xl bg-white p-1 border-2 border-[#D6EBE0] group-hover:border-[#00c982] shadow-sm group-hover:shadow-[0_25px_50px_rgba(4,38,30,0.38)] transition-all duration-300 ease-out group-hover:scale-[2.4] sm:group-hover:scale-[2.7] group-hover:z-50 group-hover:-translate-y-1 ${originClass} ${desktopEdgeClass}`}
                           >
                             <img
                               src={cert.image}
                               alt={cert.title}
                               className="w-full h-full object-cover rounded-[8px]"
                             />
-
-                            {/* Subtle Hover Overlay with Zoom Indicator */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[8px] flex items-end justify-center pb-1.5 pointer-events-none">
-                              <span className="text-[7px] font-bold text-white bg-[#085442]/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs uppercase tracking-wider flex items-center gap-0.5">
-                                <ZoomIn className="w-2.5 h-2.5 text-[#00c982]" />
-                                Click to Enlarge
-                              </span>
-                            </div>
                           </div>
 
                           {/* Small Description Below */}
@@ -926,22 +906,13 @@ export default function AboutPage() {
                         {/* One-by-One Certificate Slide Box */}
                         <div className="relative bg-[#f4faf7] border border-[#d6ebe0] rounded-2xl p-4 sm:p-5 shadow-xs">
                           <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center">
-                            <div
-                              className="sm:col-span-5 relative group cursor-pointer"
-                              onClick={() => setSelectedCertificate(certificates[certSlideIndex])}
-                            >
+                            <div className="sm:col-span-5 relative">
                               <div className="aspect-[4/3] bg-white rounded-xl overflow-hidden border border-[#d2ece0] shadow-sm flex items-center justify-center p-2 relative">
                                 <img
                                   src={certificates[certSlideIndex].image}
                                   alt={certificates[certSlideIndex].title}
-                                  className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+                                  className="w-full h-full object-contain"
                                 />
-                                <div className="absolute inset-0 bg-emerald-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
-                                  <span className="px-3 py-1 rounded-full bg-white text-emerald-950 font-bold text-[11px] shadow-md flex items-center gap-1">
-                                    <FileCheck className="w-3.5 h-3.5 text-[#085442]" />
-                                    <span>Full Resolution</span>
-                                  </span>
-                                </div>
                               </div>
                               <span className="absolute top-2 left-2 text-[10px] font-bold bg-[#085442] text-white px-2 py-0.5 rounded-md shadow-xs">
                                 {certificates[certSlideIndex].badge}
@@ -963,10 +934,6 @@ export default function AboutPage() {
 
                               <p className="text-xs text-slate-600 leading-relaxed bg-white/70 p-3 rounded-xl border border-[#e2f1ea]">
                                 {certificates[certSlideIndex].desc}
-                              </p>
-
-                              <p className="text-[10px] text-slate-400 italic">
-                                Click image to preview certificate in full resolution
                               </p>
                             </div>
                           </div>
@@ -1036,59 +1003,6 @@ export default function AboutPage() {
                   <span>Book Appointment with {selectedDoctor.name}</span>
                   <ArrowRight className="w-4 h-4 text-mint" />
                 </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Interactive Certificate Lightbox Modal (For Zooming In) */}
-      <AnimatePresence>
-        {selectedCertificate && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedCertificate(null)}
-            className="fixed inset-0 z-60 bg-black/85 backdrop-blur-md p-4 sm:p-6 flex items-center justify-center"
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border border-mint/40"
-            >
-              <div className="p-4 sm:p-5 bg-gradient-to-r from-[#04261e] to-[#085442] text-white flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-mint block">
-                    {selectedCertificate.badge}
-                  </span>
-                  <h3 className="text-base sm:text-lg font-bold">
-                    {selectedCertificate.title}
-                  </h3>
-                  <p className="text-xs text-[#a3cbbf]">
-                    {selectedCertificate.issuer} • {selectedCertificate.date}
-                  </p>
-                </div>
-                <button
-                  onClick={() => setSelectedCertificate(null)}
-                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/25 text-white flex items-center justify-center transition-colors cursor-pointer"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="p-4 sm:p-6 overflow-y-auto flex items-center justify-center bg-[#f7faf8]">
-                <img
-                  src={selectedCertificate.image}
-                  alt={selectedCertificate.title}
-                  className="max-h-[65vh] w-auto object-contain rounded-xl shadow-lg border border-[#d6ebe0]"
-                />
-              </div>
-
-              <div className="p-3.5 bg-white border-t border-[#d6ebe0] text-center text-xs text-slate-600 font-medium">
-                {selectedCertificate.desc}
               </div>
             </motion.div>
           </motion.div>
