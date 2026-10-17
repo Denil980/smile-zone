@@ -111,17 +111,8 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
               })}
             </nav>
 
-            {/* Right: Phone & Book CTA */}
+            {/* Right: Book CTA */}
             <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-              {/* Call Number Pill */}
-              <a
-                href="tel:+919876543210"
-                className="hidden xl:flex items-center gap-2 py-1.5 px-3.5 rounded-full bg-[#FAF7F2] border border-[#E5DDD2] text-xs text-[#085442] hover:bg-white hover:border-[#085442]/40 transition-all shadow-xs"
-              >
-                <Phone className="w-3.5 h-3.5 text-[#00b070]" />
-                <span className="font-bold text-[#092620] tracking-tight">+91 98765 43210</span>
-              </a>
-
               {/* Glowing Book Button */}
               <button
                 type="button"

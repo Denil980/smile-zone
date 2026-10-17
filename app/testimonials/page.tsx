@@ -163,7 +163,7 @@ export default function TestimonialsPage() {
         onClose={() => setBookingModalOpen(false)}
       />
 
-      <main className="pt-24 sm:pt-32">
+      <main className="pt-28 sm:pt-36 lg:pt-40">
         {/* ========================================================= */}
         {/* FILTERABLE TESTIMONIALS GRID                              */}
         {/* ========================================================= */}

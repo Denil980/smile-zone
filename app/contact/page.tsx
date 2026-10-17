@@ -236,7 +236,7 @@ export default function ContactPage() {
       {/* Floating Global Navbar */}
       <Navbar />
 
-      <main className="pt-24 sm:pt-32 relative z-10">
+      <main className="pt-28 sm:pt-36 lg:pt-40 relative z-10">
         {/* ========================================================= */}
         {/* 3 CORE CONTACT CARDS                                      */}
         {/* ========================================================= */}

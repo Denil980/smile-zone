@@ -276,7 +276,7 @@ export default function GalleryPage() {
         onClose={() => setBookingModalOpen(false)}
       />
 
-      <main className="pt-24 sm:pt-32 relative z-10">
+      <main className="pt-28 sm:pt-36 lg:pt-40 relative z-10">
 
         {/* ========================================================= */}
         {/* INTERACTIVE BEFORE & AFTER GALLERY                        */}

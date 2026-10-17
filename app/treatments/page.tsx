@@ -193,7 +193,7 @@ export default function TreatmentsPage() {
         }}
       />
 
-      <main className="pt-24 sm:pt-32">
+      <main className="pt-28 sm:pt-36 lg:pt-40">
         {/* ========================================================= */}
         {/* 7 TREATMENTS CARDS GRID                                   */}
         {/* ========================================================= */}
