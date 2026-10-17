@@ -226,14 +226,14 @@ const gridContainerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.03,
+      staggerChildren: 0.11, // Slower sequential stagger delay between cards
+      delayChildren: 0.05,
     },
   },
   exit: {
     opacity: 0,
     transition: {
-      duration: 0.12,
+      duration: 0.15,
       ease: "easeOut",
     },
   },
@@ -242,16 +242,16 @@ const gridContainerVariants = {
 const reviewCardVariants = {
   hidden: {
     opacity: 0,
-    y: 35,
-    scale: 0.95,
+    y: 40,
+    scale: 0.96,
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.48,
-      ease: [0.22, 1, 0.36, 1],
+      duration: 0.65, // Slower, silky smooth upward glide
+      ease: [0.16, 1, 0.3, 1], // Luxury deceleration curve
     },
   },
 };
