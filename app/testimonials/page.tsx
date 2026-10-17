@@ -475,104 +475,124 @@ export default function TestimonialsPage() {
         </AnimatePresence>
 
         {/* ========================================================= */}
-        {/* FILTERABLE TESTIMONIALS GRID                              */}
+        {/* SECTION 2: VERIFIED PATIENT REVIEWS & FILTERABLE GRID     */}
         {/* ========================================================= */}
-        <section className="py-10 sm:py-16 relative">
-          <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
-            {/* Filter Pills */}
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10 sm:mb-14">
-              {categories.map((cat) => {
-                const isSelected = selectedCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => handleCategoryClick(cat)}
-                    className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white shadow-[0_6px_20px_rgba(0,201,130,0.35)] scale-105"
-                        : "bg-white border border-[#E7DFD5] text-[#3B5B52] hover:border-[#085442] hover:text-[#085442] shadow-luxury-sm"
-                    }`}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
-            </div>
+        <section className="py-12 sm:py-20 relative">
+          <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
+            {/* Section Outer Glass Container */}
+            <div className="bg-white/80 backdrop-blur-xl border border-[#E7DFD5] rounded-[32px] sm:rounded-[40px] p-6 sm:p-10 lg:p-12 relative overflow-hidden shadow-none">
+              {/* Top Shimmer Accent */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00c982]/40 to-transparent opacity-60" />
 
-            {/* Testimonials Masonry / Grid */}
-            <motion.div
-              layout
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"
-            >
-              <AnimatePresence mode="popLayout">
-                {filteredTestimonials.map((item, index) => (
-                  <motion.div
-                    key={`${selectedCategory}-${filterKey}-${item.id}`}
-                    layout
-                    initial={{ opacity: 0, y: 32, scale: 0.94 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -18, scale: 0.94, transition: { duration: 0.2 } }}
-                    transition={{
-                      duration: 0.44,
-                      delay: index * 0.07, // Staggered delay: 0s, 0.07s, 0.14s, 0.21s... cascading one by one!
-                      ease: [0.22, 1, 0.36, 1],
-                    }}
-                    whileHover={{
-                      y: -6,
-                      boxShadow: "0 16px 36px -10px rgba(0, 201, 130, 0.15)",
-                      borderColor: "#00c982",
-                      transition: { duration: 0.2 },
-                    }}
-                    className="bg-white/95 rounded-3xl p-6 sm:p-7 border border-[#E7DFD5] shadow-none transition-all duration-300 flex flex-col justify-between cursor-pointer group"
-                  >
-                    <div>
-                      {/* Rating Stars & Treatment Tag */}
-                      <div className="flex items-center justify-between gap-2 mb-3">
-                        <div className="flex items-center gap-1 text-amber-500">
-                          {[...Array(item.rating)].map((_, i) => (
-                            <Star key={i} className="w-4 h-4 fill-amber-500 stroke-amber-500" />
-                          ))}
-                        </div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FAF7F2] text-[#085442] border border-[#E7DFD5]">
-                          {item.category}
-                        </span>
-                      </div>
+              {/* Section Header */}
+              <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+                <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-[#FAF7F2] border border-[#E7DFD5] text-[#085442] text-xs font-bold uppercase tracking-wider mb-3 shadow-sm">
+                  <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                  <span>4.9 / 5.0 Rating • 100+ Verified Patient Reviews</span>
+                </div>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0A261F] tracking-tight">
+                  Verified Patient Reviews
+                </h2>
+                <p className="mt-3 text-xs sm:text-sm text-[#3B5B52] leading-relaxed">
+                  Browse authentic feedback categorized by treatment — from painless root canals and pediatric care to smile makeovers and dental implants.
+                </p>
+              </div>
 
-                      {/* Highlight Quote */}
-                      <h3 className="text-sm sm:text-base font-bold text-[#0A261F] leading-snug mb-2.5 group-hover:text-[#085442] transition-colors">
-                        &ldquo;{item.highlight}&rdquo;
-                      </h3>
+              {/* Filter Pills */}
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10 sm:mb-14">
+                {categories.map((cat) => {
+                  const isSelected = selectedCategory === cat;
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => handleCategoryClick(cat)}
+                      className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white shadow-[0_6px_20px_rgba(0,201,130,0.35)] scale-105"
+                          : "bg-white border border-[#E7DFD5] text-[#3B5B52] hover:border-[#085442] hover:text-[#085442] shadow-luxury-sm"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
 
-                      {/* Main Review Body */}
-                      <p className="text-xs sm:text-sm text-[#3B5B52] leading-relaxed font-normal">
-                        {item.text}
-                      </p>
-                    </div>
-
-                    {/* Patient Footer */}
-                    <div className="mt-5 pt-4 border-t border-[#EFE8DF] flex items-center justify-between">
+              {/* Testimonials Masonry / Grid */}
+              <motion.div
+                layout
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"
+              >
+                <AnimatePresence mode="popLayout">
+                  {filteredTestimonials.map((item, index) => (
+                    <motion.div
+                      key={`${selectedCategory}-${filterKey}-${item.id}`}
+                      layout
+                      initial={{ opacity: 0, y: 32, scale: 0.94 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -18, scale: 0.94, transition: { duration: 0.2 } }}
+                      transition={{
+                        duration: 0.44,
+                        delay: index * 0.07, // Staggered delay: 0s, 0.07s, 0.14s, 0.21s... cascading one by one!
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                      whileHover={{
+                        y: -6,
+                        boxShadow: "0 16px 36px -10px rgba(0, 201, 130, 0.15)",
+                        borderColor: "#00c982",
+                        transition: { duration: 0.2 },
+                      }}
+                      className="bg-white rounded-3xl p-6 sm:p-7 border border-[#E7DFD5] shadow-none transition-all duration-300 flex flex-col justify-between cursor-pointer group"
+                    >
                       <div>
-                        <div className="flex items-center gap-1.5">
-                          <h4 className="text-xs sm:text-sm font-bold text-[#0A261F]">
-                            {item.name}
-                          </h4>
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#00c982]" />
+                        {/* Rating Stars & Treatment Tag */}
+                        <div className="flex items-center justify-between gap-2 mb-3">
+                          <div className="flex items-center gap-1 text-amber-500">
+                            {[...Array(item.rating)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-amber-500 stroke-amber-500" />
+                            ))}
+                          </div>
+                          <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FAF7F2] text-[#085442] border border-[#E7DFD5]">
+                            {item.category}
+                          </span>
                         </div>
-                        <p className="text-[11px] text-[#527269] mt-0.5">
-                          {item.treatment}
+
+                        {/* Highlight Quote */}
+                        <h3 className="text-sm sm:text-base font-bold text-[#0A261F] leading-snug mb-2.5 group-hover:text-[#085442] transition-colors">
+                          &ldquo;{item.highlight}&rdquo;
+                        </h3>
+
+                        {/* Main Review Body */}
+                        <p className="text-xs sm:text-sm text-[#3B5B52] leading-relaxed font-normal">
+                          {item.text}
                         </p>
                       </div>
 
-                      <div className="text-right">
-                        <span className="text-[10px] font-medium text-[#7C9D94]">
-                          {item.date}
-                        </span>
+                      {/* Patient Footer */}
+                      <div className="mt-5 pt-4 border-t border-[#EFE8DF] flex items-center justify-between">
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <h4 className="text-xs sm:text-sm font-bold text-[#0A261F]">
+                              {item.name}
+                            </h4>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#00c982]" />
+                          </div>
+                          <p className="text-[11px] text-[#527269] mt-0.5">
+                            {item.treatment}
+                          </p>
+                        </div>
+
+                        <div className="text-right">
+                          <span className="text-[10px] font-medium text-[#7C9D94]">
+                            {item.date}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </motion.div>
+            </div>
           </div>
         </section>
       </main>
