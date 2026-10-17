@@ -226,8 +226,8 @@ const gridContainerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.56, // Waits for previous card to smoothly reach position and settle before next card starts
-      delayChildren: 0.04,
+      staggerChildren: 0.68, // Waits for previous card to smoothly reach position and settle before next card starts
+      delayChildren: 0.05,
     },
   },
 };
@@ -235,16 +235,16 @@ const gridContainerVariants = {
 const reviewCardVariants = {
   hidden: {
     opacity: 0,
-    y: 36, // Gentle upward distance from bottom
-    scale: 0.97, // Subtle, natural scale
+    y: 28, // Soft, graceful upward distance from bottom
+    scale: 0.985, // Subtle, natural perspective
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.52, // Smooth, gentle glide upward
-      ease: [0.16, 1, 0.3, 1], // Quintic luxury deceleration curve
+      duration: 0.65, // Gentle, luxurious deceleration
+      ease: [0.22, 1, 0.36, 1], // Silky smooth ease-out curve
     },
   },
 };
@@ -555,7 +555,11 @@ export default function TestimonialsPage() {
                       <motion.div
                         key={item.id}
                         variants={reviewCardVariants}
-                        style={{ willChange: "transform, opacity" }}
+                        style={{
+                          willChange: "transform, opacity",
+                          transform: "translateZ(0)",
+                          backfaceVisibility: "hidden",
+                        }}
                         whileHover={{
                           y: -6,
                           boxShadow: "0 16px 36px -10px rgba(0, 201, 130, 0.15)",

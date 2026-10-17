@@ -172,8 +172,8 @@ const gridContainerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.56, // Waits for previous card to smoothly reach position and settle before next card starts
-      delayChildren: 0.04,
+      staggerChildren: 0.68, // Waits for previous card to smoothly reach position and settle before next card starts
+      delayChildren: 0.05,
     },
   },
 };
@@ -181,16 +181,16 @@ const gridContainerVariants = {
 const articleCardVariants = {
   hidden: {
     opacity: 0,
-    y: 36, // Gentle upward distance from bottom
-    scale: 0.97, // Subtle, natural scale
+    y: 28, // Soft, graceful upward distance from bottom
+    scale: 0.985, // Subtle, natural perspective
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.52, // Smooth, gentle glide upward
-      ease: [0.16, 1, 0.3, 1], // Quintic luxury deceleration curve
+      duration: 0.65, // Gentle, luxurious deceleration
+      ease: [0.22, 1, 0.36, 1], // Silky smooth ease-out curve
     },
   },
 };
@@ -367,14 +367,18 @@ export default function BlogPage() {
                   <motion.div
                     key={post.id}
                     variants={articleCardVariants}
-                    style={{ willChange: "transform, opacity" }}
+                    style={{
+                      willChange: "transform, opacity",
+                      transform: "translateZ(0)",
+                      backfaceVisibility: "hidden",
+                    }}
                     whileHover={{
                       y: -6,
                       boxShadow: "0 16px 36px -10px rgba(4, 120, 87, 0.15)",
                       borderColor: "#085442",
                       transition: { duration: 0.2 },
                     }}
-                    className="bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden border border-[#E7DFD5] shadow-luxury transition-colors duration-200 flex flex-col justify-between group"
+                    className="bg-white rounded-3xl overflow-hidden border border-[#E7DFD5] shadow-luxury transition-colors duration-200 flex flex-col justify-between group"
                   >
                     <div>
                       {/* Card Thumbnail */}
