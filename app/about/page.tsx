@@ -19,7 +19,6 @@ import {
   Phone,
   Stethoscope,
   X,
-  FileCheck,
   ChevronRight,
   ChevronLeft,
   CheckCircle2,
@@ -77,7 +76,6 @@ function MetricCounter({
 
 export default function AboutPage() {
   const [selectedTreatment, setSelectedTreatment] = useState<string | null>(null);
-  const [certSlideIndex, setCertSlideIndex] = useState(0);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
 
   const [selectedDoctor, setSelectedDoctor] = useState<{
@@ -281,14 +279,6 @@ export default function AboutPage() {
       desc: "Certificate of Appreciation presented to Dr. Lajja A. Kamdar for participating as a Delegate in the 3rd Triennial Commonwealth Dental Association & 54th Indian Dental Association Congress, New Delhi.",
     },
   ];
-
-  const nextCert = () => {
-    setCertSlideIndex((prev) => (prev + 1) % certificates.length);
-  };
-
-  const prevCert = () => {
-    setCertSlideIndex((prev) => (prev - 1 + certificates.length) % certificates.length);
-  };
 
   const clinicSchedule = [
     { day: "Monday", morning: "9:00 AM – 1:00 PM", evening: "5:00 PM – 9:00 PM", isClosed: false },
@@ -666,16 +656,12 @@ export default function AboutPage() {
                   whileHover={{ y: -6 }}
                   onClick={() => {
                     setSelectedDoctor(doc);
-                    if (doc.name === "Dr. Lajja Kamdar") {
-                      setCertSlideIndex(0);
-                    }
                   }}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       setSelectedDoctor(doc);
-                      if (doc.name === "Dr. Lajja Kamdar") setCertSlideIndex(0);
                     }
                   }}
                   className="bg-white/95 rounded-3xl overflow-hidden shadow-luxury hover:shadow-luxury-hover hover:shadow-[0_12px_32px_rgba(8,84,66,0.12)] transition-all duration-300 flex flex-col justify-between p-6 sm:p-7 group border border-[#E7DFD5] hover:border-[#085442] cursor-pointer text-left"
@@ -914,102 +900,6 @@ export default function AboutPage() {
                       ))}
                     </div>
                   </div>
-
-                  {/* DR. LAJJA KAMDAR EXCLUSIVE: MILESTONES & CERTIFICATES CAROUSEL */}
-                  {selectedDoctor.name === "Dr. Lajja Kamdar" && (
-                    <>
-                      {/* Verified Clinical Certificates Slider */}
-                      <div className="pt-2">
-                        <div className="flex items-center justify-between mb-3">
-                          <div>
-                            <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#085442] uppercase tracking-wider">
-                              <FileCheck className="w-4 h-4 text-[#0b8064]" />
-                              <span>Clinical Accreditations &amp; Certificates</span>
-                            </div>
-                            <p className="text-[11px] text-slate-500 mt-0.5">
-                              Click arrows to browse verified credentials one by one
-                            </p>
-                          </div>
-
-                          <span className="text-xs font-bold text-[#085442] bg-mint/20 px-3 py-1 rounded-full border border-mint/30">
-                            {certSlideIndex + 1} of {certificates.length}
-                          </span>
-                        </div>
-
-                        {/* One-by-One Certificate Slide Box */}
-                        <div className="relative bg-[#f4faf7] border border-[#d6ebe0] rounded-2xl p-4 sm:p-5 shadow-xs">
-                          <div className="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center">
-                            <div className="sm:col-span-5 relative">
-                              <div className="aspect-[4/3] bg-white rounded-xl overflow-hidden border border-[#d2ece0] shadow-sm flex items-center justify-center p-2 relative">
-                                <img
-                                  src={certificates[certSlideIndex].image}
-                                  alt={certificates[certSlideIndex].title}
-                                  className="w-full h-full object-contain"
-                                />
-                              </div>
-                              <span className="absolute top-2 left-2 text-[10px] font-bold bg-[#085442] text-white px-2 py-0.5 rounded-md shadow-xs">
-                                {certificates[certSlideIndex].badge}
-                              </span>
-                            </div>
-
-                            <div className="sm:col-span-7 flex flex-col justify-between space-y-2 text-left">
-                              <div>
-                                <span className="text-[10px] font-bold text-[#0b8064] uppercase tracking-wider block">
-                                  Official Credential • {certificates[certSlideIndex].date}
-                                </span>
-                                <h4 className="text-sm sm:text-base font-black text-[#092620] leading-snug mt-0.5">
-                                  {certificates[certSlideIndex].title}
-                                </h4>
-                                <span className="text-xs text-[#085442] font-semibold block mt-1">
-                                  {certificates[certSlideIndex].issuer}
-                                </span>
-                              </div>
-
-                              <p className="text-xs text-slate-600 leading-relaxed bg-white/70 p-3 rounded-xl border border-[#e2f1ea]">
-                                {certificates[certSlideIndex].desc}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Arrow Controls & Dots */}
-                          <div className="flex items-center justify-between pt-4 mt-4 border-t border-[#d8ece2]">
-                            <button
-                              onClick={prevCert}
-                              aria-label="Previous Certificate"
-                              className="px-3.5 py-1.5 rounded-full bg-white border border-[#cde8dc] hover:border-[#085442] hover:bg-[#085442] hover:text-white text-[#085442] font-bold text-xs flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
-                            >
-                              <ChevronLeft className="w-4 h-4" />
-                              <span>Previous</span>
-                            </button>
-
-                            <div className="flex items-center gap-1.5">
-                              {certificates.map((_, idx) => (
-                                <button
-                                  key={idx}
-                                  onClick={() => setCertSlideIndex(idx)}
-                                  className={`h-2 rounded-full transition-all cursor-pointer ${
-                                    idx === certSlideIndex
-                                      ? "w-6 bg-[#085442]"
-                                      : "w-2 bg-[#b8dfce] hover:bg-[#0b8064]"
-                                  }`}
-                                  aria-label={`Go to certificate ${idx + 1}`}
-                                />
-                              ))}
-                            </div>
-
-                            <button
-                              onClick={nextCert}
-                              aria-label="Next Certificate"
-                              className="px-3.5 py-1.5 rounded-full bg-[#085442] hover:bg-[#0b8064] text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer"
-                            >
-                              <span>Next</span>
-                              <ChevronRight className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
                 </div>
               </div>
 
