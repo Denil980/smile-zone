@@ -116,9 +116,9 @@ export default function AboutClinic() {
           >
 
             {/* Main Headline (Strictly 2 lines) */}
-            <h2 className="text-2xl sm:text-3xl lg:text-[32px] xl:text-[36px] font-black text-[#0A261F] leading-[1.2] tracking-tight mb-3">
-              <span className="block">Best Family Dentist</span>
-              <span className="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent block whitespace-nowrap">
+            <h2 className="text-2xl sm:text-3xl lg:text-[32px] xl:text-[36px] font-black text-[#0A261F] leading-tight tracking-tight mb-5 sm:mb-6">
+              <span className="block mb-1">Best Family Dentist</span>
+              <span className="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent block whitespace-nowrap pb-2 pt-0.5 leading-snug">
                 in Tilak Nagar, Chembur
               </span>
             </h2>
