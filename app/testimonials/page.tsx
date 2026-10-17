@@ -227,14 +227,14 @@ const gridContainerVariants = {
     opacity: 1,
     transition: {
       staggerChildren: 0.08,
-      delayChildren: 0.04,
+      delayChildren: 0.03,
     },
   },
   exit: {
     opacity: 0,
     transition: {
-      duration: 0.14,
-      ease: "easeInOut",
+      duration: 0.12,
+      ease: "easeOut",
     },
   },
 };
@@ -242,18 +242,16 @@ const gridContainerVariants = {
 const reviewCardVariants = {
   hidden: {
     opacity: 0,
-    y: 28,
-    scale: 0.96,
+    y: 35,
+    scale: 0.95,
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      type: "spring",
-      stiffness: 240,
-      damping: 24,
-      mass: 0.75,
+      duration: 0.48,
+      ease: [0.22, 1, 0.36, 1],
     },
   },
 };
@@ -566,6 +564,7 @@ export default function TestimonialsPage() {
                       <motion.div
                         key={item.id}
                         variants={reviewCardVariants}
+                        style={{ willChange: "transform, opacity" }}
                         whileHover={{
                           y: -6,
                           boxShadow: "0 16px 36px -10px rgba(0, 201, 130, 0.15)",
