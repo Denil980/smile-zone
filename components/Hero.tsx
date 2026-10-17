@@ -208,14 +208,14 @@ export default function Hero({ onOpenVideoModal, onOpenBookingModal }: HeroProps
                     else window.location.href = "/#book-appointment";
                   }
                 }}
-                className="relative overflow-hidden group bg-gradient-to-r from-[#00c982] via-[#00b573] to-[#047857] text-[#032019] font-black px-7 sm:px-8 py-3.5 sm:py-4 rounded-full flex items-center gap-3 shadow-[0_10px_30px_rgba(0,201,130,0.35)] hover:shadow-[0_15px_35px_rgba(0,201,130,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300 text-sm sm:text-base cursor-pointer"
+                className="relative overflow-hidden group bg-gradient-to-r from-[#00c982] via-[#00b573] to-[#047857] text-white font-black px-7 sm:px-8 py-3.5 sm:py-4 rounded-full flex items-center gap-3 shadow-[0_10px_30px_rgba(0,201,130,0.35)] hover:shadow-[0_15px_35px_rgba(0,201,130,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300 text-sm sm:text-base cursor-pointer"
               >
                 {/* Shimmer Light Reflection Sweep */}
                 <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full bg-gradient-to-r from-transparent via-white/35 to-transparent transition-transform duration-1000 ease-out pointer-events-none" />
 
-                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-[#032019] stroke-[2.5]" />
+                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[2.5]" />
                 <span className="tracking-tight">Book Appointment</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-[#032019] stroke-[2.5] group-hover:translate-x-1.5 transition-transform duration-300" />
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[2.5] group-hover:translate-x-1.5 transition-transform duration-300" />
               </button>
 
               {/* Secondary: Watch Video Modal Trigger */}
