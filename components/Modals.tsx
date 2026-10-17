@@ -98,7 +98,7 @@ export default function Modals({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onCloseTreatment}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-4 sm:p-6 flex items-center justify-center overflow-y-auto"
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center overflow-hidden"
           >
             <motion.div
               initial={{ scale: 0.92, opacity: 0 }}
@@ -106,7 +106,7 @@ export default function Modals({
               exit={{ scale: 0.92, opacity: 0 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-3xl max-w-lg w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col border border-mint/40 my-auto text-left"
+              className="bg-white rounded-3xl max-w-lg w-full max-h-[85vh] sm:max-h-[88vh] overflow-hidden shadow-2xl flex flex-col border border-mint/40 text-left"
             >
               {/* Header */}
               <div className="p-5 sm:p-6 bg-gradient-to-r from-[#03221b] via-[#053026] to-[#085442] text-white flex items-start justify-between shrink-0">
@@ -129,7 +129,7 @@ export default function Modals({
               </div>
 
               {/* Body */}
-              <div className="p-5 sm:p-7 overflow-y-auto space-y-5 text-xs sm:text-sm text-slate-600 bg-white">
+              <div className="flex-1 min-h-0 p-5 sm:p-7 overflow-y-auto space-y-5 text-xs sm:text-sm text-slate-600 bg-white">
                 <div className="p-4 sm:p-5 rounded-2xl bg-[#fbfdfc] border border-[#e2f1ea] shadow-xs">
                   <p className="text-slate-700 leading-relaxed font-normal text-xs sm:text-sm">
                     {treatmentDetails[selectedTreatment] || treatmentDetails["General Dentistry"]}
@@ -174,7 +174,7 @@ export default function Modals({
       {/* 3. Booking Confirmation Modal */}
       <AnimatePresence>
         {bookingData && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
@@ -190,7 +190,7 @@ export default function Modals({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.94, y: 15 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="relative w-full max-w-xl bg-[#FAF8F5] rounded-[32px] sm:rounded-[36px] border border-[#E7DFD5] shadow-[0_24px_60px_rgba(10,38,31,0.25)] overflow-hidden z-10 my-auto max-h-[92vh] text-left"
+              className="relative w-full max-w-xl bg-[#FAF8F5] rounded-[32px] sm:rounded-[36px] border border-[#E7DFD5] shadow-[0_24px_60px_rgba(10,38,31,0.25)] overflow-hidden z-10 max-h-[85vh] sm:max-h-[88vh] flex flex-col text-left"
             >
               {/* Close Button */}
               <button
@@ -203,7 +203,7 @@ export default function Modals({
               </button>
 
               {/* Confirmation Content */}
-              <div className="w-full p-6 sm:p-7 md:p-8 overflow-y-auto max-h-[90vh] flex flex-col justify-center">
+              <div className="w-full flex-1 min-h-0 p-6 sm:p-7 md:p-8 overflow-y-auto flex flex-col justify-start">
                 <div className="py-6 sm:py-8 text-center space-y-4">
                   <div className="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-[#00b070] flex items-center justify-center mx-auto text-[#00b070] shadow-[0_0_20px_rgba(0,176,112,0.2)]">
                     <Check className="w-8 h-8 stroke-[2.5]" />

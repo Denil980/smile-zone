@@ -430,10 +430,10 @@ export default function TestimonialsPage() {
                 exit={{ scale: 0.92, opacity: 0, y: 20 }}
                 transition={{ type: "spring", damping: 26, stiffness: 320 }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-3xl bg-[#092620] text-white rounded-3xl border border-white/15 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col"
+                className="relative w-full max-w-3xl max-h-[88vh] bg-[#092620] text-white rounded-3xl border border-white/15 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)] overflow-hidden flex flex-col"
               >
                 {/* Modal Header */}
-                <div className="px-5 sm:px-6 py-4 flex items-center justify-between border-b border-white/10 bg-[#071F1A]">
+                <div className="px-5 sm:px-6 py-4 flex items-center justify-between border-b border-white/10 bg-[#071F1A] shrink-0">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-full bg-[#00c982]/20 flex items-center justify-center text-[#00c982]">
                       <Video className="w-4 h-4" />

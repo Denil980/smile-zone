@@ -378,13 +378,13 @@ export default function BlogPage() {
         {/* ========================================================= */}
         <AnimatePresence>
           {activeArticle && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 overflow-hidden">
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={() => setActiveArticle(null)}
-                className="fixed inset-0 bg-[#0A261F]/70 backdrop-blur-md"
+                className="fixed inset-0 bg-[#0A261F]/75 backdrop-blur-md"
               />
 
               <motion.div
@@ -392,28 +392,28 @@ export default function BlogPage() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 15 }}
                 transition={{ duration: 0.25 }}
-                className="relative w-full max-w-3xl bg-[#FAF8F5] rounded-3xl sm:rounded-[36px] border border-[#E7DFD5] shadow-[0_24px_60px_rgba(10,38,31,0.25)] overflow-hidden z-10 my-auto max-h-[92vh] flex flex-col"
+                className="relative w-full max-w-3xl max-h-[85vh] sm:max-h-[88vh] bg-[#FAF8F5] rounded-3xl sm:rounded-[36px] border border-[#E7DFD5] shadow-[0_24px_60px_rgba(10,38,31,0.3)] overflow-hidden z-10 flex flex-col"
               >
-                {/* Header */}
-                <div className="relative p-6 sm:p-8 bg-gradient-to-r from-[#0A261F] via-[#08382c] to-[#0A261F] text-white pr-14">
+                {/* Header (Always fully visible at top) */}
+                <div className="relative p-5 sm:p-7 bg-gradient-to-r from-[#0A261F] via-[#08382c] to-[#0A261F] text-white pr-14 shrink-0 shadow-sm">
                   <button
                     type="button"
                     onClick={() => setActiveArticle(null)}
                     aria-label="Close article"
-                    className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+                    className="absolute top-4 right-4 sm:top-5 sm:right-5 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer border border-white/10"
                   >
                     <X className="w-5 h-5" />
                   </button>
 
-                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-mint/20 border border-mint/40 text-mint text-[11px] font-bold uppercase tracking-wider mb-3">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-mint/20 border border-mint/40 text-mint text-[11px] font-bold uppercase tracking-wider mb-2.5">
                     {activeArticle.category}
                   </div>
 
-                  <h2 className="text-xl sm:text-2xl font-black text-white leading-tight">
+                  <h2 className="text-lg sm:text-2xl font-black text-white leading-tight">
                     {activeArticle.title}
                   </h2>
 
-                  <div className="flex items-center gap-3 text-xs text-[#c6e6dd] mt-3">
+                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs text-[#c6e6dd] mt-2.5">
                     <span>By {activeArticle.author}</span>
                     <span>•</span>
                     <span>{activeArticle.readTime}</span>
@@ -422,8 +422,8 @@ export default function BlogPage() {
                   </div>
                 </div>
 
-                {/* Article Body */}
-                <div className="p-6 sm:p-8 overflow-y-auto space-y-4 text-xs sm:text-sm text-[#4A635B] leading-relaxed bg-[#FAF8F5]">
+                {/* Article Body (Scrolls internally) */}
+                <div className="flex-1 min-h-0 p-5 sm:p-8 overflow-y-auto space-y-4 text-xs sm:text-sm text-[#4A635B] leading-relaxed bg-[#FAF8F5]">
                   {activeArticle.content.map((p, idx) => (
                     <p key={idx}>{p}</p>
                   ))}

@@ -312,7 +312,7 @@ export default function TreatmentsPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedTreatment(null)}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-4 sm:p-6 flex items-center justify-center overflow-y-auto"
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center overflow-hidden"
           >
             {/* Modal Dialog Card */}
             <motion.div
@@ -321,7 +321,7 @@ export default function TreatmentsPage() {
               exit={{ scale: 0.92, opacity: 0 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-3xl max-w-2xl w-full max-h-[92vh] overflow-hidden shadow-2xl flex flex-col border border-mint/40 my-auto text-left"
+              className="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] sm:max-h-[88vh] overflow-hidden shadow-2xl flex flex-col border border-mint/40 text-left"
             >
               {/* 1. FIRST: TREATMENT NAME & BADGE HEADER */}
               <div className="p-5 sm:p-6 bg-gradient-to-r from-[#03221b] via-[#053026] to-[#085442] text-white flex items-start justify-between shrink-0">
@@ -344,7 +344,7 @@ export default function TreatmentsPage() {
               </div>
 
               {/* 2. MODAL BODY (Scrollable) */}
-              <div className="p-5 sm:p-7 overflow-y-auto space-y-6 text-xs sm:text-sm text-slate-600 bg-white">
+              <div className="flex-1 min-h-0 p-5 sm:p-7 overflow-y-auto space-y-6 text-xs sm:text-sm text-slate-600 bg-white">
                 {/* Treatment Image (Fully visible, zero zoom, square showcase format matching doctor photo) */}
                 <div className="flex justify-center">
                   <div className="relative w-52 h-52 sm:w-64 sm:h-64 rounded-2xl overflow-hidden border border-[#d6ebe0] shadow-md bg-[#f4faf7] p-3 flex items-center justify-center">

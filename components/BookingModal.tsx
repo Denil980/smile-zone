@@ -275,7 +275,7 @@ export default function BookingModal({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -291,7 +291,7 @@ export default function BookingModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.94, y: 15 }}
             transition={{ duration: 0.25, ease: "easeOut" }}
-            className="relative w-full max-w-xl bg-[#FAF8F5] rounded-[32px] sm:rounded-[36px] border border-[#E7DFD5] shadow-[0_24px_60px_rgba(10,38,31,0.25)] overflow-hidden z-10 my-auto max-h-[92vh] text-left"
+            className="relative w-full max-w-xl bg-[#FAF8F5] rounded-[32px] sm:rounded-[36px] border border-[#E7DFD5] shadow-[0_24px_60px_rgba(10,38,31,0.25)] overflow-hidden z-10 max-h-[85vh] sm:max-h-[88vh] flex flex-col text-left"
           >
             {/* Close Button */}
             <button
@@ -304,7 +304,7 @@ export default function BookingModal({
             </button>
 
             {/* Form / Confirmation */}
-            <div className="w-full p-6 sm:p-7 md:p-8 overflow-y-auto max-h-[90vh] flex flex-col justify-center">
+            <div className="w-full flex-1 min-h-0 p-6 sm:p-7 md:p-8 overflow-y-auto flex flex-col justify-start">
               {isSubmitted ? (
                 <div className="py-6 sm:py-8 text-center space-y-4">
                   <div className="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-[#00b070] flex items-center justify-center mx-auto text-[#00b070] shadow-[0_0_20px_rgba(0,176,112,0.2)]">
