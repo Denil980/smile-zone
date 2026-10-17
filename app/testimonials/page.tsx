@@ -230,13 +230,6 @@ const gridContainerVariants = {
       delayChildren: 0.04,
     },
   },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.16,
-      ease: "easeOut",
-    },
-  },
 };
 
 const reviewCardVariants = {
@@ -537,7 +530,7 @@ export default function TestimonialsPage() {
                     <button
                       key={cat}
                       onClick={() => handleCategoryClick(cat)}
-                      className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer active:scale-95 ${
+                      className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                         isSelected
                           ? "bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white shadow-[0_6px_20px_rgba(0,201,130,0.35)] scale-105"
                           : "bg-white border border-[#E7DFD5] text-[#3B5B52] hover:border-[#085442] hover:text-[#085442] shadow-luxury-sm"
@@ -551,15 +544,13 @@ export default function TestimonialsPage() {
 
               {/* Testimonials Masonry / Grid Container */}
               <div className="min-h-[440px]">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`${selectedCategory}-${filterKey}`}
-                    variants={gridContainerVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"
-                  >
+                <motion.div
+                  key={`${selectedCategory}-${filterKey}`}
+                  variants={gridContainerVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"
+                >
                     {filteredTestimonials.map((item) => (
                       <motion.div
                         key={item.id}
@@ -620,7 +611,6 @@ export default function TestimonialsPage() {
                       </motion.div>
                     ))}
                   </motion.div>
-                </AnimatePresence>
               </div>
             </div>
           </div>
