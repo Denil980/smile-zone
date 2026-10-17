@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { ArrowRight, GraduationCap, Award, ShieldCheck, Users } from "lucide-react";
 
@@ -93,8 +94,8 @@ export default function MeetSpecialist() {
             </p>
 
             {/* Action CTA Button */}
-            <a
-              href="/about#dr-lajja"
+            <Link
+              href="/about#lead-dentist"
               className="relative overflow-hidden group inline-flex items-center gap-2.5 bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white font-bold text-sm px-8 py-3.5 rounded-full shadow-[0_10px_30px_rgba(0,201,130,0.35)] hover:shadow-[0_15px_35px_rgba(0,201,130,0.5)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
             >
               {/* Shimmer Light Reflection Sweep */}
@@ -102,7 +103,7 @@ export default function MeetSpecialist() {
 
               <span className="tracking-tight">Know More About Dr. Lajja</span>
               <ArrowRight className="w-4 h-4 text-white stroke-[2.5] group-hover:translate-x-1.5 transition-transform duration-300" />
-            </a>
+            </Link>
           </motion.div>
 
           {/* ========================================================= */}

@@ -445,7 +445,9 @@ export default function AboutPage() {
         {/* ========================================================= */}
         {/* SECTION 2: FOUNDER / LEAD DENTIST (DR. LAJJA KAMDAR)      */}
         {/* ========================================================= */}
-        <section id="lead-dentist" className="relative bg-gradient-to-b from-[#FAF7F2]/80 via-[#F3F8F5]/60 to-[#FAF8F5]/80 text-[#092620] py-16 sm:py-24 pb-20 sm:pb-32 overflow-hidden border-t border-[#E7DFD5]/60">
+        <section id="lead-dentist" className="scroll-mt-24 sm:scroll-mt-28 relative bg-gradient-to-b from-[#FAF7F2]/80 via-[#F3F8F5]/60 to-[#FAF8F5]/80 text-[#092620] py-16 sm:py-24 pb-20 sm:pb-32 overflow-hidden border-t border-[#E7DFD5]/60">
+          {/* Dual anchor for both #lead-dentist and #dr-lajja */}
+          <div id="dr-lajja" className="absolute -top-24 sm:-top-28 pointer-events-none" />
           {/* Subtle Ambient Lighting */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
             <div className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[700px] h-[400px] bg-mint/10 blur-[150px] rounded-full" />
