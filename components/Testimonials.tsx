@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, CheckCircle2, Quote } from "lucide-react";
 
 export default function Testimonials() {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isPaused, setIsPaused] = useState(false);
+  const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const testimonials = [
     {
@@ -52,12 +54,99 @@ export default function Testimonials() {
     },
   ];
 
+  // Triplicate testimonials for a truly seamless, infinite horizontal loop
+  const displayTestimonials = [...testimonials, ...testimonials, ...testimonials];
+
+  // Initialize scroll position to the middle set for seamless looping in both directions
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const initScroll = () => {
+      const singleSetWidth = el.scrollWidth / 3;
+      if (singleSetWidth > 0 && el.scrollLeft === 0) {
+        el.scrollLeft = singleSetWidth;
+      }
+    };
+
+    initScroll();
+    const timer = setTimeout(initScroll, 120);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Very slow, smooth horizontal auto-scroll ticker
+  useEffect(() => {
+    let animationFrameId: number;
+    let lastTime: number | null = null;
+    // Ultra-slow speed: ~24 pixels/sec (very relaxed, gentle, taking ~15 seconds per card)
+    const SPEED_PIXELS_PER_SEC = 24;
+
+    const step = (time: number) => {
+      if (lastTime === null) lastTime = time;
+      const delta = Math.min((time - lastTime) / 1000, 0.1);
+      lastTime = time;
+
+      if (!isPaused && scrollRef.current) {
+        const el = scrollRef.current;
+        const singleSetWidth = el.scrollWidth / 3;
+
+        if (singleSetWidth > 0) {
+          // If at start, initialize to middle set
+          if (el.scrollLeft === 0) {
+            el.scrollLeft = singleSetWidth;
+          }
+
+          // Advance towards the right (scrolling forward through reviews)
+          el.scrollLeft += SPEED_PIXELS_PER_SEC * delta;
+
+          // Seamless infinite wrap-around
+          if (el.scrollLeft >= singleSetWidth * 2) {
+            el.scrollLeft -= singleSetWidth;
+          } else if (el.scrollLeft <= singleSetWidth * 0.2) {
+            el.scrollLeft += singleSetWidth;
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(step);
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    };
+  }, [isPaused]);
+
+  const pauseAutoScrollTemporarily = () => {
+    setIsPaused(true);
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    resumeTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 1500);
+  };
+
   const scrollLeft = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: -360, behavior: "smooth" });
+    if (!scrollRef.current) return;
+    pauseAutoScrollTemporarily();
+    const el = scrollRef.current;
+    const singleSetWidth = el.scrollWidth / 3;
+    if (singleSetWidth > 0 && el.scrollLeft - 360 < singleSetWidth * 0.5) {
+      el.scrollLeft += singleSetWidth;
+    }
+    el.scrollBy({ left: -360, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    if (scrollRef.current) scrollRef.current.scrollBy({ left: 360, behavior: "smooth" });
+    if (!scrollRef.current) return;
+    pauseAutoScrollTemporarily();
+    const el = scrollRef.current;
+    const singleSetWidth = el.scrollWidth / 3;
+    if (singleSetWidth > 0 && el.scrollLeft + 360 > singleSetWidth * 2.5) {
+      el.scrollLeft -= singleSetWidth;
+    }
+    el.scrollBy({ left: 360, behavior: "smooth" });
   };
 
   return (
@@ -107,11 +196,12 @@ export default function Testimonials() {
 
             {/* Carousel Navigation Controls */}
             <div className="flex items-center gap-4">
-
               {/* Navigation Arrows */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={scrollLeft}
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => setIsPaused(false)}
                   aria-label="Previous testimonials"
                   className="w-10 h-10 rounded-full bg-white border border-[#D5E5DE] text-[#0A261F] flex items-center justify-center hover:bg-[#085442] hover:text-white active:scale-95 transition-all duration-300 cursor-pointer shadow-none"
                 >
@@ -119,6 +209,8 @@ export default function Testimonials() {
                 </button>
                 <button
                   onClick={scrollRight}
+                  onMouseEnter={() => setIsPaused(true)}
+                  onMouseLeave={() => setIsPaused(false)}
                   aria-label="Next testimonials"
                   className="w-10 h-10 rounded-full bg-white border border-[#D5E5DE] text-[#0A261F] flex items-center justify-center hover:bg-[#085442] hover:text-white active:scale-95 transition-all duration-300 cursor-pointer shadow-none"
                 >
@@ -131,17 +223,21 @@ export default function Testimonials() {
           {/* Testimonial Cards Carousel Grid */}
           <div
             ref={scrollRef}
-            className="flex gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-4 pt-1"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onTouchStart={() => setIsPaused(true)}
+            onTouchEnd={() => {
+              if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+              resumeTimeoutRef.current = setTimeout(() => setIsPaused(false), 1500);
+            }}
+            className="flex gap-6 overflow-x-auto no-scrollbar pb-4 pt-1"
+            style={{ scrollBehavior: "auto" }}
           >
-            {testimonials.map((t, idx) => (
+            {displayTestimonials.map((t, idx) => (
               <motion.div
-                key={t.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                key={`${t.name}-${idx}`}
                 whileHover={{ y: -6 }}
-                className="group relative bg-white hover:bg-[#FAFDFB] border border-[#E7DFD5] hover:border-[#085442] shadow-none rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 w-[310px] sm:w-[350px] lg:w-[calc(33.333%-16px)] shrink-0 snap-start overflow-hidden cursor-pointer"
+                className="group relative bg-white hover:bg-[#FAFDFB] border border-[#E7DFD5] hover:border-[#085442] shadow-none rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 w-[310px] sm:w-[350px] lg:w-[calc(33.333%-16px)] shrink-0 overflow-hidden cursor-pointer"
               >
                 {/* Top Subtle Shimmer Accent on Hover */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00c982] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
