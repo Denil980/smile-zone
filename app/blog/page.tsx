@@ -172,6 +172,25 @@ export default function BlogPage() {
   const [activeArticle, setActiveArticle] = useState<BlogPost | null>(null);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
 
+  React.useEffect(() => {
+    if (activeArticle) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setActiveArticle(null);
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener("keydown", handleKeyDown);
+      };
+    }
+  }, [activeArticle]);
+
   const filteredPosts =
     selectedCategory === "All Articles"
       ? blogPosts
@@ -180,14 +199,16 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-transparent text-[#0A261F] relative selection:bg-mint selection:text-emerald-950 font-sans">
       {/* Ambient Luxury Glows */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      <div className={`fixed inset-0 pointer-events-none overflow-hidden z-0 transition-opacity duration-200 ${activeArticle ? "opacity-0 invisible" : "opacity-100"}`}>
         <div className="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-emerald-400/5 blur-[120px]" />
         <div className="absolute top-1/3 -right-32 w-96 h-96 rounded-full bg-teal-400/5 blur-[120px]" />
         <div className="absolute bottom-1/4 left-1/4 w-96 h-96 rounded-full bg-emerald-500/5 blur-[140px]" />
       </div>
 
-      {/* Floating Global Navbar */}
-      <Navbar onOpenBookingModal={() => setBookingModalOpen(true)} />
+      {/* Floating Global Navbar - fully hidden when modal is open */}
+      <div className={`transition-opacity duration-200 ${activeArticle ? "opacity-0 invisible pointer-events-none" : "opacity-100"}`}>
+        <Navbar onOpenBookingModal={() => setBookingModalOpen(true)} />
+      </div>
 
       {/* Booking Modal */}
       <BookingModal
@@ -195,7 +216,7 @@ export default function BlogPage() {
         onClose={() => setBookingModalOpen(false)}
       />
 
-      <main className="relative z-10">
+      <main className={`relative z-10 transition-opacity duration-200 ${activeArticle ? "opacity-0 invisible pointer-events-none" : "opacity-100"}`}>
         {/* Page Header Section */}
         <PageHeader
           currentPage="Blog"
@@ -373,165 +394,169 @@ export default function BlogPage() {
             </motion.div>
           </div>
         </section>
-
-        {/* ========================================================= */}
-        {/* ARTICLE DETAIL READER MODAL                               */}
-        {/* ========================================================= */}
-        <AnimatePresence>
-          {activeArticle && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setActiveArticle(null)}
-              className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center overflow-hidden"
-            >
-              {/* Modal Dialog Card */}
-              <motion.div
-                initial={{ scale: 0.92, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.92, opacity: 0 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                onClick={(e) => e.stopPropagation()}
-                className="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] sm:max-h-[88vh] overflow-hidden shadow-2xl flex flex-col border border-mint/40 text-left"
-              >
-                {/* 1. FIRST: ARTICLE TITLE & BADGE HEADER */}
-                <div className="p-5 sm:p-6 bg-gradient-to-r from-[#03221b] via-[#053026] to-[#085442] text-white flex items-start justify-between shrink-0">
-                  <div>
-                    <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
-                      {activeArticle.title}
-                    </h2>
-                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-mint text-xs font-semibold mt-2 border border-white/10">
-                      <span>{activeArticle.category}</span>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={() => setActiveArticle(null)}
-                    className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer shrink-0 mt-1"
-                    aria-label="Close dialog"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-
-                {/* 2. MODAL BODY (Scrollable) */}
-                <div className="flex-1 min-h-0 p-5 sm:p-7 overflow-y-auto space-y-6 text-xs sm:text-sm text-slate-600 bg-white">
-                  {/* Article Image showcase matching Treatments photo display */}
-                  <div className="flex justify-center">
-                    <div className="relative w-52 h-52 sm:w-64 sm:h-64 rounded-2xl overflow-hidden border border-[#d6ebe0] shadow-md bg-[#f4faf7] p-3 flex items-center justify-center">
-                      <img
-                        src={activeArticle.image}
-                        alt={activeArticle.title}
-                        className="w-full h-full object-contain object-center select-none"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Detailed Article Content */}
-                  <div className="space-y-5">
-                    <div>
-                      <h3 className="text-xs font-bold text-[#085442] uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                        <Stethoscope className="w-4 h-4 text-[#0b8064]" />
-                        <span>Clinical Overview &amp; Insights</span>
-                      </h3>
-                      <div className="space-y-3 text-slate-700 leading-relaxed bg-[#fbfdfc] border border-[#e2f1ea] rounded-2xl p-4 sm:p-5 font-normal text-xs sm:text-sm shadow-xs">
-                        {activeArticle.content.map((p, idx) => (
-                          <p key={idx}>{p}</p>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Key Clinical Takeaways */}
-                    <div>
-                      <h3 className="text-xs font-bold text-[#085442] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-                        <CheckCircle2 className="w-4 h-4 text-[#0b8064]" />
-                        <span>Key Clinical Takeaways:</span>
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        {activeArticle.keyTakeaways.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="flex items-start gap-2 p-2.5 rounded-xl bg-[#f4faf7] border border-[#d6ebe0] text-slate-700 text-xs font-medium"
-                          >
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#00b070] shrink-0 mt-0.5" />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Quick Info Chips: Author & Reading Time */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                      <div className="p-4 rounded-2xl bg-[#fbfdfc] border border-[#e2f1ea] shadow-xs">
-                        <div className="text-[11px] font-bold uppercase tracking-wider text-[#085442] mb-1.5">
-                          <span>Author &amp; Specialist</span>
-                        </div>
-                        <p className="text-xs text-slate-700 leading-relaxed">
-                          {activeArticle.author}
-                        </p>
-                      </div>
-
-                      <div className="p-4 rounded-2xl bg-[#fbfdfc] border border-[#e2f1ea] shadow-xs">
-                        <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#085442] mb-1.5">
-                          <Clock className="w-3.5 h-3.5 text-[#0b8064]" />
-                          <span>Reading Time &amp; Date</span>
-                        </div>
-                        <p className="text-xs text-slate-700 leading-relaxed">
-                          {activeArticle.readTime} • {activeArticle.date}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 3. MODAL FOOTER */}
-                <div className="p-4 sm:p-5 bg-[#f8faf9] border-t border-[#d6ebe0] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
-                  <div className="text-center sm:text-left">
-                    <p className="text-xs font-bold text-[#092620]">
-                      Ready to consult Dr. Lajja Kamdar?
-                    </p>
-                    <p className="text-[11px] text-slate-500">
-                      Direct appointments at SmileZone Dental Studio, Chembur
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-2.5 w-full sm:w-auto">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setActiveArticle(null);
-                        setBookingModalOpen(true);
-                      }}
-                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-[#085442] hover:bg-[#0b8064] text-white font-bold text-xs sm:text-sm transition-all shadow-[0_4px_16px_rgba(8,84,66,0.3)] hover:-translate-y-0.5 cursor-pointer shrink-0"
-                    >
-                      <Calendar className="w-4 h-4 text-mint" />
-                      <span>Book Consultation</span>
-                      <ArrowRight className="w-4 h-4 text-mint" />
-                    </button>
-
-                    <a
-                      href={`https://wa.me/919876543210?text=Hello%20Doctor,%20I%20have%20a%20question%20regarding%20${encodeURIComponent(activeArticle.title)}%20at%20SmileZone%20Dental%20Studio.`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-3 rounded-full bg-white border border-[#d6ebe0] hover:border-[#085442] text-[#085442] hover:bg-[#FAF7F2] transition-all shrink-0 inline-flex items-center justify-center"
-                      aria-label="WhatsApp Inquiry"
-                      title="WhatsApp Inquiry"
-                    >
-                      <Phone className="w-4 h-4" />
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* ========================================================= */}
-
       </main>
 
-      <Footer />
+      {/* Footer - hidden when modal is open */}
+      <div className={`transition-opacity duration-200 ${activeArticle ? "opacity-0 invisible pointer-events-none" : "opacity-100"}`}>
+        <Footer />
+      </div>
+
+      {/* ========================================================= */}
+      {/* ARTICLE DETAIL READER MODAL                               */}
+      {/* ========================================================= */}
+      <AnimatePresence>
+        {activeArticle && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveArticle(null)}
+            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl p-3 sm:p-6 flex items-center justify-center overflow-hidden"
+          >
+            {/* Modal Dialog Card */}
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] sm:max-h-[88vh] overflow-hidden shadow-2xl flex flex-col border border-mint/40 text-left"
+            >
+              {/* 1. FIRST: ARTICLE TITLE & BADGE HEADER */}
+              <div className="p-5 sm:p-6 bg-gradient-to-r from-[#03221b] via-[#053026] to-[#085442] text-white flex items-start justify-between shrink-0">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight">
+                    {activeArticle.title}
+                  </h2>
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-mint text-xs font-semibold mt-2 border border-white/10">
+                    <span>{activeArticle.category}</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setActiveArticle(null)}
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer shrink-0 mt-1"
+                  aria-label="Close dialog"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* 2. MODAL BODY (Scrollable) */}
+              <div className="flex-1 min-h-0 p-5 sm:p-7 overflow-y-auto space-y-6 text-xs sm:text-sm text-slate-600 bg-white">
+                {/* Article Image showcase matching Treatments photo display */}
+                <div className="flex justify-center">
+                  <div className="relative w-52 h-52 sm:w-64 sm:h-64 rounded-2xl overflow-hidden border border-[#d6ebe0] shadow-md bg-[#f4faf7] p-3 flex items-center justify-center">
+                    <img
+                      src={activeArticle.image}
+                      alt={activeArticle.title}
+                      className="w-full h-full object-contain object-center select-none"
+                    />
+                  </div>
+                </div>
+
+                {/* Detailed Article Content */}
+                <div className="space-y-5">
+                  <div>
+                    <h3 className="text-xs font-bold text-[#085442] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <Stethoscope className="w-4 h-4 text-[#0b8064]" />
+                      <span>Clinical Overview &amp; Insights</span>
+                    </h3>
+                    <div className="space-y-3 text-slate-700 leading-relaxed bg-[#fbfdfc] border border-[#e2f1ea] rounded-2xl p-4 sm:p-5 font-normal text-xs sm:text-sm shadow-xs">
+                      {activeArticle.content.map((p, idx) => (
+                        <p key={idx}>{p}</p>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Key Clinical Takeaways */}
+                  <div>
+                    <h3 className="text-xs font-bold text-[#085442] uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-[#0b8064]" />
+                      <span>Key Clinical Takeaways:</span>
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {activeArticle.keyTakeaways.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-2 p-2.5 rounded-xl bg-[#f4faf7] border border-[#d6ebe0] text-slate-700 text-xs font-medium"
+                        >
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#00b070] shrink-0 mt-0.5" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Quick Info Chips: Author & Reading Time */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div className="p-4 rounded-2xl bg-[#fbfdfc] border border-[#e2f1ea] shadow-xs">
+                      <div className="text-[11px] font-bold uppercase tracking-wider text-[#085442] mb-1.5">
+                        <span>Author &amp; Specialist</span>
+                      </div>
+                      <p className="text-xs text-slate-700 leading-relaxed">
+                        {activeArticle.author}
+                      </p>
+                    </div>
+
+                    <div className="p-4 rounded-2xl bg-[#fbfdfc] border border-[#e2f1ea] shadow-xs">
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#085442] mb-1.5">
+                        <Clock className="w-3.5 h-3.5 text-[#0b8064]" />
+                        <span>Reading Time &amp; Date</span>
+                      </div>
+                      <p className="text-xs text-slate-700 leading-relaxed">
+                        {activeArticle.readTime} • {activeArticle.date}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 3. MODAL FOOTER */}
+              <div className="p-4 sm:p-5 bg-[#f8faf9] border-t border-[#d6ebe0] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+                <div className="text-center sm:text-left">
+                  <p className="text-xs font-bold text-[#092620]">
+                    Ready to consult Dr. Lajja Kamdar?
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    Direct appointments at SmileZone Dental Studio, Chembur
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveArticle(null);
+                      setBookingModalOpen(true);
+                    }}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-[#085442] hover:bg-[#0b8064] text-white font-bold text-xs sm:text-sm transition-all shadow-[0_4px_16px_rgba(8,84,66,0.3)] hover:-translate-y-0.5 cursor-pointer shrink-0"
+                  >
+                    <Calendar className="w-4 h-4 text-mint" />
+                    <span>Book Consultation</span>
+                    <ArrowRight className="w-4 h-4 text-mint" />
+                  </button>
+
+                  <a
+                    href={`https://wa.me/919876543210?text=Hello%20Doctor,%20I%20have%20a%20question%20regarding%20${encodeURIComponent(activeArticle.title)}%20at%20SmileZone%20Dental%20Studio.`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-3 rounded-full bg-white border border-[#d6ebe0] hover:border-[#085442] text-[#085442] hover:bg-[#FAF7F2] transition-all shrink-0 inline-flex items-center justify-center"
+                    aria-label="WhatsApp Inquiry"
+                    title="WhatsApp Inquiry"
+                  >
+                    <Phone className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className={`transition-opacity duration-200 ${activeArticle ? "opacity-0 invisible pointer-events-none" : "opacity-100"}`}>
+        <Footer />
+      </div>
     </div>
   );
 }
