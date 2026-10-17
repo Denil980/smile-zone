@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
+import PageHeader from "@/components/PageHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
@@ -193,11 +194,19 @@ export default function TreatmentsPage() {
         }}
       />
 
-      <main className="pt-28 sm:pt-36 lg:pt-40">
+      <main>
+        {/* Page Header Section */}
+        <PageHeader
+          currentPage="Treatments"
+          title="Dental Treatments"
+          highlightWord="Treatments"
+          description="Comprehensive, gentle dental care from routine hygiene and pain-free root canals to cosmetic smile makeovers and permanent dental implants."
+        />
+
         {/* ========================================================= */}
         {/* 7 TREATMENTS CARDS GRID                                   */}
         {/* ========================================================= */}
-        <section className="py-8 sm:py-14 bg-gradient-to-b from-[#FAF8F5]/80 via-white/60 to-[#FAF6F0]/80 relative overflow-hidden">
+        <section className="py-10 sm:py-16 bg-gradient-to-b from-[#FAF8F5]/80 via-white/60 to-[#FAF6F0]/80 relative overflow-hidden">
           {/* Ambient Lighting Accents */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
             <div className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[650px] h-[380px] bg-mint/10 blur-[140px] rounded-full" />

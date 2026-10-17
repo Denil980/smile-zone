@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PageHeader from "@/components/PageHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
@@ -236,11 +237,19 @@ export default function ContactPage() {
       {/* Floating Global Navbar */}
       <Navbar />
 
-      <main className="pt-28 sm:pt-36 lg:pt-40 relative z-10">
+      <main className="relative z-10">
+        {/* Page Header Section */}
+        <PageHeader
+          currentPage="Contact"
+          title="Contact SmileZone"
+          highlightWord="SmileZone"
+          description="Get in touch with SmileZone Dental Studio in Tilak Nagar, Chembur. Find clinic directions, consulting hours, phone numbers, or schedule your dental appointment."
+        />
+
         {/* ========================================================= */}
         {/* 3 CORE CONTACT CARDS                                      */}
         {/* ========================================================= */}
-        <section className="py-8 sm:py-14 relative z-20">
+        <section className="py-10 sm:py-16 relative z-20">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {/* Card 1: Location */}

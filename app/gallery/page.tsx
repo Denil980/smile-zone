@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
+import PageHeader from "@/components/PageHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import { MoveHorizontal } from "lucide-react";
 
@@ -276,12 +277,19 @@ export default function GalleryPage() {
         onClose={() => setBookingModalOpen(false)}
       />
 
-      <main className="pt-28 sm:pt-36 lg:pt-40 relative z-10">
+      <main className="relative z-10">
+        {/* Page Header Section */}
+        <PageHeader
+          currentPage="Gallery"
+          title="Smile Gallery"
+          highlightWord="Gallery"
+          description="Real patient before-and-after smile transformations showcasing aesthetic teeth alignment, porcelain veneers, teeth whitening, and full mouth rehabilitations."
+        />
 
         {/* ========================================================= */}
         {/* INTERACTIVE BEFORE & AFTER GALLERY                        */}
         {/* ========================================================= */}
-        <section className="py-14 sm:py-20 relative">
+        <section className="py-10 sm:py-16 relative">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
             {/* Category Filter Pills */}
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10 sm:mb-14">

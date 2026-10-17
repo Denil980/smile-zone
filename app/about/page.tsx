@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Modals from "@/components/Modals";
 import BookingModal from "@/components/BookingModal";
+import PageHeader from "@/components/PageHeader";
 import { TypewriterHeading } from "@/components/Hero";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
@@ -290,10 +291,18 @@ export default function AboutPage() {
       />
 
       <main>
+        {/* Page Header Section */}
+        <PageHeader
+          currentPage="About"
+          title="About SmileZone"
+          highlightWord="SmileZone"
+          description="Discover our patient-first dental philosophy, 20+ years of clinical excellence, and state-of-the-art dental care led by Dr. Lajja Kamdar in Tilak Nagar, Chembur."
+        />
+
         {/* ========================================================= */}
         {/* SECTION 1: HERO / OUR LEAD DENTIST                        */}
         {/* ========================================================= */}
-        <section className="relative bg-gradient-to-b from-[#FAF7F2]/80 via-[#F3F8F5]/60 to-[#FAF8F5]/80 text-[#092620] pt-28 sm:pt-36 pb-20 sm:pb-32 overflow-hidden">
+        <section className="relative bg-gradient-to-b from-[#FAF7F2]/80 via-[#F3F8F5]/60 to-[#FAF8F5]/80 text-[#092620] pt-12 sm:pt-16 pb-20 sm:pb-32 overflow-hidden">
           {/* Subtle Ambient Lighting */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
             <div className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[700px] h-[400px] bg-mint/10 blur-[150px] rounded-full" />

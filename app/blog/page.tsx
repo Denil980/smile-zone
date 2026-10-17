@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
+import PageHeader from "@/components/PageHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
@@ -193,12 +194,19 @@ export default function BlogPage() {
         onClose={() => setBookingModalOpen(false)}
       />
 
-      <main className="pt-28 sm:pt-36 lg:pt-40 relative z-10">
+      <main className="relative z-10">
+        {/* Page Header Section */}
+        <PageHeader
+          currentPage="Blog"
+          title="Dental Health Blog"
+          highlightWord="Blog"
+          description="Clinical insights, oral hygiene tips, and expert dental guides from Dr. Lajja Kamdar to help you and your family maintain bright, healthy smiles."
+        />
 
         {/* ========================================================= */}
         {/* FEATURED ARTICLE SPOTLIGHT                                */}
         {/* ========================================================= */}
-        <section className="py-12 sm:py-16">
+        <section className="py-10 sm:py-16">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
             <div className="bg-white/95 backdrop-blur-md rounded-3xl sm:rounded-[36px] overflow-hidden border border-[#E7DFD5] hover:border-[#085442] shadow-luxury hover:shadow-luxury-hover hover:shadow-[0_12px_36px_rgba(8,84,66,0.12)] transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-center">
               <div className="lg:col-span-5 h-64 sm:h-80 lg:h-full relative overflow-hidden bg-slate-900 group">

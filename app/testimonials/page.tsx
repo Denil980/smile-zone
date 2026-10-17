@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import BookingModal from "@/components/BookingModal";
+import PageHeader from "@/components/PageHeader";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Star,
@@ -163,11 +164,19 @@ export default function TestimonialsPage() {
         onClose={() => setBookingModalOpen(false)}
       />
 
-      <main className="pt-28 sm:pt-36 lg:pt-40">
+      <main>
+        {/* Page Header Section */}
+        <PageHeader
+          currentPage="Testimonials"
+          title="Patient Testimonials"
+          highlightWord="Testimonials"
+          description="Read genuine verified reviews and patient stories about pain-free dental treatments, gentle care, and lasting smile transformations at SmileZone Dental Studio."
+        />
+
         {/* ========================================================= */}
         {/* FILTERABLE TESTIMONIALS GRID                              */}
         {/* ========================================================= */}
-        <section className="py-8 sm:py-14 relative">
+        <section className="py-10 sm:py-16 relative">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
             {/* Filter Pills */}
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-2.5 mb-10 sm:mb-14">
