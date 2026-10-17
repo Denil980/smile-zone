@@ -312,7 +312,7 @@ export default function TreatmentsPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedTreatment(null)}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center overflow-hidden"
+            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center overflow-hidden"
           >
             {/* Modal Dialog Card */}
             <motion.div

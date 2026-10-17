@@ -50,7 +50,7 @@ export default function Modals({
       {/* 1. Video Player Modal */}
       <AnimatePresence>
         {videoOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -98,7 +98,7 @@ export default function Modals({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onCloseTreatment}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center overflow-hidden"
+            className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md p-3 sm:p-6 flex items-center justify-center overflow-hidden"
           >
             <motion.div
               initial={{ scale: 0.92, opacity: 0 }}
@@ -174,7 +174,7 @@ export default function Modals({
       {/* 3. Booking Confirmation Modal */}
       <AnimatePresence>
         {bookingData && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden">
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-4 md:p-6 overflow-hidden">
             {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
