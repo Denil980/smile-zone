@@ -280,11 +280,6 @@ export default function TestimonialsPage() {
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
             {/* Section Header */}
             <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF7F2] border border-[#00c982]/30 text-[#085442] text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
-                <Video className="w-3.5 h-3.5 text-[#00c982]" />
-                <span>Patient Video Stories</span>
-                <Sparkles className="w-3 h-3 text-[#00c982]" />
-              </div>
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#0A261F] tracking-tight">
                 Real Smiles, Inspiring Stories
               </h2>
