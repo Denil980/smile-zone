@@ -463,16 +463,24 @@ export default function AboutPage() {
                   part2ClassName="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent"
                 />
 
-                {/* Single Natural Introduction Paragraph (6-8 lines) */}
-                <motion.p
+                {/* Doctor Bio Narrative in 3 Distinct Paragraphs */}
+                <motion.div
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="text-sm sm:text-base text-[#3B5B52] leading-relaxed font-normal"
+                  className="space-y-3 text-xs sm:text-sm text-[#3B5B52] leading-relaxed font-normal"
                 >
-                  Dr. Lajja Kamdar is a well-reputed Dentist in Tilak Nagar, Chembur. She acquired her degree of bachelor&apos;s in &apos;Dental Surgery&apos; from the prestigious Nair Hospital Dental College, Mumbai in the year 2000. Dr. Lajja has always kept her skills updated with the latest certified courses related to Cosmetic Dentistry, Restorative Dentistry, and Pediatric Dentistry. She is specialized in Full Mouth Rehabilitation with her expertise in SMILE DESIGN involving the latest in dental technology which includes state-of-the-art Flexible Dentures and Dental Implants. Her journey with private practice started in 2001 with SMILEZONE DENTAL STUDIO, which has been upgraded regularly with the latest techniques, machines, and materials to provide the best treatment to her thousands of happy patients. In her 20+ years of private practice, Dr. Lajja has treated numerous complex cases, giving healthy, confident, and long-lasting smiles with gentle care and a patient-first approach.
-                </motion.p>
+                  <p>
+                    Dr. Lajja Kamdar is a well-reputed Dentist in Tilak Nagar, Chembur. She acquired her degree of bachelor&apos;s in &apos;Dental Surgery&apos; from the prestigious Nair Hospital Dental College, Mumbai in the year 2000. Dr. Lajja has always kept her skills updated with the latest certified courses related to Cosmetic Dentistry, Restorative Dentistry, and Pediatric Dentistry.
+                  </p>
+                  <p>
+                    She is specialized in Full Mouth Rehabilitation with her expertise in SMILE DESIGN involving the latest in dental technology which includes state-of-the-art Flexible Dentures and Dental Implants.
+                  </p>
+                  <p>
+                    Her journey with private practice started in 2001 with SMILEZONE DENTAL STUDIO, which has been upgraded regularly with the latest techniques, machines, and materials to provide the best treatment to her thousands of happy patients. In her 20+ years of private practice, Dr. Lajja has treated numerous complex cases, giving healthy, confident, and long-lasting smiles with gentle care and a patient-first approach.
+                  </p>
+                </motion.div>
 
                 {/* Verified Accreditations & Certificates (Passport-Sized with Interactive Hover Zoom) */}
                 <motion.div
