@@ -84,10 +84,10 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
                   <div key={item.name} className="relative flex flex-col items-center">
                     <Link
                       href={item.href}
-                      className={`transition-all py-1.5 px-3.5 rounded-full flex items-center justify-center cursor-pointer ${
+                      className={`transition-all duration-200 py-1.5 px-3.5 rounded-full flex items-center justify-center cursor-pointer border ${
                         isActive
-                          ? "bg-[#085442] border border-[#085442] text-white font-bold shadow-[0_4px_14px_rgba(8,84,66,0.22)]"
-                          : "hover:text-[#085442] hover:bg-[#F2ECE4]/75 text-[#3b5951]"
+                          ? "bg-[#085442] border-[#085442] text-white font-bold shadow-[0_4px_14px_rgba(8,84,66,0.22)]"
+                          : "border-transparent text-[#2D4D44] hover:text-[#085442] hover:bg-[#E6F7F0] hover:border-[#BCE4D3]"
                       }`}
                     >
                       {item.name}
@@ -193,7 +193,7 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
                         className={`py-2 px-3 rounded-xl flex items-center justify-between transition-colors ${
                           isActive
                             ? "bg-[#0b4737] text-white font-bold border border-mint/40"
-                            : "text-[#cde2dc] hover:text-mint"
+                            : "text-[#cde2dc] hover:text-white hover:bg-[#085442]/50"
                         }`}
                       >
                         <span>{item.name}</span>
