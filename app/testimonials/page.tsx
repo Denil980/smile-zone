@@ -221,6 +221,43 @@ const categories = [
   "Implants & Dentures",
 ];
 
+const gridContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.04,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.14,
+      ease: "easeInOut",
+    },
+  },
+};
+
+const reviewCardVariants = {
+  hidden: {
+    opacity: 0,
+    y: 28,
+    scale: 0.96,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 240,
+      damping: 24,
+      mass: 0.75,
+    },
+  },
+};
+
 export default function TestimonialsPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Reviews");
   const [filterKey, setFilterKey] = useState(0);
@@ -502,7 +539,7 @@ export default function TestimonialsPage() {
                     <button
                       key={cat}
                       onClick={() => handleCategoryClick(cat)}
-                      className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                      className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer active:scale-95 ${
                         isSelected
                           ? "bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white shadow-[0_6px_20px_rgba(0,201,130,0.35)] scale-105"
                           : "bg-white border border-[#E7DFD5] text-[#3B5B52] hover:border-[#085442] hover:text-[#085442] shadow-luxury-sm"
@@ -514,80 +551,78 @@ export default function TestimonialsPage() {
                 })}
               </div>
 
-              {/* Testimonials Masonry / Grid */}
-              <motion.div
-                layout
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"
-              >
-                <AnimatePresence mode="popLayout">
-                  {filteredTestimonials.map((item, index) => (
-                    <motion.div
-                      key={`${selectedCategory}-${filterKey}-${item.id}`}
-                      layout
-                      initial={{ opacity: 0, y: 32, scale: 0.94 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: -18, scale: 0.94, transition: { duration: 0.2 } }}
-                      transition={{
-                        duration: 0.44,
-                        delay: index * 0.07, // Staggered delay: 0s, 0.07s, 0.14s, 0.21s... cascading one by one!
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                      whileHover={{
-                        y: -6,
-                        boxShadow: "0 16px 36px -10px rgba(0, 201, 130, 0.15)",
-                        borderColor: "#00c982",
-                        transition: { duration: 0.2 },
-                      }}
-                      className="bg-white rounded-3xl p-6 sm:p-7 border border-[#E7DFD5] shadow-none transition-all duration-300 flex flex-col justify-between cursor-pointer group"
-                    >
-                      <div>
-                        {/* Rating Stars & Treatment Tag */}
-                        <div className="flex items-center justify-between gap-2 mb-3">
-                          <div className="flex items-center gap-1 text-amber-500">
-                            {[...Array(item.rating)].map((_, i) => (
-                              <Star key={i} className="w-4 h-4 fill-amber-500 stroke-amber-500" />
-                            ))}
-                          </div>
-                          <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FAF7F2] text-[#085442] border border-[#E7DFD5]">
-                            {item.category}
-                          </span>
-                        </div>
-
-                        {/* Highlight Quote */}
-                        <h3 className="text-sm sm:text-base font-bold text-[#0A261F] leading-snug mb-2.5 group-hover:text-[#085442] transition-colors">
-                          &ldquo;{item.highlight}&rdquo;
-                        </h3>
-
-                        {/* Main Review Body */}
-                        <p className="text-xs sm:text-sm text-[#3B5B52] leading-relaxed font-normal">
-                          {item.text}
-                        </p>
-                      </div>
-
-                      {/* Patient Footer */}
-                      <div className="mt-5 pt-4 border-t border-[#EFE8DF] flex items-center justify-between">
+              {/* Testimonials Masonry / Grid Container */}
+              <div className="min-h-[440px]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={`${selectedCategory}-${filterKey}`}
+                    variants={gridContainerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"
+                  >
+                    {filteredTestimonials.map((item) => (
+                      <motion.div
+                        key={item.id}
+                        variants={reviewCardVariants}
+                        whileHover={{
+                          y: -6,
+                          boxShadow: "0 16px 36px -10px rgba(0, 201, 130, 0.15)",
+                          borderColor: "#00c982",
+                          transition: { duration: 0.2 },
+                        }}
+                        className="bg-white rounded-3xl p-6 sm:p-7 border border-[#E7DFD5] shadow-none transition-colors duration-200 flex flex-col justify-between cursor-pointer group"
+                      >
                         <div>
-                          <div className="flex items-center gap-1.5">
-                            <h4 className="text-xs sm:text-sm font-bold text-[#0A261F]">
-                              {item.name}
-                            </h4>
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#00c982]" />
+                          {/* Rating Stars & Treatment Tag */}
+                          <div className="flex items-center justify-between gap-2 mb-3">
+                            <div className="flex items-center gap-1 text-amber-500">
+                              {[...Array(item.rating)].map((_, i) => (
+                                <Star key={i} className="w-4 h-4 fill-amber-500 stroke-amber-500" />
+                              ))}
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FAF7F2] text-[#085442] border border-[#E7DFD5]">
+                              {item.category}
+                            </span>
                           </div>
-                          <p className="text-[11px] text-[#527269] mt-0.5">
-                            {item.treatment}
+
+                          {/* Highlight Quote */}
+                          <h3 className="text-sm sm:text-base font-bold text-[#0A261F] leading-snug mb-2.5 group-hover:text-[#085442] transition-colors">
+                            &ldquo;{item.highlight}&rdquo;
+                          </h3>
+
+                          {/* Main Review Body */}
+                          <p className="text-xs sm:text-sm text-[#3B5B52] leading-relaxed font-normal">
+                            {item.text}
                           </p>
                         </div>
 
-                        <div className="text-right">
-                          <span className="text-[10px] font-medium text-[#7C9D94]">
-                            {item.date}
-                          </span>
+                        {/* Patient Footer */}
+                        <div className="mt-5 pt-4 border-t border-[#EFE8DF] flex items-center justify-between">
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <h4 className="text-xs sm:text-sm font-bold text-[#0A261F]">
+                                {item.name}
+                              </h4>
+                              <CheckCircle2 className="w-3.5 h-3.5 text-[#00c982]" />
+                            </div>
+                            <p className="text-[11px] text-[#527269] mt-0.5">
+                              {item.treatment}
+                            </p>
+                          </div>
+
+                          <div className="text-right">
+                            <span className="text-[10px] font-medium text-[#7C9D94]">
+                              {item.date}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    ))}
+                  </motion.div>
                 </AnimatePresence>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
