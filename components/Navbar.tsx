@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Phone,
@@ -19,7 +20,6 @@ interface NavbarProps {
 export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
-  const [activeNav, setActiveNav] = useState("Home");
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -31,24 +31,17 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
     { name: "Contact", href: "/contact" },
   ];
 
-  // Route-based active highlight sync
-  useEffect(() => {
-    if (pathname === "/about") {
-      setActiveNav("About");
-    } else if (pathname === "/treatments") {
-      setActiveNav("Treatments");
-    } else if (pathname === "/testimonials") {
-      setActiveNav("Testimonials");
-    } else if (pathname === "/gallery") {
-      setActiveNav("Gallery");
-    } else if (pathname === "/blog") {
-      setActiveNav("Blog");
-    } else if (pathname === "/contact") {
-      setActiveNav("Contact");
-    } else {
-      setActiveNav("Home");
-    }
-  }, [pathname]);
+  // Compute active nav synchronously from pathname - zero delay, zero flickering, never jumps to Home first
+  const activeNav = (() => {
+    if (!pathname || pathname === "/") return "Home";
+    if (pathname.startsWith("/about")) return "About";
+    if (pathname.startsWith("/treatments")) return "Treatments";
+    if (pathname.startsWith("/testimonials")) return "Testimonials";
+    if (pathname.startsWith("/gallery")) return "Gallery";
+    if (pathname.startsWith("/blog")) return "Blog";
+    if (pathname.startsWith("/contact")) return "Contact";
+    return "Home";
+  })();
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 w-full bg-transparent transition-all duration-300 py-3 sm:py-4 pointer-events-none">
@@ -61,9 +54,8 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
           <div className="w-full bg-white/90 backdrop-blur-2xl border border-[#e6ded5] rounded-full pl-2 sm:pl-2.5 pr-2.5 sm:pr-3 py-2 flex items-center justify-between gap-3 shadow-[0_10px_35px_rgba(13,56,48,0.06),0_1px_3px_rgba(0,0,0,0.02)] transition-all">
             {/* Left: Brand Logo & Title */}
             <div className="flex items-center gap-3 shrink-0">
-              <a
+              <Link
                 href="/"
-                onClick={() => setActiveNav("Home")}
                 className="relative flex items-center justify-center p-1 group"
               >
                 {/* Outer Glow Halo */}
@@ -80,7 +72,7 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
                     className="w-full h-full object-contain"
                   />
                 </div>
-              </a>
+              </Link>
             </div>
 
             {/* Middle Nav Links (Direct Click - No Dropdowns) */}
@@ -90,9 +82,8 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
 
                 return (
                   <div key={item.name} className="relative flex flex-col items-center">
-                    <a
+                    <Link
                       href={item.href}
-                      onClick={() => setActiveNav(item.name)}
                       className={`transition-all py-1.5 px-3.5 rounded-full flex items-center justify-center cursor-pointer ${
                         isActive
                           ? "bg-[#085442] border border-[#085442] text-white font-bold shadow-[0_4px_14px_rgba(8,84,66,0.22)]"
@@ -100,7 +91,7 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
                       }`}
                     >
                       {item.name}
-                    </a>
+                    </Link>
 
                     {/* Glowing dot under active item */}
                     {isActive && (
@@ -195,13 +186,10 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
                   {navItems.map((item) => {
                     const isActive = activeNav === item.name;
                     return (
-                      <a
+                      <Link
                         key={item.name}
                         href={item.href}
-                        onClick={() => {
-                          setActiveNav(item.name);
-                          setMobileOpen(false);
-                        }}
+                        onClick={() => setMobileOpen(false)}
                         className={`py-2 px-3 rounded-xl flex items-center justify-between transition-colors ${
                           isActive
                             ? "bg-[#0b4737] text-white font-bold border border-mint/40"
@@ -210,7 +198,7 @@ export default function Navbar({ onOpenTreatmentModal, onOpenBookingModal }: Nav
                       >
                         <span>{item.name}</span>
                         {isActive && <span className="w-2 h-2 rounded-full bg-mint" />}
-                      </a>
+                      </Link>
                     );
                   })}
                 </div>

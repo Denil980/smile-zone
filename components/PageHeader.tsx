@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 interface PageHeaderProps {
@@ -135,12 +136,12 @@ export default function PageHeader({
           <nav aria-label="Breadcrumb" className="mb-4">
             <ol className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs sm:text-sm font-semibold tracking-wide shadow-sm">
               <li>
-                <a
+                <Link
                   href="/"
                   className="text-white/80 hover:text-white transition-colors"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li className="text-white/40 select-none">/</li>
               <li className="text-white font-bold">
