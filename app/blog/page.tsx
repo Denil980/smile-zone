@@ -167,10 +167,45 @@ const categories = [
   "Dental Implants",
 ];
 
+const gridContainerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.56, // Waits for previous card to smoothly reach position and settle before next card starts
+      delayChildren: 0.04,
+    },
+  },
+};
+
+const articleCardVariants = {
+  hidden: {
+    opacity: 0,
+    y: 36, // Gentle upward distance from bottom
+    scale: 0.97, // Subtle, natural scale
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.52, // Smooth, gentle glide upward
+      ease: [0.16, 1, 0.3, 1], // Quintic luxury deceleration curve
+    },
+  },
+};
+
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Articles");
+  const [filterKey, setFilterKey] = useState(0);
   const [activeArticle, setActiveArticle] = useState<BlogPost | null>(null);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
+
+  const handleCategoryClick = (cat: string) => {
+    setSelectedCategory(cat);
+    // Increment filterKey so cards always trigger a fresh sequential one-by-one cascade
+    setFilterKey((prev) => prev + 1);
+  };
 
   React.useEffect(() => {
     if (activeArticle) {
@@ -306,8 +341,8 @@ export default function BlogPage() {
                 return (
                   <button
                     key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                    onClick={() => handleCategoryClick(cat)}
+                    className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-200 cursor-pointer ${
                       isSelected
                         ? "bg-gradient-to-r from-[#047857] to-[#0A261F] text-white border border-[#047857] shadow-[0_6px_20px_rgba(4,120,87,0.3)] scale-105"
                         : "bg-white/90 backdrop-blur-md border border-[#E7DFD5] text-[#0A261F] hover:border-[#047857]/50 hover:text-[#047857] shadow-sm"
@@ -319,26 +354,27 @@ export default function BlogPage() {
               })}
             </div>
 
-            {/* Articles Grid */}
-            <motion.div
-              layout
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
-            >
-              <AnimatePresence mode="popLayout">
+            {/* Articles Grid Container */}
+            <div className="min-h-[440px]">
+              <motion.div
+                key={`${selectedCategory}-${filterKey}`}
+                variants={gridContainerVariants}
+                initial="hidden"
+                animate="visible"
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+              >
                 {filteredPosts.map((post) => (
                   <motion.div
                     key={post.id}
-                    layout
-                    initial={{ opacity: 0, y: 24, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 16, scale: 0.94 }}
-                    transition={{
-                      layout: { type: "spring", stiffness: 340, damping: 29, mass: 0.8 },
-                      opacity: { duration: 0.28, ease: "easeOut" },
-                      y: { duration: 0.28, ease: "easeOut" },
-                      scale: { duration: 0.28, ease: "easeOut" },
+                    variants={articleCardVariants}
+                    style={{ willChange: "transform, opacity" }}
+                    whileHover={{
+                      y: -6,
+                      boxShadow: "0 16px 36px -10px rgba(4, 120, 87, 0.15)",
+                      borderColor: "#085442",
+                      transition: { duration: 0.2 },
                     }}
-                    className="bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden border border-[#E7DFD5] hover:border-[#085442] shadow-luxury hover:shadow-luxury-hover hover:shadow-[0_12px_32px_rgba(8,84,66,0.12)] hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
+                    className="bg-white/95 backdrop-blur-md rounded-3xl overflow-hidden border border-[#E7DFD5] shadow-luxury transition-colors duration-200 flex flex-col justify-between group"
                   >
                     <div>
                       {/* Card Thumbnail */}
@@ -390,8 +426,8 @@ export default function BlogPage() {
                     </div>
                   </motion.div>
                 ))}
-              </AnimatePresence>
-            </motion.div>
+              </motion.div>
+            </div>
           </div>
         </section>
       </main>
