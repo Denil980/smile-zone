@@ -25,6 +25,7 @@ import {
   CheckCircle2,
   GraduationCap,
   Clock,
+  ZoomIn,
 } from "lucide-react";
 
 function MetricCounter({
@@ -91,6 +92,24 @@ export default function AboutPage() {
     clinicalPhilosophy: string;
     keyProcedures: string[];
   } | null>(null);
+
+  // Enlarged certificate state for screen-fitting zoom with top-corner close icon
+  const [enlargedCertificate, setEnlargedCertificate] = useState<{
+    title: string;
+    issuer: string;
+    date: string;
+    image: string;
+    badge: string;
+    desc: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setEnlargedCertificate(null);
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // =========================================================
   // DATA: CLINIC FEATURES (6 ITEMS)
@@ -252,6 +271,14 @@ export default function AboutPage() {
       image: "/assets/ready/cert_colgate_pro_relief.png",
       badge: "Colgate & IDA Award",
       desc: "Awarded in recognition of unique contributions in providing clinical relief to patients suffering from severe tooth sensitivity.",
+    },
+    {
+      title: "3rd Triennial Commonwealth Dental & 54th IDA Congress",
+      issuer: "Commonwealth Dental Association & Indian Dental Association",
+      date: "28 January – 01 February 2000",
+      image: "/assets/ready/cert_commonwealth_congress.jpg",
+      badge: "Commonwealth & IDA Congress",
+      desc: "Certificate of Appreciation presented to Dr. Lajja A. Kamdar for participating as a Delegate in the 3rd Triennial Commonwealth Dental Association & 54th Indian Dental Association Congress, New Delhi.",
     },
   ];
 
@@ -464,48 +491,46 @@ export default function AboutPage() {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4 items-start">
-                    {certificates.map((cert, index) => {
-                      // Smart origin mapping so zoomed certificates expand inwards and never clip off-screen
-                      const originClass =
-                        index % 2 === 0
-                          ? "origin-bottom-left"
-                          : "origin-bottom-right";
-                      const desktopEdgeClass =
-                        index === 0
-                          ? "sm:origin-bottom-left"
-                          : index === certificates.length - 1
-                          ? "sm:origin-bottom-right"
-                          : "sm:origin-bottom";
-
-                      return (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 items-start">
+                    {certificates.map((cert) => (
+                      <div
+                        key={cert.title}
+                        className="group relative flex flex-col items-center"
+                      >
+                        {/* Passport-Sized Certificate Frame (3:4 ratio) */}
                         <div
-                          key={cert.title}
-                          className="group relative flex flex-col items-center"
+                          onClick={() => setEnlargedCertificate(cert)}
+                          title="Click to view full screen certificate"
+                          className="relative w-full max-w-[94px] sm:max-w-[104px] aspect-[3/4] rounded-xl bg-white p-1 border-2 border-[#D6EBE0] group-hover:border-[#00c982] shadow-sm group-hover:shadow-[0_15px_30px_rgba(4,38,30,0.25)] transition-all duration-300 ease-out group-hover:scale-105 cursor-pointer flex items-center justify-center overflow-hidden"
                         >
-                          {/* Passport-Sized Certificate Frame (3:4 ratio) */}
-                          <div
-                            className={`relative w-full max-w-[96px] sm:max-w-[108px] aspect-[3/4] rounded-xl bg-white p-1 border-2 border-[#D6EBE0] group-hover:border-[#00c982] shadow-sm group-hover:shadow-[0_25px_50px_rgba(4,38,30,0.38)] transition-all duration-300 ease-out group-hover:scale-[2.4] sm:group-hover:scale-[2.7] group-hover:z-50 group-hover:-translate-y-1 ${originClass} ${desktopEdgeClass}`}
-                          >
-                            <img
-                              src={cert.image}
-                              alt={cert.title}
-                              className="w-full h-full object-cover rounded-[8px]"
-                            />
-                          </div>
+                          <img
+                            src={cert.image}
+                            alt={cert.title}
+                            className="w-full h-full object-cover rounded-[8px]"
+                          />
 
-                          {/* Small Description Below */}
-                          <div className="mt-2 text-center w-full px-0.5">
-                            <h5 className="text-[11px] sm:text-xs font-bold text-[#092620] leading-snug line-clamp-2 group-hover:text-[#0b8064] transition-colors">
-                              {cert.badge}
-                            </h5>
-                            <p className="text-[10px] text-[#527269] font-medium leading-tight mt-0.5 line-clamp-1">
-                              {cert.issuer.split("&")[0].trim()}
-                            </p>
+                          {/* Subtle Hover Overlay with Zoom Icon */}
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-[8px] flex flex-col items-center justify-center pointer-events-none p-1 text-center">
+                            <span className="p-1 rounded-full bg-white text-[#04261e] shadow-md mb-1">
+                              <ZoomIn className="w-3.5 h-3.5 text-[#085442]" />
+                            </span>
+                            <span className="text-[8px] font-bold text-white uppercase tracking-wider">
+                              Click to View
+                            </span>
                           </div>
                         </div>
-                      );
-                    })}
+
+                        {/* Small Description Below */}
+                        <div className="mt-2 text-center w-full px-0.5">
+                          <h5 className="text-[11px] sm:text-xs font-bold text-[#092620] leading-snug line-clamp-2 group-hover:text-[#0b8064] transition-colors">
+                            {cert.badge}
+                          </h5>
+                          <p className="text-[10px] text-[#527269] font-medium leading-tight mt-0.5 line-clamp-1">
+                            {cert.issuer.split("&")[0].trim()}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
               </div>
@@ -1003,6 +1028,62 @@ export default function AboutPage() {
                   <span>Book Appointment with {selectedDoctor.name}</span>
                   <ArrowRight className="w-4 h-4 text-mint" />
                 </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Full-Screen Enlarged Certificate Viewer with Top-Corner Close Icon */}
+      <AnimatePresence>
+        {enlargedCertificate && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setEnlargedCertificate(null)}
+            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 cursor-zoom-out"
+          >
+            {/* Certificate Display Container */}
+            <motion.div
+              initial={{ scale: 0.88, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.88, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 320, damping: 28 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-h-[94vh] max-w-[96vw] flex flex-col items-center justify-center cursor-default"
+            >
+              {/* Close Button at the Top Corner of the Image */}
+              <button
+                onClick={() => setEnlargedCertificate(null)}
+                aria-label="Close enlarged certificate"
+                title="Close (Esc)"
+                className="absolute -top-3.5 -right-3.5 sm:-top-4 sm:-right-4 z-[105] w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white text-[#04261e] hover:bg-[#00c982] hover:text-white shadow-[0_10px_30px_rgba(0,0,0,0.6)] border-2 border-[#00c982] flex items-center justify-center transition-all duration-200 cursor-pointer hover:scale-110 active:scale-95"
+              >
+                <X className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2.5]" />
+              </button>
+
+              {/* The Certificate Image Fitting the Screen in Height & Width */}
+              <div className="relative rounded-2xl overflow-hidden shadow-[0_30px_70px_rgba(0,0,0,0.7)] border-2 border-white/20 bg-black/40 flex items-center justify-center">
+                <img
+                  src={enlargedCertificate.image}
+                  alt={enlargedCertificate.title}
+                  className="max-h-[82vh] sm:max-h-[86vh] w-auto max-w-[92vw] object-contain rounded-2xl select-none"
+                />
+              </div>
+
+              {/* Clean Bottom Caption with Certificate Info */}
+              <div className="mt-2.5 text-center px-4 max-w-2xl">
+                <span className="inline-block px-2.5 py-0.5 rounded-full bg-[#00c982]/20 border border-[#00c982]/40 text-[#00E599] text-[11px] font-bold uppercase tracking-wider mb-1">
+                  {enlargedCertificate.badge}
+                </span>
+                <h4 className="text-white text-sm sm:text-base font-bold tracking-tight">
+                  {enlargedCertificate.title}
+                </h4>
+                <p className="text-white/70 text-xs mt-0.5">
+                  {enlargedCertificate.issuer} • {enlargedCertificate.date}
+                </p>
               </div>
             </motion.div>
           </motion.div>
