@@ -226,7 +226,7 @@ const gridContainerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.11, // Slower sequential stagger delay between cards
+      staggerChildren: 0.44, // Waits for previous card to reach its position and stop before next card starts
       delayChildren: 0.05,
     },
   },
@@ -242,16 +242,16 @@ const gridContainerVariants = {
 const reviewCardVariants = {
   hidden: {
     opacity: 0,
-    y: 40,
-    scale: 0.96,
+    y: 50, // Starts from the bottom
+    scale: 0.95,
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.65, // Slower, silky smooth upward glide
-      ease: [0.16, 1, 0.3, 1], // Luxury deceleration curve
+      duration: 0.40, // Takes 0.40s to glide up and stop at final position
+      ease: [0.22, 1, 0.36, 1], // Clean deceleration so it stops firmly in place
     },
   },
 };
