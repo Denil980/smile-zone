@@ -81,7 +81,7 @@ export default function MeetSpecialist() {
           >
             {/* Main Headline */}
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0A261F] leading-tight mb-5">
-              About <span className="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent">Dr. Lajja Kamdar</span>
+              Founder <span className="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent">Dr. Lajja Kamdar</span>
             </h2>
 
             {/* Bio Narrative */}
