@@ -25,6 +25,7 @@ import {
   CheckCircle2,
   GraduationCap,
   Clock,
+  ZoomIn,
 } from "lucide-react";
 
 function MetricCounter({
@@ -456,25 +457,76 @@ export default function AboutPage() {
                   Dr. Lajja Kamdar is a well-reputed Dentist in Tilak Nagar, Chembur. She acquired her degree of bachelor&apos;s in &apos;Dental Surgery&apos; from the prestigious Nair Hospital Dental College, Mumbai in the year 2000. Dr. Lajja has always kept her skills updated with the latest certified courses related to Cosmetic Dentistry, Restorative Dentistry, and Pediatric Dentistry. She is specialized in Full Mouth Rehabilitation with her expertise in SMILE DESIGN involving the latest in dental technology which includes state-of-the-art Flexible Dentures and Dental Implants. Her journey with private practice started in 2001 with SMILEZONE DENTAL STUDIO, which has been upgraded regularly with the latest techniques, machines, and materials to provide the best treatment to her thousands of happy patients. In her 20+ years of private practice, Dr. Lajja has treated numerous complex cases, giving healthy, confident, and long-lasting smiles with gentle care and a patient-first approach.
                 </motion.p>
 
-                {/* CTA Button: View Certificates and Awards */}
+                {/* Verified Accreditations & Certificates (Passport-Sized with Interactive Hover Zoom) */}
                 <motion.div
                   initial={{ opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="pt-2"
+                  transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                  className="pt-3 relative z-30"
                 >
-                  <button
-                    onClick={() => {
-                      setSelectedDoctor(doctors[0]);
-                      setCertSlideIndex(0);
-                    }}
-                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white font-black text-xs sm:text-sm shadow-[0_10px_30px_rgba(0,201,130,0.35)] hover:shadow-[0_15px_35px_rgba(0,201,130,0.5)] transition-all cursor-pointer hover:-translate-y-0.5 active:scale-95"
-                  >
-                    <Award className="w-4 h-4 text-white" />
-                    <span>View Certificates and Awards</span>
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </button>
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-5 h-5 rounded-full bg-[#E6F7F0] border border-[#BCE4D3] flex items-center justify-center text-[#085442]">
+                      <Award className="w-3.5 h-3.5 text-[#085442]" />
+                    </div>
+                    <span className="text-xs font-bold text-[#085442] uppercase tracking-wider">
+                      Verified Clinical Accreditations &amp; Certifications
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 sm:gap-4 items-start">
+                    {certificates.map((cert, index) => {
+                      // Smart origin mapping so zoomed certificates expand inwards and never clip off-screen
+                      const originClass =
+                        index % 2 === 0
+                          ? "origin-bottom-left"
+                          : "origin-bottom-right";
+                      const desktopEdgeClass =
+                        index === 0
+                          ? "sm:origin-bottom-left"
+                          : index === certificates.length - 1
+                          ? "sm:origin-bottom-right"
+                          : "sm:origin-bottom";
+
+                      return (
+                        <div
+                          key={cert.title}
+                          className="group relative flex flex-col items-center"
+                        >
+                          {/* Passport-Sized Certificate Frame (3:4 ratio) */}
+                          <div
+                            onClick={() => setSelectedCertificate(cert)}
+                            title="Hover to zoom • Click for full screen"
+                            className={`relative w-full max-w-[96px] sm:max-w-[108px] aspect-[3/4] rounded-xl bg-white p-1 border-2 border-[#D6EBE0] group-hover:border-[#00c982] shadow-sm group-hover:shadow-[0_25px_50px_rgba(4,38,30,0.38)] cursor-zoom-in transition-all duration-300 ease-out group-hover:scale-[2.35] sm:group-hover:scale-[2.65] group-hover:z-50 group-hover:-translate-y-1 ${originClass} ${desktopEdgeClass}`}
+                          >
+                            <img
+                              src={cert.image}
+                              alt={cert.title}
+                              className="w-full h-full object-cover rounded-[8px]"
+                            />
+
+                            {/* Subtle Hover Overlay with Zoom Indicator */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity rounded-[8px] flex items-end justify-center pb-1.5 pointer-events-none">
+                              <span className="text-[7px] font-bold text-white bg-[#085442]/90 backdrop-blur-xs px-1.5 py-0.5 rounded shadow-xs uppercase tracking-wider flex items-center gap-0.5">
+                                <ZoomIn className="w-2.5 h-2.5 text-[#00c982]" />
+                                Click to Enlarge
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Small Description Below */}
+                          <div className="mt-2 text-center w-full px-0.5">
+                            <h5 className="text-[11px] sm:text-xs font-bold text-[#092620] leading-snug line-clamp-2 group-hover:text-[#0b8064] transition-colors">
+                              {cert.badge}
+                            </h5>
+                            <p className="text-[10px] text-[#527269] font-medium leading-tight mt-0.5 line-clamp-1">
+                              {cert.issuer.split("&")[0].trim()}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </motion.div>
               </div>
 
