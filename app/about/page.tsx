@@ -106,6 +106,18 @@ export default function AboutPage() {
       if (e.key === "Escape") setEnlargedCertificate(null);
     };
     window.addEventListener("keydown", handleKeyDown);
+
+    // Smooth scroll to target hash section if navigated from another page
+    if (typeof window !== "undefined" && window.location.hash) {
+      const hash = window.location.hash;
+      const el = document.querySelector(hash);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 150);
+      }
+    }
+
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
@@ -310,7 +322,7 @@ export default function AboutPage() {
         {/* ========================================================= */}
         {/* SECTION 1: ABOUT OUR CLINIC (SMILEZONE DENTAL STUDIO)     */}
         {/* ========================================================= */}
-        <section id="about-clinic" className="py-16 sm:py-24 bg-gradient-to-b from-[#FAF8F5]/90 via-white/70 to-[#FAF6F0]/80 relative overflow-hidden">
+        <section id="about-clinic" className="scroll-mt-24 sm:scroll-mt-28 py-16 sm:py-24 bg-gradient-to-b from-[#FAF8F5]/90 via-white/70 to-[#FAF6F0]/80 relative overflow-hidden">
           {/* Subtle Ambient Glow */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[360px] bg-mint/10 blur-[140px] rounded-full" />
