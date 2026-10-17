@@ -103,7 +103,7 @@ export default function AboutClinic() {
       </div>
 
       <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_1.15fr_0.8fr] items-center gap-10 lg:gap-8 xl:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.15fr_1.1fr_0.8fr] items-center gap-10 lg:gap-8 xl:gap-12">
           {/* ========================================================= */}
           {/* LEFT COLUMN: Premium Headline, Narrative & Trust Metrics   */}
           {/* ========================================================= */}
@@ -115,10 +115,10 @@ export default function AboutClinic() {
             className="flex flex-col items-start"
           >
 
-            {/* Main Headline */}
-            <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-black text-[#0A261F] leading-[1.18] tracking-tight mb-3">
-              Best Family Dentist<br />
-              <span className="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent">
+            {/* Main Headline (Strictly 2 lines) */}
+            <h2 className="text-2xl sm:text-3xl lg:text-[32px] xl:text-[36px] font-black text-[#0A261F] leading-[1.2] tracking-tight mb-3">
+              <span className="block">Best Family Dentist</span>
+              <span className="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent block whitespace-nowrap">
                 in Tilak Nagar, Chembur
               </span>
             </h2>
@@ -130,10 +130,15 @@ export default function AboutClinic() {
               </h4>
             </div>
 
-            {/* Body Description */}
-            <p className="text-xs sm:text-sm text-[#3B5B52] leading-relaxed mb-6 font-normal">
-              SmileZone Dental Studio is a Multispeciality Dental Clinic in Tilak Nagar, Chembur led by Dr. Lajja Kamdar who has 20+ years of experience in Dentistry. From General Dentistry, Cosmetic Dentistry, to Dental Implants, At SmileZone Dental Studio we&apos;re proud to offer a wide range of highest-quality dental treatments to our patients.
-            </p>
+            {/* Body Description - Two Separate Paragraphs */}
+            <div className="space-y-3 mb-6">
+              <p className="text-xs sm:text-sm text-[#3B5B52] leading-relaxed font-normal">
+                SmileZone Dental Studio is a Multispeciality Dental Clinic in Tilak Nagar, Chembur led by Dr. Lajja Kamdar who has 20+ years of experience in Dentistry.
+              </p>
+              <p className="text-xs sm:text-sm text-[#3B5B52] leading-relaxed font-normal">
+                From General Dentistry, Cosmetic Dentistry, to Dental Implants, at SmileZone Dental Studio we&apos;re proud to offer a wide range of highest-quality dental treatments to our patients.
+              </p>
+            </div>
 
             {/* 3 Quick Trust Metric Cards */}
             <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full mb-7">
