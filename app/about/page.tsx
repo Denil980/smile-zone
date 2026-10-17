@@ -300,141 +300,9 @@ export default function AboutPage() {
         />
 
         {/* ========================================================= */}
-        {/* SECTION 1: HERO / OUR LEAD DENTIST                        */}
+        {/* SECTION 1: ABOUT OUR CLINIC (SMILEZONE DENTAL STUDIO)     */}
         {/* ========================================================= */}
-        <section className="relative bg-gradient-to-b from-[#FAF7F2]/80 via-[#F3F8F5]/60 to-[#FAF8F5]/80 text-[#092620] pt-12 sm:pt-16 pb-20 sm:pb-32 overflow-hidden">
-          {/* Subtle Ambient Lighting */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
-            <div className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[700px] h-[400px] bg-mint/10 blur-[150px] rounded-full" />
-            <div className="absolute top-12 right-12 w-80 h-80 bg-[#e8dfc8]/30 blur-[120px] rounded-full" />
-          </div>
-
-          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-2 sm:pt-4">
-              {/* Left Column: Doctor Info */}
-              <div className="lg:col-span-6 space-y-6">
-                {/* Heading with Typewriter Animation */}
-                <TypewriterHeading
-                  part1="Dr. Lajja"
-                  part2="Kamdar"
-                  hasBreak={false}
-                  className="text-3xl sm:text-5xl lg:text-5xl font-black text-[#0A261F] tracking-tight leading-tight"
-                  part2ClassName="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent"
-                />
-
-                {/* Single Natural Introduction Paragraph (6-8 lines) */}
-                <p className="text-sm sm:text-base text-[#3B5B52] leading-relaxed font-normal">
-                  Dr. Lajja Kamdar is a well-reputed Dentist in Tilak Nagar, Chembur. She acquired her degree of bachelor&apos;s in &apos;Dental Surgery&apos; from the prestigious Nair Hospital Dental College, Mumbai in the year 2000. Dr. Lajja has always kept her skills updated with the latest certified courses related to Cosmetic Dentistry, Restorative Dentistry, and Pediatric Dentistry. She is specialized in Full Mouth Rehabilitation with her expertise in SMILE DESIGN involving the latest in dental technology which includes state-of-the-art Flexible Dentures and Dental Implants. Her journey with private practice started in 2001 with SMILEZONE DENTAL STUDIO, which has been upgraded regularly with the latest techniques, machines, and materials to provide the best treatment to her thousands of happy patients. In her 20+ years of private practice, Dr. Lajja has treated numerous complex cases, giving healthy, confident, and long-lasting smiles with gentle care and a patient-first approach.
-                </p>
-
-                {/* CTA Button: View Certificates and Awards */}
-                <div className="pt-2">
-                  <button
-                    onClick={() => {
-                      setSelectedDoctor(doctors[0]);
-                      setCertSlideIndex(0);
-                    }}
-                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white font-black text-xs sm:text-sm shadow-[0_10px_30px_rgba(0,201,130,0.35)] hover:shadow-[0_15px_35px_rgba(0,201,130,0.5)] transition-all cursor-pointer"
-                  >
-                    <Award className="w-4 h-4 text-white" />
-                    <span>View Certificates and Awards</span>
-                    <ArrowRight className="w-4 h-4 text-white" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Right Column: Hero Visual with Circular Backdrop, Cutout & 3 Metric Badges Underneath */}
-              <div className="lg:col-span-6 relative flex flex-col items-center justify-center pt-6 lg:pt-0">
-                {/* Glowing Circular Halo */}
-                <div className="relative w-[340px] h-[340px] sm:w-[420px] sm:h-[420px] flex items-center justify-center">
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#00d084]/20 via-[#e8dfc8]/30 to-transparent border border-[#E7DFD5] shadow-luxury" />
-
-                  {/* Doctor Cutout Image */}
-                  <img
-                    src="/assets/site_images/Dr-lajja-Kamdar-min.png"
-                    alt="Dr. Lajja Kamdar"
-                    className="relative z-10 w-[85%] h-auto object-contain drop-shadow-[0_20px_35px_rgba(10,38,31,0.15)] select-none"
-                  />
-                </div>
-
-                {/* 3 Metric Badges Under Image of the Doctor */}
-                <div className="relative z-20 w-full max-w-[540px] -mt-4 sm:-mt-6 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
-                  {/* Metric 1 */}
-                  <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md border border-[#E7DFD5] rounded-2xl p-3 shadow-luxury">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E6F7F0] to-[#F0FAF5] border border-[#BCE4D3] flex items-center justify-center text-[#085442] shrink-0">
-                      <Award className="w-5 h-5 text-[#085442]" />
-                    </div>
-                    <div>
-                      <span className="block text-base sm:text-lg font-black text-[#085442] leading-tight">
-                        <MetricCounter value={20} suffix="+" />
-                      </span>
-                      <span className="text-[11px] text-[#527269] font-medium leading-tight block mt-0.5">
-                        Years of Experience
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Metric 2 */}
-                  <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md border border-[#E7DFD5] rounded-2xl p-3 shadow-luxury">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E6F7F0] to-[#F0FAF5] border border-[#BCE4D3] flex items-center justify-center text-[#085442] shrink-0">
-                      <Users className="w-5 h-5 text-[#085442]" />
-                    </div>
-                    <div>
-                      <span className="block text-base sm:text-lg font-black text-[#085442] leading-tight">
-                        <MetricCounter value={5000} suffix="+" />
-                      </span>
-                      <span className="text-[11px] text-[#527269] font-medium leading-tight block mt-0.5">
-                        Happy Patients
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Metric 3 */}
-                  <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md border border-[#E7DFD5] rounded-2xl p-3 shadow-luxury">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E6F7F0] to-[#F0FAF5] border border-[#BCE4D3] flex items-center justify-center text-[#085442] shrink-0">
-                      <ShieldCheck className="w-5 h-5 text-[#085442]" />
-                    </div>
-                    <div>
-                      <span className="block text-base sm:text-lg font-black text-[#085442] leading-tight">
-                        Expertise
-                      </span>
-                      <span className="text-[11px] text-[#527269] font-medium leading-tight block mt-0.5">
-                        Across All Age Groups
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Organic Bottom Multi-Layer Wave Transition */}
-          <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
-            <svg
-              className="relative block w-full h-[40px] sm:h-[60px]"
-              viewBox="0 0 1200 120"
-              preserveAspectRatio="none"
-            >
-              <path
-                d="M0,0 C350,110 850,110 1200,0 L1200,120 L0,120 Z"
-                fill="rgba(245, 238, 226, 0.45)"
-              />
-              <path
-                d="M0,20 C400,10 800,100 1200,15 L1200,120 L0,120 Z"
-                fill="rgba(216, 237, 226, 0.5)"
-              />
-              <path
-                d="M0,35 C320,115 880,105 1200,30 L1200,120 L0,120 Z"
-                fill="#FAF8F5"
-              />
-            </svg>
-          </div>
-        </section>
-
-        {/* ========================================================= */}
-        {/* SECTION 2: ABOUT OUR CLINIC (TRANSLUCENT LUXURY)          */}
-        {/* ========================================================= */}
-        <section id="about-clinic" className="py-16 sm:py-24 bg-gradient-to-b from-[#FAF8F5]/80 via-white/60 to-[#FAF6F0]/80 relative overflow-hidden">
+        <section id="about-clinic" className="py-16 sm:py-24 bg-gradient-to-b from-[#FAF8F5]/90 via-white/70 to-[#FAF6F0]/80 relative overflow-hidden">
           {/* Subtle Ambient Glow */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[360px] bg-mint/10 blur-[140px] rounded-full" />
@@ -551,6 +419,138 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* ========================================================= */}
+        {/* SECTION 2: FOUNDER / LEAD DENTIST (DR. LAJJA KAMDAR)      */}
+        {/* ========================================================= */}
+        <section id="lead-dentist" className="relative bg-gradient-to-b from-[#FAF7F2]/80 via-[#F3F8F5]/60 to-[#FAF8F5]/80 text-[#092620] py-16 sm:py-24 pb-20 sm:pb-32 overflow-hidden border-t border-[#E7DFD5]/60">
+          {/* Subtle Ambient Lighting */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+            <div className="absolute top-1/4 left-1/3 -translate-x-1/2 w-[700px] h-[400px] bg-mint/10 blur-[150px] rounded-full" />
+            <div className="absolute top-12 right-12 w-80 h-80 bg-[#e8dfc8]/30 blur-[120px] rounded-full" />
+          </div>
+
+          <div className="max-w-[1240px] mx-auto px-4 sm:px-6 relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pt-2 sm:pt-4">
+              {/* Left Column: Doctor Info */}
+              <div className="lg:col-span-6 space-y-6">
+                {/* Heading with Typewriter Animation */}
+                <TypewriterHeading
+                  part1="Dr. Lajja"
+                  part2="Kamdar"
+                  hasBreak={false}
+                  className="text-3xl sm:text-5xl lg:text-5xl font-black text-[#0A261F] tracking-tight leading-tight"
+                  part2ClassName="bg-gradient-to-r from-[#00A86B] via-[#059669] to-[#047857] bg-clip-text text-transparent"
+                />
+
+                {/* Single Natural Introduction Paragraph (6-8 lines) */}
+                <p className="text-sm sm:text-base text-[#3B5B52] leading-relaxed font-normal">
+                  Dr. Lajja Kamdar is a well-reputed Dentist in Tilak Nagar, Chembur. She acquired her degree of bachelor&apos;s in &apos;Dental Surgery&apos; from the prestigious Nair Hospital Dental College, Mumbai in the year 2000. Dr. Lajja has always kept her skills updated with the latest certified courses related to Cosmetic Dentistry, Restorative Dentistry, and Pediatric Dentistry. She is specialized in Full Mouth Rehabilitation with her expertise in SMILE DESIGN involving the latest in dental technology which includes state-of-the-art Flexible Dentures and Dental Implants. Her journey with private practice started in 2001 with SMILEZONE DENTAL STUDIO, which has been upgraded regularly with the latest techniques, machines, and materials to provide the best treatment to her thousands of happy patients. In her 20+ years of private practice, Dr. Lajja has treated numerous complex cases, giving healthy, confident, and long-lasting smiles with gentle care and a patient-first approach.
+                </p>
+
+                {/* CTA Button: View Certificates and Awards */}
+                <div className="pt-2">
+                  <button
+                    onClick={() => {
+                      setSelectedDoctor(doctors[0]);
+                      setCertSlideIndex(0);
+                    }}
+                    className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-full bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white font-black text-xs sm:text-sm shadow-[0_10px_30px_rgba(0,201,130,0.35)] hover:shadow-[0_15px_35px_rgba(0,201,130,0.5)] transition-all cursor-pointer"
+                  >
+                    <Award className="w-4 h-4 text-white" />
+                    <span>View Certificates and Awards</span>
+                    <ArrowRight className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Column: Hero Visual with Circular Backdrop, Cutout & 3 Metric Badges Underneath */}
+              <div className="lg:col-span-6 relative flex flex-col items-center justify-center pt-6 lg:pt-0">
+                {/* Glowing Circular Halo */}
+                <div className="relative w-[340px] h-[340px] sm:w-[420px] sm:h-[420px] flex items-center justify-center">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-[#00d084]/20 via-[#e8dfc8]/30 to-transparent border border-[#E7DFD5] shadow-luxury" />
+
+                  {/* Doctor Cutout Image */}
+                  <img
+                    src="/assets/site_images/Dr-lajja-Kamdar-min.png"
+                    alt="Dr. Lajja Kamdar"
+                    className="relative z-10 w-[85%] h-auto object-contain drop-shadow-[0_20px_35px_rgba(10,38,31,0.15)] select-none"
+                  />
+                </div>
+
+                {/* 3 Metric Badges Under Image of the Doctor */}
+                <div className="relative z-20 w-full max-w-[540px] -mt-4 sm:-mt-6 grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
+                  {/* Metric 1 */}
+                  <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md border border-[#E7DFD5] rounded-2xl p-3 shadow-luxury">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E6F7F0] to-[#F0FAF5] border border-[#BCE4D3] flex items-center justify-center text-[#085442] shrink-0">
+                      <Award className="w-5 h-5 text-[#085442]" />
+                    </div>
+                    <div>
+                      <span className="block text-base sm:text-lg font-black text-[#085442] leading-tight">
+                        <MetricCounter value={20} suffix="+" />
+                      </span>
+                      <span className="text-[11px] text-[#527269] font-medium leading-tight block mt-0.5">
+                        Years of Experience
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Metric 2 */}
+                  <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md border border-[#E7DFD5] rounded-2xl p-3 shadow-luxury">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E6F7F0] to-[#F0FAF5] border border-[#BCE4D3] flex items-center justify-center text-[#085442] shrink-0">
+                      <Users className="w-5 h-5 text-[#085442]" />
+                    </div>
+                    <div>
+                      <span className="block text-base sm:text-lg font-black text-[#085442] leading-tight">
+                        <MetricCounter value={5000} suffix="+" />
+                      </span>
+                      <span className="text-[11px] text-[#527269] font-medium leading-tight block mt-0.5">
+                        Happy Patients
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Metric 3 */}
+                  <div className="flex items-center gap-3 bg-white/95 backdrop-blur-md border border-[#E7DFD5] rounded-2xl p-3 shadow-luxury">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E6F7F0] to-[#F0FAF5] border border-[#BCE4D3] flex items-center justify-center text-[#085442] shrink-0">
+                      <ShieldCheck className="w-5 h-5 text-[#085442]" />
+                    </div>
+                    <div>
+                      <span className="block text-base sm:text-lg font-black text-[#085442] leading-tight">
+                        Expertise
+                      </span>
+                      <span className="text-[11px] text-[#527269] font-medium leading-tight block mt-0.5">
+                        Across All Age Groups
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Organic Bottom Multi-Layer Wave Transition into Section 3 */}
+          <div className="absolute bottom-0 left-0 right-0 w-full overflow-hidden leading-none z-10 pointer-events-none">
+            <svg
+              className="relative block w-full h-[40px] sm:h-[60px]"
+              viewBox="0 0 1200 120"
+              preserveAspectRatio="none"
+            >
+              <path
+                d="M0,0 C350,110 850,110 1200,0 L1200,120 L0,120 Z"
+                fill="rgba(245, 238, 226, 0.45)"
+              />
+              <path
+                d="M0,20 C400,10 800,100 1200,15 L1200,120 L0,120 Z"
+                fill="rgba(216, 237, 226, 0.5)"
+              />
+              <path
+                d="M0,35 C320,115 880,105 1200,30 L1200,120 L0,120 Z"
+                fill="#FAF8F5"
+              />
+            </svg>
           </div>
         </section>
 
