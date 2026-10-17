@@ -226,14 +226,14 @@ const gridContainerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.44, // Waits for previous card to reach its position and stop before next card starts
-      delayChildren: 0.05,
+      staggerChildren: 0.56, // Waits for previous card to smoothly reach position and settle before next card starts
+      delayChildren: 0.04,
     },
   },
   exit: {
     opacity: 0,
     transition: {
-      duration: 0.15,
+      duration: 0.16,
       ease: "easeOut",
     },
   },
@@ -242,16 +242,16 @@ const gridContainerVariants = {
 const reviewCardVariants = {
   hidden: {
     opacity: 0,
-    y: 50, // Starts from the bottom
-    scale: 0.95,
+    y: 36, // Gentle upward distance from bottom
+    scale: 0.97, // Subtle, natural scale
   },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.40, // Takes 0.40s to glide up and stop at final position
-      ease: [0.22, 1, 0.36, 1], // Clean deceleration so it stops firmly in place
+      duration: 0.52, // Smooth, gentle glide upward
+      ease: [0.16, 1, 0.3, 1], // Quintic luxury deceleration curve
     },
   },
 };
