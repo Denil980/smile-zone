@@ -265,7 +265,10 @@ export default function BlogPage() {
         {/* ========================================================= */}
         <section className="py-10 sm:py-16">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
-            <div className="bg-white/95 backdrop-blur-md rounded-3xl sm:rounded-[36px] overflow-hidden border border-[#E7DFD5] hover:border-[#085442] shadow-luxury hover:shadow-luxury-hover hover:shadow-[0_12px_36px_rgba(8,84,66,0.12)] transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-center">
+            <div
+              onClick={() => setActiveArticle(blogPosts[0])}
+              className="bg-white/95 backdrop-blur-md rounded-3xl sm:rounded-[36px] overflow-hidden border border-[#E7DFD5] hover:border-[#085442] shadow-luxury hover:shadow-luxury-hover hover:shadow-[0_12px_36px_rgba(8,84,66,0.12)] transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-center cursor-pointer"
+            >
               <div className="lg:col-span-5 h-64 sm:h-80 lg:h-full relative overflow-hidden bg-slate-900 group">
                 <img
                   src={blogPosts[0].image}
@@ -317,7 +320,10 @@ export default function BlogPage() {
 
                   <button
                     type="button"
-                    onClick={() => setActiveArticle(blogPosts[0])}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveArticle(blogPosts[0]);
+                    }}
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] hover:shadow-[0_8px_24px_rgba(0,201,130,0.35)] text-white font-bold text-xs shadow-sm hover:-translate-y-0.5 transition-all cursor-pointer"
                   >
                     <span>Read Full Guide</span>
@@ -378,7 +384,8 @@ export default function BlogPage() {
                       borderColor: "#085442",
                       transition: { duration: 0.2 },
                     }}
-                    className="bg-white rounded-3xl overflow-hidden border border-[#E7DFD5] shadow-luxury transition-colors duration-200 flex flex-col justify-between group"
+                    onClick={() => setActiveArticle(post)}
+                    className="bg-white rounded-3xl overflow-hidden border border-[#E7DFD5] shadow-luxury transition-colors duration-200 flex flex-col justify-between group cursor-pointer"
                   >
                     <div>
                       {/* Card Thumbnail */}
@@ -421,7 +428,10 @@ export default function BlogPage() {
 
                       <button
                         type="button"
-                        onClick={() => setActiveArticle(post)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveArticle(post);
+                        }}
                         className="inline-flex items-center gap-1.5 text-xs font-bold text-[#047857] hover:text-[#00c982] cursor-pointer"
                       >
                         <span>Read More</span>
