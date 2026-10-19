@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, CheckCircle2, Quote } from "lucide-react";
 
 export default function Testimonials() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [mobileIndex, setMobileIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const testimonials = [
@@ -54,19 +56,71 @@ export default function Testimonials() {
     },
   ];
 
-  // Triplicate testimonials for a truly seamless, infinite horizontal loop
+  // Triplicate testimonials for a truly seamless, infinite horizontal loop on desktop
   const displayTestimonials = [...testimonials, ...testimonials, ...testimonials];
 
-  // Initialize scroll position to the middle set for seamless looping in both directions
+  const activeTestimonial = testimonials[mobileIndex];
+
+  // Animation variants for single-card transition on mobile
+  const slideVariants = {
+    enter: (dir: number) => ({
+      x: dir > 0 ? 40 : -40,
+      opacity: 0,
+      scale: 0.98,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      scale: 1,
+      transition: {
+        x: { type: "spring", stiffness: 320, damping: 30 },
+        opacity: { duration: 0.22 },
+        scale: { duration: 0.22 },
+      },
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? -40 : 40,
+      opacity: 0,
+      scale: 0.98,
+      transition: {
+        duration: 0.16,
+      },
+    }),
+  };
+
+  const pauseAutoScrollTemporarily = (duration = 6000) => {
+    setIsPaused(true);
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    resumeTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, duration);
+  };
+
+  // Mobile auto-advance (1 card at a time every 4.5 seconds)
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      if (typeof window !== "undefined" && window.innerWidth < 1024) {
+        setDirection(1);
+        setMobileIndex((prev) => (prev + 1) % testimonials.length);
+      }
+    }, 4500);
+
+    return () => clearInterval(interval);
+  }, [isPaused, testimonials.length]);
+
+  // Desktop horizontal scroll initialization
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
 
     const initScroll = () => {
+      if (typeof window !== "undefined" && window.innerWidth < 1024) return;
       const firstCard = el.querySelector<HTMLElement>(":scope > div");
       const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
       const style = window.getComputedStyle(el);
-      const gap = parseFloat(style.columnGap || style.gap) || 16;
+      const gap = parseFloat(style.columnGap || style.gap) || 24;
       const step = cardWidth + gap;
       const singleSetWidth = step * testimonials.length;
 
@@ -79,10 +133,11 @@ export default function Testimonials() {
     const timer = setTimeout(initScroll, 120);
 
     const handleResize = () => {
+      if (typeof window !== "undefined" && window.innerWidth < 1024) return;
       const firstCard = el.querySelector<HTMLElement>(":scope > div");
       const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
       const style = window.getComputedStyle(el);
-      const gap = parseFloat(style.columnGap || style.gap) || 16;
+      const gap = parseFloat(style.columnGap || style.gap) || 24;
       const step = cardWidth + gap;
       if (step > 0) {
         const nearestIndex = Math.round(el.scrollLeft / step);
@@ -97,11 +152,10 @@ export default function Testimonials() {
     };
   }, [testimonials.length]);
 
-  // Very slow, smooth horizontal auto-scroll ticker
+  // Desktop slow smooth ticker (only active on >= 1024px)
   useEffect(() => {
     let animationFrameId: number;
     let lastTime: number | null = null;
-    // Ultra-slow speed: ~24 pixels/sec (very relaxed, gentle)
     const SPEED_PIXELS_PER_SEC = 24;
 
     const step = (time: number) => {
@@ -109,29 +163,26 @@ export default function Testimonials() {
       const delta = Math.min((time - lastTime) / 1000, 0.1);
       lastTime = time;
 
-      if (!isPaused && scrollRef.current) {
+      if (!isPaused && scrollRef.current && typeof window !== "undefined" && window.innerWidth >= 1024) {
         const el = scrollRef.current;
         const firstCard = el.querySelector<HTMLElement>(":scope > div");
         const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
-        const style = window.getComputedStyle(el);
-        const gap = parseFloat(style.columnGap || style.gap) || 16;
-        const cardStep = cardWidth + gap;
-        const singleSetWidth = cardStep * testimonials.length;
+        if (cardWidth > 0) {
+          const style = window.getComputedStyle(el);
+          const gap = parseFloat(style.columnGap || style.gap) || 24;
+          const cardStep = cardWidth + gap;
+          const singleSetWidth = cardStep * testimonials.length;
 
-        if (singleSetWidth > 0) {
-          // If at start, initialize to middle set
-          if (el.scrollLeft === 0) {
-            el.scrollLeft = singleSetWidth;
-          }
-
-          // Advance towards the right (scrolling forward through reviews)
-          el.scrollLeft += SPEED_PIXELS_PER_SEC * delta;
-
-          // Seamless infinite wrap-around
-          if (el.scrollLeft >= singleSetWidth * 2) {
-            el.scrollLeft -= singleSetWidth;
-          } else if (el.scrollLeft <= singleSetWidth * 0.4) {
-            el.scrollLeft += singleSetWidth;
+          if (singleSetWidth > 0) {
+            if (el.scrollLeft === 0) {
+              el.scrollLeft = singleSetWidth;
+            }
+            el.scrollLeft += SPEED_PIXELS_PER_SEC * delta;
+            if (el.scrollLeft >= singleSetWidth * 2) {
+              el.scrollLeft -= singleSetWidth;
+            } else if (el.scrollLeft <= singleSetWidth * 0.4) {
+              el.scrollLeft += singleSetWidth;
+            }
           }
         }
       }
@@ -147,22 +198,13 @@ export default function Testimonials() {
     };
   }, [isPaused, testimonials.length]);
 
-  const pauseAutoScrollTemporarily = (duration = 6000) => {
-    setIsPaused(true);
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
-    resumeTimeoutRef.current = setTimeout(() => {
-      setIsPaused(false);
-    }, duration);
-  };
-
-  const scrollLeft = () => {
-    if (!scrollRef.current) return;
-    pauseAutoScrollTemporarily(6000);
+  const scrollLeftDesktop = () => {
+    if (!scrollRef.current || typeof window === "undefined" || window.innerWidth < 1024) return;
     const el = scrollRef.current;
     const firstCard = el.querySelector<HTMLElement>(":scope > div");
     const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
     const style = window.getComputedStyle(el);
-    const gap = parseFloat(style.columnGap || style.gap) || 16;
+    const gap = parseFloat(style.columnGap || style.gap) || 24;
     const step = cardWidth + gap;
     const singleSetWidth = step * testimonials.length;
 
@@ -175,14 +217,13 @@ export default function Testimonials() {
     el.scrollTo({ left: targetScroll, behavior: "smooth" });
   };
 
-  const scrollRight = () => {
-    if (!scrollRef.current) return;
-    pauseAutoScrollTemporarily(6000);
+  const scrollRightDesktop = () => {
+    if (!scrollRef.current || typeof window === "undefined" || window.innerWidth < 1024) return;
     const el = scrollRef.current;
     const firstCard = el.querySelector<HTMLElement>(":scope > div");
     const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
     const style = window.getComputedStyle(el);
-    const gap = parseFloat(style.columnGap || style.gap) || 16;
+    const gap = parseFloat(style.columnGap || style.gap) || 24;
     const step = cardWidth + gap;
     const singleSetWidth = step * testimonials.length;
 
@@ -193,6 +234,24 @@ export default function Testimonials() {
     const currentCardIndex = Math.floor((el.scrollLeft + 8) / step);
     const targetScroll = (currentCardIndex + 1) * step;
     el.scrollTo({ left: targetScroll, behavior: "smooth" });
+  };
+
+  const handlePrev = () => {
+    pauseAutoScrollTemporarily(6000);
+    // Mobile transition
+    setDirection(-1);
+    setMobileIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    // Desktop transition
+    scrollLeftDesktop();
+  };
+
+  const handleNext = () => {
+    pauseAutoScrollTemporarily(6000);
+    // Mobile transition
+    setDirection(1);
+    setMobileIndex((prev) => (prev + 1) % testimonials.length);
+    // Desktop transition
+    scrollRightDesktop();
   };
 
   return (
@@ -214,7 +273,7 @@ export default function Testimonials() {
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00c982]/40 to-transparent opacity-50" />
 
           {/* Header Row */}
-          <div className="flex flex-wrap justify-between items-end gap-6 mb-10 sm:mb-12">
+          <div className="flex flex-wrap justify-between items-end gap-6 mb-8 sm:mb-12">
             <div className="max-w-2xl">
               <motion.h2
                 initial={{ opacity: 0, y: 15 }}
@@ -242,11 +301,10 @@ export default function Testimonials() {
 
             {/* Carousel Navigation Controls */}
             <div className="flex items-center gap-4">
-              {/* Navigation Arrows */}
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={scrollLeft}
+                  onClick={handlePrev}
                   onMouseEnter={() => setIsPaused(true)}
                   onMouseLeave={() => setIsPaused(false)}
                   onTouchEnd={(e) => {
@@ -259,7 +317,7 @@ export default function Testimonials() {
                 </button>
                 <button
                   type="button"
-                  onClick={scrollRight}
+                  onClick={handleNext}
                   onMouseEnter={() => setIsPaused(true)}
                   onMouseLeave={() => setIsPaused(false)}
                   onTouchEnd={(e) => {
@@ -274,21 +332,123 @@ export default function Testimonials() {
             </div>
           </div>
 
-          {/* Testimonial Cards Carousel Grid */}
+          {/* ============================================================ */}
+          {/* MOBILE VIEW (< lg): STRICTLY ONE SINGLE CARD VISIBLE AT A TIME */}
+          {/* ============================================================ */}
+          <div className="lg:hidden relative overflow-hidden">
+            <div className="w-full relative min-h-[310px] flex items-stretch">
+              <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                  key={mobileIndex}
+                  custom={direction}
+                  variants={slideVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  drag="x"
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragStart={() => setIsPaused(true)}
+                  onDragEnd={(_e, info) => {
+                    if (info.offset.x < -35) {
+                      handleNext();
+                    } else if (info.offset.x > 35) {
+                      handlePrev();
+                    } else {
+                      pauseAutoScrollTemporarily(6000);
+                    }
+                  }}
+                  className="w-full bg-white border border-[#E7DFD5] hover:border-[#085442] rounded-3xl p-6 sm:p-7 flex flex-col justify-between shadow-xs select-none touch-pan-y relative overflow-hidden cursor-grab active:cursor-grabbing"
+                >
+                  {/* Subtle top shimmer accent */}
+                  <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00c982] to-transparent opacity-90" />
+
+                  <div>
+                    {/* Card Top Row: 5 Stars + Verified Badge + Quote Icon */}
+                    <div className="flex items-center justify-between mb-5">
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1 text-amber-500">
+                          {[...Array(activeTestimonial.rating)].map((_, i) => (
+                            <Star key={i} className="w-4 h-4 fill-amber-500 stroke-none" />
+                          ))}
+                        </div>
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#085442] bg-[#EAF6F0] px-2 py-0.5 rounded-full border border-[#C5E5D5]">
+                          <CheckCircle2 className="w-3 h-3 text-[#00c982]" />
+                          Verified
+                        </span>
+                      </div>
+
+                      <Quote className="w-7 h-7 text-[#D4E8DF]" />
+                    </div>
+
+                    {/* Patient Review Text */}
+                    <p className="text-xs sm:text-sm text-[#24423A] leading-relaxed font-normal mb-6">
+                      &quot;{activeTestimonial.text}&quot;
+                    </p>
+                  </div>
+
+                  {/* Card Bottom: Procedure Tag, Patient Name & Origin */}
+                  <div className="pt-4 border-t border-[#EFE8DF] flex flex-col gap-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <h3 className="text-sm sm:text-base font-bold text-[#0A261F]">
+                        {activeTestimonial.name}
+                      </h3>
+                      <span className="text-[10px] font-bold text-[#085442] uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-[#FAF7F2] border border-[#E7DFD5]">
+                        {activeTestimonial.treatment}
+                      </span>
+                    </div>
+
+                    <p className="text-[11px] text-[#69877F] font-medium">
+                      {activeTestimonial.location}
+                    </p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Mobile Navigation Dots & Slide Counter */}
+            <div className="flex items-center justify-between mt-5 px-1">
+              <div className="flex items-center gap-1.5">
+                {testimonials.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      pauseAutoScrollTemporarily(6000);
+                      setDirection(idx > mobileIndex ? 1 : -1);
+                      setMobileIndex(idx);
+                    }}
+                    aria-label={`Go to testimonial ${idx + 1}`}
+                    className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${
+                      idx === mobileIndex
+                        ? "w-7 bg-[#00A86B]"
+                        : "w-2 bg-[#D5E5DE] hover:bg-[#A3C9B8]"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <span className="text-xs font-semibold text-[#4A7265] tracking-wider select-none">
+                0{mobileIndex + 1} <span className="text-[#A3C4B8]">/</span> 0{testimonials.length}
+              </span>
+            </div>
+          </div>
+
+          {/* ============================================================ */}
+          {/* DESKTOP VIEW (>= lg): CONTINUOUS MULTI-CARD HORIZONTAL SCROLL */}
+          {/* ============================================================ */}
           <div
             ref={scrollRef}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
-            onTouchStart={() => setIsPaused(true)}
-            onTouchEnd={() => pauseAutoScrollTemporarily(6000)}
-            className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar pb-4 pt-1"
+            className="hidden lg:flex gap-6 overflow-x-auto no-scrollbar pb-4 pt-1"
             style={{ scrollBehavior: "auto" }}
           >
             {displayTestimonials.map((t, idx) => (
               <motion.div
                 key={`${t.name}-${idx}`}
                 whileHover={{ y: -6 }}
-                className="group relative bg-white hover:bg-[#FAFDFB] border border-[#E7DFD5] hover:border-[#085442] shadow-none rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 w-full min-w-full sm:min-w-0 sm:w-[350px] lg:w-[calc(33.333%-16px)] shrink-0 overflow-hidden cursor-pointer"
+                className="group relative bg-white hover:bg-[#FAFDFB] border border-[#E7DFD5] hover:border-[#085442] shadow-none rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 lg:w-[calc(33.333%-16px)] shrink-0 overflow-hidden cursor-pointer"
               >
                 {/* Top Subtle Shimmer Accent on Hover */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00c982] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
