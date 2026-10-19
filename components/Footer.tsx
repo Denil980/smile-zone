@@ -81,92 +81,109 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Col 2: Quick Links */}
-          <div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-7 after:h-0.5 after:bg-mint">
-              Quick Links
-            </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-[#9cbdb4]">
-              <li>
-                <a href="/" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Home
-                </a>
-              </li>
-              <li>
-                <a href="/about" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> About Us
-                </a>
-              </li>
-              <li>
-                <a href="/treatments" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Treatments
-                </a>
-              </li>
-              <li>
-                <a href="/testimonials" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Patient Testimonials
-                </a>
-              </li>
-              <li>
-                <a href="/gallery" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Smile Gallery
-                </a>
-              </li>
-              <li>
-                <a href="/blog" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Oral Health Blog
-                </a>
-              </li>
-              <li>
-                <a href="/contact" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Contact &amp; Location
-                </a>
-              </li>
-            </ul>
-          </div>
+          {/* Col 2 & 3: Quick Links & Treatments (Side-by-side on mobile, native grid columns on md+) */}
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 md:contents">
+            {/* Col 2: Quick Links */}
+            <div>
+              <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-7 after:h-0.5 after:bg-mint">
+                Quick Links
+              </h4>
+              <ul className="space-y-2 text-xs sm:text-sm text-[#9cbdb4]">
+                <li>
+                  <a href="/" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Home</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/about" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>About Us</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/treatments" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Treatments</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/testimonials" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Patient Testimonials</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/gallery" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Smile Gallery</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/blog" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Oral Health Blog</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/contact" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Contact &amp; Location</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-          {/* Col 3: Treatments */}
-          <div>
-            <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-7 after:h-0.5 after:bg-mint">
-              Treatments
-            </h4>
-            <ul className="space-y-2 text-xs sm:text-sm text-[#9cbdb4]">
-              <li>
-                <a href="/treatments" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> General Dentistry
-                </a>
-              </li>
-              <li>
-                <a href="/treatments" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Dental Implants
-                </a>
-              </li>
-              <li>
-                <a href="/treatments" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Cosmetic Dentistry
-                </a>
-              </li>
-              <li>
-                <a href="/treatments" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Braces & Aligners
-                </a>
-              </li>
-              <li>
-                <a href="/treatments" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Pediatric Dentistry
-                </a>
-              </li>
-              <li>
-                <a href="/treatments" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Geriatric Dentistry
-                </a>
-              </li>
-              <li>
-                <a href="/treatments" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> Digital Dentistry
-                </a>
-              </li>
-            </ul>
+            {/* Col 3: Treatments */}
+            <div>
+              <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-4 relative pb-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-7 after:h-0.5 after:bg-mint">
+                Treatments
+              </h4>
+              <ul className="space-y-2 text-xs sm:text-sm text-[#9cbdb4]">
+                <li>
+                  <a href="/treatments" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>General Dentistry</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/treatments" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Dental Implants</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/treatments" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Cosmetic Dentistry</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/treatments" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Braces &amp; Aligners</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/treatments" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Pediatric Dentistry</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/treatments" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Geriatric Dentistry</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/treatments" className="hover:text-mint transition-colors flex items-start gap-1.5 leading-snug">
+                    <ChevronRight className="w-3.5 h-3.5 text-mint shrink-0 mt-0.5" />
+                    <span>Digital Dentistry</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* Col 4: Working Hours */}
