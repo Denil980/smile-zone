@@ -94,7 +94,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="/about" className="hover:text-mint transition-colors flex items-center gap-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> About Us (Overview)
+                  <ChevronRight className="w-3.5 h-3.5 text-mint" /> About Us
                 </a>
               </li>
               <li>
