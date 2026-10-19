@@ -157,6 +157,7 @@ function initAppointmentForms() {
       const email = form.querySelector('[name="email"]')?.value;
       const date = form.querySelector('[name="date"]')?.value;
       const time = form.querySelector('[name="time"]')?.value;
+      const message = form.querySelector('[name="message"]')?.value;
       const sendCopy = form.querySelector('[name="send_copy"]')?.checked;
 
       if (!name || !phone) {
@@ -175,6 +176,7 @@ function initAppointmentForms() {
             <p><strong>Contact:</strong> ${escapeHtml(phone)} ${email ? `(${escapeHtml(email)})` : ''}</p>
             <p><strong>Treatment:</strong> ${treatment ? escapeHtml(treatment) : 'General Consultation'}</p>
             <p><strong>Date & Time:</strong> ${date || 'Preferred Slot'} at ${time || '10:00 AM'}</p>
+            ${message ? `<p><strong>Notes / Concerns:</strong> ${escapeHtml(message)}</p>` : ''}
             <p style="margin-top: 10px; font-size: 0.85rem; color: #a3c2b9;">
               Dr. Lajja Kamdar's desk will call you to confirm your slot within 30 minutes.
             </p>
