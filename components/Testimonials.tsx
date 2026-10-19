@@ -63,7 +63,13 @@ export default function Testimonials() {
     if (!el) return;
 
     const initScroll = () => {
-      const singleSetWidth = el.scrollWidth / 3;
+      const firstCard = el.querySelector<HTMLElement>(":scope > div");
+      const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
+      const style = window.getComputedStyle(el);
+      const gap = parseFloat(style.columnGap || style.gap) || 16;
+      const step = cardWidth + gap;
+      const singleSetWidth = step * testimonials.length;
+
       if (singleSetWidth > 0 && el.scrollLeft === 0) {
         el.scrollLeft = singleSetWidth;
       }
@@ -71,14 +77,31 @@ export default function Testimonials() {
 
     initScroll();
     const timer = setTimeout(initScroll, 120);
-    return () => clearTimeout(timer);
-  }, []);
+
+    const handleResize = () => {
+      const firstCard = el.querySelector<HTMLElement>(":scope > div");
+      const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
+      const style = window.getComputedStyle(el);
+      const gap = parseFloat(style.columnGap || style.gap) || 16;
+      const step = cardWidth + gap;
+      if (step > 0) {
+        const nearestIndex = Math.round(el.scrollLeft / step);
+        el.scrollLeft = nearestIndex * step;
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [testimonials.length]);
 
   // Very slow, smooth horizontal auto-scroll ticker
   useEffect(() => {
     let animationFrameId: number;
     let lastTime: number | null = null;
-    // Ultra-slow speed: ~24 pixels/sec (very relaxed, gentle, taking ~15 seconds per card)
+    // Ultra-slow speed: ~24 pixels/sec (very relaxed, gentle)
     const SPEED_PIXELS_PER_SEC = 24;
 
     const step = (time: number) => {
@@ -88,7 +111,12 @@ export default function Testimonials() {
 
       if (!isPaused && scrollRef.current) {
         const el = scrollRef.current;
-        const singleSetWidth = el.scrollWidth / 3;
+        const firstCard = el.querySelector<HTMLElement>(":scope > div");
+        const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
+        const style = window.getComputedStyle(el);
+        const gap = parseFloat(style.columnGap || style.gap) || 16;
+        const cardStep = cardWidth + gap;
+        const singleSetWidth = cardStep * testimonials.length;
 
         if (singleSetWidth > 0) {
           // If at start, initialize to middle set
@@ -102,7 +130,7 @@ export default function Testimonials() {
           // Seamless infinite wrap-around
           if (el.scrollLeft >= singleSetWidth * 2) {
             el.scrollLeft -= singleSetWidth;
-          } else if (el.scrollLeft <= singleSetWidth * 0.2) {
+          } else if (el.scrollLeft <= singleSetWidth * 0.4) {
             el.scrollLeft += singleSetWidth;
           }
         }
@@ -117,36 +145,54 @@ export default function Testimonials() {
       cancelAnimationFrame(animationFrameId);
       if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
     };
-  }, [isPaused]);
+  }, [isPaused, testimonials.length]);
 
-  const pauseAutoScrollTemporarily = () => {
+  const pauseAutoScrollTemporarily = (duration = 6000) => {
     setIsPaused(true);
     if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
     resumeTimeoutRef.current = setTimeout(() => {
       setIsPaused(false);
-    }, 1500);
+    }, duration);
   };
 
   const scrollLeft = () => {
     if (!scrollRef.current) return;
-    pauseAutoScrollTemporarily();
+    pauseAutoScrollTemporarily(6000);
     const el = scrollRef.current;
-    const singleSetWidth = el.scrollWidth / 3;
-    if (singleSetWidth > 0 && el.scrollLeft - 360 < singleSetWidth * 0.5) {
+    const firstCard = el.querySelector<HTMLElement>(":scope > div");
+    const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
+    const style = window.getComputedStyle(el);
+    const gap = parseFloat(style.columnGap || style.gap) || 16;
+    const step = cardWidth + gap;
+    const singleSetWidth = step * testimonials.length;
+
+    if (singleSetWidth > 0 && el.scrollLeft - step < singleSetWidth * 0.6) {
       el.scrollLeft += singleSetWidth;
     }
-    el.scrollBy({ left: -360, behavior: "smooth" });
+
+    const currentCardIndex = Math.ceil((el.scrollLeft - 8) / step);
+    const targetScroll = Math.max(0, (currentCardIndex - 1) * step);
+    el.scrollTo({ left: targetScroll, behavior: "smooth" });
   };
 
   const scrollRight = () => {
     if (!scrollRef.current) return;
-    pauseAutoScrollTemporarily();
+    pauseAutoScrollTemporarily(6000);
     const el = scrollRef.current;
-    const singleSetWidth = el.scrollWidth / 3;
-    if (singleSetWidth > 0 && el.scrollLeft + 360 > singleSetWidth * 2.5) {
+    const firstCard = el.querySelector<HTMLElement>(":scope > div");
+    const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
+    const style = window.getComputedStyle(el);
+    const gap = parseFloat(style.columnGap || style.gap) || 16;
+    const step = cardWidth + gap;
+    const singleSetWidth = step * testimonials.length;
+
+    if (singleSetWidth > 0 && el.scrollLeft + step > singleSetWidth * 2.4) {
       el.scrollLeft -= singleSetWidth;
     }
-    el.scrollBy({ left: 360, behavior: "smooth" });
+
+    const currentCardIndex = Math.floor((el.scrollLeft + 8) / step);
+    const targetScroll = (currentCardIndex + 1) * step;
+    el.scrollTo({ left: targetScroll, behavior: "smooth" });
   };
 
   return (
@@ -163,7 +209,7 @@ export default function Testimonials() {
 
       <div className="max-w-[1340px] mx-auto px-4 sm:px-6 relative z-10">
         {/* Main Inner Glass Container */}
-        <div className="bg-white/80 backdrop-blur-xl border border-[#E7DFD5] rounded-[32px] sm:rounded-[40px] p-6 sm:p-10 lg:p-12 shadow-none relative overflow-hidden">
+        <div className="bg-white/80 backdrop-blur-xl border border-[#E7DFD5] rounded-[32px] sm:rounded-[40px] p-5 sm:p-10 lg:p-12 shadow-none relative overflow-hidden">
           {/* Top Shimmer Accent */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#00c982]/40 to-transparent opacity-50" />
 
@@ -199,20 +245,28 @@ export default function Testimonials() {
               {/* Navigation Arrows */}
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={scrollLeft}
                   onMouseEnter={() => setIsPaused(true)}
                   onMouseLeave={() => setIsPaused(false)}
-                  aria-label="Previous testimonials"
-                  className="w-10 h-10 rounded-full bg-white border border-[#D5E5DE] text-[#0A261F] flex items-center justify-center hover:bg-[#085442] hover:text-white active:scale-95 transition-all duration-300 cursor-pointer shadow-none"
+                  onTouchEnd={(e) => {
+                    e.currentTarget.blur();
+                  }}
+                  aria-label="Previous testimonial"
+                  className="w-10 h-10 rounded-full bg-white border border-[#D5E5DE] text-[#0A261F] flex items-center justify-center hover:bg-[#085442] hover:text-white hover:border-[#085442] active:scale-90 transition-all duration-200 cursor-pointer shadow-xs select-none"
                 >
                   <ChevronLeft className="w-5 h-5 stroke-[2.4]" />
                 </button>
                 <button
+                  type="button"
                   onClick={scrollRight}
                   onMouseEnter={() => setIsPaused(true)}
                   onMouseLeave={() => setIsPaused(false)}
-                  aria-label="Next testimonials"
-                  className="w-10 h-10 rounded-full bg-white border border-[#D5E5DE] text-[#0A261F] flex items-center justify-center hover:bg-[#085442] hover:text-white active:scale-95 transition-all duration-300 cursor-pointer shadow-none"
+                  onTouchEnd={(e) => {
+                    e.currentTarget.blur();
+                  }}
+                  aria-label="Next testimonial"
+                  className="w-10 h-10 rounded-full bg-white border border-[#D5E5DE] text-[#0A261F] flex items-center justify-center hover:bg-[#085442] hover:text-white hover:border-[#085442] active:scale-90 transition-all duration-200 cursor-pointer shadow-xs select-none"
                 >
                   <ChevronRight className="w-5 h-5 stroke-[2.4]" />
                 </button>
@@ -226,18 +280,15 @@ export default function Testimonials() {
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
             onTouchStart={() => setIsPaused(true)}
-            onTouchEnd={() => {
-              if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
-              resumeTimeoutRef.current = setTimeout(() => setIsPaused(false), 1500);
-            }}
-            className="flex gap-6 overflow-x-auto no-scrollbar pb-4 pt-1"
+            onTouchEnd={() => pauseAutoScrollTemporarily(6000)}
+            className="flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar pb-4 pt-1"
             style={{ scrollBehavior: "auto" }}
           >
             {displayTestimonials.map((t, idx) => (
               <motion.div
                 key={`${t.name}-${idx}`}
                 whileHover={{ y: -6 }}
-                className="group relative bg-white hover:bg-[#FAFDFB] border border-[#E7DFD5] hover:border-[#085442] shadow-none rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 w-[310px] sm:w-[350px] lg:w-[calc(33.333%-16px)] shrink-0 overflow-hidden cursor-pointer"
+                className="group relative bg-white hover:bg-[#FAFDFB] border border-[#E7DFD5] hover:border-[#085442] shadow-none rounded-3xl p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 w-full min-w-full sm:min-w-0 sm:w-[350px] lg:w-[calc(33.333%-16px)] shrink-0 overflow-hidden cursor-pointer"
               >
                 {/* Top Subtle Shimmer Accent on Hover */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#00c982] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
