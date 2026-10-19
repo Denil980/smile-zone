@@ -8,6 +8,8 @@ export default function Testimonials() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
   const [mobileIndex, setMobileIndex] = useState(0);
+  const [desktopIndex, setDesktopIndex] = useState(0);
+  const currentDesktopIndexRef = useRef(0);
   const [direction, setDirection] = useState(1);
   const resumeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -127,6 +129,12 @@ export default function Testimonials() {
       if (singleSetWidth > 0 && el.scrollLeft === 0) {
         el.scrollLeft = singleSetWidth;
       }
+
+      if (step > 0) {
+        const initialIndex = ((Math.round(el.scrollLeft / step) % testimonials.length) + testimonials.length) % testimonials.length;
+        currentDesktopIndexRef.current = initialIndex;
+        setDesktopIndex(initialIndex);
+      }
     };
 
     initScroll();
@@ -142,6 +150,9 @@ export default function Testimonials() {
       if (step > 0) {
         const nearestIndex = Math.round(el.scrollLeft / step);
         el.scrollLeft = nearestIndex * step;
+        const newIndex = ((nearestIndex % testimonials.length) + testimonials.length) % testimonials.length;
+        currentDesktopIndexRef.current = newIndex;
+        setDesktopIndex(newIndex);
       }
     };
 
@@ -183,6 +194,13 @@ export default function Testimonials() {
             } else if (el.scrollLeft <= singleSetWidth * 0.4) {
               el.scrollLeft += singleSetWidth;
             }
+
+            // Keep desktop dots synchronized with the scrolling cards
+            const newIndex = ((Math.round(el.scrollLeft / cardStep) % testimonials.length) + testimonials.length) % testimonials.length;
+            if (newIndex !== currentDesktopIndexRef.current) {
+              currentDesktopIndexRef.current = newIndex;
+              setDesktopIndex(newIndex);
+            }
           }
         }
       }
@@ -197,6 +215,51 @@ export default function Testimonials() {
       if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
     };
   }, [isPaused, testimonials.length]);
+
+  const handleDesktopScroll = () => {
+    const el = scrollRef.current;
+    if (!el || typeof window === "undefined" || window.innerWidth < 1024) return;
+    const firstCard = el.querySelector<HTMLElement>(":scope > div");
+    const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
+    if (cardWidth <= 0) return;
+    const style = window.getComputedStyle(el);
+    const gap = parseFloat(style.columnGap || style.gap) || 24;
+    const cardStep = cardWidth + gap;
+    if (cardStep <= 0) return;
+
+    const newIndex = ((Math.round(el.scrollLeft / cardStep) % testimonials.length) + testimonials.length) % testimonials.length;
+    if (newIndex !== currentDesktopIndexRef.current) {
+      currentDesktopIndexRef.current = newIndex;
+      setDesktopIndex(newIndex);
+    }
+  };
+
+  const handleDesktopDotClick = (targetIdx: number) => {
+    pauseAutoScrollTemporarily(6000);
+    if (!scrollRef.current) return;
+    const el = scrollRef.current;
+    const firstCard = el.querySelector<HTMLElement>(":scope > div");
+    const cardWidth = firstCard ? firstCard.offsetWidth : el.clientWidth;
+    const style = window.getComputedStyle(el);
+    const gap = parseFloat(style.columnGap || style.gap) || 24;
+    const cardStep = cardWidth + gap;
+    const singleSetWidth = cardStep * testimonials.length;
+
+    if (singleSetWidth <= 0) return;
+
+    const currentBase = Math.floor(el.scrollLeft / singleSetWidth) * singleSetWidth;
+    let targetScroll = currentBase + targetIdx * cardStep;
+
+    if (targetScroll < singleSetWidth * 0.6) {
+      targetScroll += singleSetWidth;
+    } else if (targetScroll > singleSetWidth * 2.2) {
+      targetScroll -= singleSetWidth;
+    }
+
+    currentDesktopIndexRef.current = targetIdx;
+    setDesktopIndex(targetIdx);
+    el.scrollTo({ left: targetScroll, behavior: "smooth" });
+  };
 
   const scrollLeftDesktop = () => {
     if (!scrollRef.current || typeof window === "undefined" || window.innerWidth < 1024) return;
@@ -213,8 +276,13 @@ export default function Testimonials() {
     }
 
     const currentCardIndex = Math.ceil((el.scrollLeft - 8) / step);
-    const targetScroll = Math.max(0, (currentCardIndex - 1) * step);
+    const prevCardIndex = currentCardIndex - 1;
+    const targetScroll = Math.max(0, prevCardIndex * step);
     el.scrollTo({ left: targetScroll, behavior: "smooth" });
+
+    const newIndex = ((prevCardIndex % testimonials.length) + testimonials.length) % testimonials.length;
+    currentDesktopIndexRef.current = newIndex;
+    setDesktopIndex(newIndex);
   };
 
   const scrollRightDesktop = () => {
@@ -232,8 +300,13 @@ export default function Testimonials() {
     }
 
     const currentCardIndex = Math.floor((el.scrollLeft + 8) / step);
-    const targetScroll = (currentCardIndex + 1) * step;
+    const nextCardIndex = currentCardIndex + 1;
+    const targetScroll = nextCardIndex * step;
     el.scrollTo({ left: targetScroll, behavior: "smooth" });
+
+    const newIndex = ((nextCardIndex % testimonials.length) + testimonials.length) % testimonials.length;
+    currentDesktopIndexRef.current = newIndex;
+    setDesktopIndex(newIndex);
   };
 
   const handlePrev = () => {
@@ -441,6 +514,7 @@ export default function Testimonials() {
             ref={scrollRef}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
+            onScroll={handleDesktopScroll}
             className="hidden lg:flex gap-6 overflow-x-auto no-scrollbar pb-4 pt-1"
             style={{ scrollBehavior: "auto" }}
           >
@@ -493,6 +567,27 @@ export default function Testimonials() {
                   </p>
                 </div>
               </motion.div>
+            ))}
+          </div>
+
+          {/* Desktop Navigation Dots (>= lg) */}
+          <div
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            className="hidden lg:flex items-center justify-center gap-2 mt-6"
+          >
+            {testimonials.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleDesktopDotClick(idx)}
+                aria-label={`Go to testimonial ${idx + 1}`}
+                className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${
+                  idx === desktopIndex
+                    ? "w-7 bg-[#00A86B]"
+                    : "w-2 bg-[#D5E5DE] hover:bg-[#A3C9B8]"
+                }`}
+              />
             ))}
           </div>
         </div>
