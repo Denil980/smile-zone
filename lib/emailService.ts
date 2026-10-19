@@ -13,6 +13,7 @@ export interface BookingEmailData {
   email?: string;
   date: string;
   time: string;
+  message?: string;
   sendCopy?: boolean;
 }
 
@@ -79,9 +80,16 @@ export async function sendBookingEmail(data: BookingEmailData): Promise<{ succes
       send_copy: data.sendCopy ? "Yes" : "No",
       sms_whatsapp_copy: data.sendCopy ? "Yes" : "No",
 
+      // Custom message / notes aliases
+      custom_message: data.message?.trim() || "None",
+      patient_message: data.message?.trim() || "None",
+      patient_notes: data.message?.trim() || "None",
+      user_message: data.message?.trim() || "None",
+      notes: data.message?.trim() || "None",
+
       // Comprehensive message summaries
-      message: `New Dental Appointment Request Details:\n\n• Patient Name: ${data.name}\n• Phone Number: ${data.phone}\n• Email: ${data.email?.trim() || "Not provided"}\n• Treatment: ${data.treatment}\n• Preferred Date: ${data.date}\n• Preferred Slot: ${data.time}\n• SMS / WhatsApp Confirmation Requested: ${data.sendCopy ? "Yes" : "No"}`,
-      details: `Patient: ${data.name} | Phone: ${data.phone} | Treatment: ${data.treatment} | Date: ${data.date} | Slot: ${data.time}`,
+      message: `New Dental Appointment Request Details:\n\n• Patient Name: ${data.name}\n• Phone Number: ${data.phone}\n• Email: ${data.email?.trim() || "Not provided"}\n• Treatment: ${data.treatment}\n• Preferred Date: ${data.date}\n• Preferred Slot: ${data.time}\n• Custom Message / Notes: ${data.message?.trim() || "None"}\n• SMS / WhatsApp Confirmation Requested: ${data.sendCopy ? "Yes" : "No"}`,
+      details: `Patient: ${data.name} | Phone: ${data.phone} | Treatment: ${data.treatment} | Date: ${data.date} | Slot: ${data.time}${data.message?.trim() ? ` | Message: ${data.message.trim()}` : ""}`,
     };
 
     console.log("[EmailJS] Sending appointment email payload with templateParams:", templateParams);

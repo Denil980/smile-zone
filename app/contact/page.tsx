@@ -15,6 +15,7 @@ import {
   Check,
   Navigation,
   ExternalLink,
+  MessageSquare,
 } from "lucide-react";
 import { sendBookingEmail } from "@/lib/emailService";
 
@@ -179,6 +180,7 @@ export default function ContactPage() {
     email: "",
     date: "",
     time: "",
+    message: "",
     sendCopy: true,
   });
 
@@ -221,6 +223,7 @@ export default function ContactPage() {
       email: "",
       date: "",
       time: "",
+      message: "",
       sendCopy: true,
     });
   };
@@ -422,6 +425,14 @@ export default function ContactPage() {
                         <span className="text-[#6B857D] font-medium">Preferred Slot:</span>
                         <strong className="text-[#0A261F]">{formData.date} ({formData.time.split(" ")[0]})</strong>
                       </div>
+                      {formData.message && (
+                        <div className="flex flex-col border-t border-[#F0EAE1] pt-2 text-left">
+                          <span className="text-[#6B857D] font-medium text-[11px] mb-1">Notes / Message:</span>
+                          <p className="text-[#0A261F] text-xs italic bg-white/70 p-2.5 rounded-xl border border-[#E7DFD5] break-words whitespace-pre-wrap leading-relaxed">
+                            "{formData.message}"
+                          </p>
+                        </div>
+                      )}
                     </div>
 
                     <div className="pt-2">
@@ -537,6 +548,25 @@ export default function ContactPage() {
                             options={timeOptions}
                             placeholder="Select Time Slot"
                             required
+                          />
+                        </div>
+
+                        {/* Custom Message Field */}
+                        <div className="sm:col-span-2">
+                          <div className="flex items-center justify-between mb-1">
+                            <label className="flex items-center gap-1.5 text-[11px] font-bold text-[#047857] uppercase tracking-wider">
+                              <MessageSquare className="w-3.5 h-3.5 text-[#047857]" />
+                              <span>Custom Message</span>
+                              <span className="text-slate-400 font-normal lowercase">(optional)</span>
+                            </label>
+                            <span className="text-[10px] text-slate-400 font-medium">Symptoms, questions or notes</span>
+                          </div>
+                          <textarea
+                            rows={3}
+                            value={formData.message}
+                            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                            placeholder="Describe any dental concerns, tooth pain, symptoms, or notes for the doctor..."
+                            className="w-full bg-[#FAF7F2] hover:bg-white focus:bg-white border border-[#E7DFD5] hover:border-[#047857]/60 focus:border-[#047857] rounded-xl sm:rounded-2xl px-4 py-2.5 text-xs sm:text-sm text-[#0A261F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#047857]/15 transition-all resize-none leading-relaxed"
                           />
                         </div>
                       </div>

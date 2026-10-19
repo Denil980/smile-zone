@@ -26,6 +26,7 @@ export default function Home() {
     email: string;
     date: string;
     time: string;
+    message?: string;
   } | null>(null);
 
   return (

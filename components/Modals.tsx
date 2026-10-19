@@ -16,6 +16,7 @@ interface ModalsProps {
     email: string;
     date: string;
     time: string;
+    message?: string;
   } | null;
   onCloseBooking: () => void;
 }
@@ -238,6 +239,14 @@ export default function Modals({
                         {bookingData.date} ({bookingData.time.split(" ")[0]})
                       </strong>
                     </div>
+                    {bookingData.message && (
+                      <div className="flex flex-col border-t border-[#F0EAE1] pt-2 text-left">
+                        <span className="text-[#6B857D] font-medium text-[11px] mb-1">Notes / Message:</span>
+                        <p className="text-[#0A261F] text-xs italic bg-white/70 p-2.5 rounded-xl border border-[#E7DFD5] break-words whitespace-pre-wrap leading-relaxed">
+                          "{bookingData.message}"
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="pt-2">
