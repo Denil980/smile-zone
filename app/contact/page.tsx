@@ -17,6 +17,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { sendBookingEmail } from "@/lib/emailService";
+import CustomDatePicker from "@/components/CustomDatePicker";
 
 interface CustomSelectOption {
   value: string;
@@ -524,15 +525,14 @@ export default function ContactPage() {
                           <label className="block text-[11px] font-bold text-[#047857] uppercase tracking-wider mb-1">
                             Preferred Date
                           </label>
-                          <input
-                            type="date"
-                            required
-                            min={todayStr}
+                          <CustomDatePicker
                             value={formData.date}
-                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                            className={`w-full bg-[#FAF7F2] hover:bg-white focus:bg-white border border-[#E7DFD5] hover:border-[#047857]/60 focus:border-[#047857] rounded-xl px-4 py-2.5 text-xs sm:text-sm ${
-                              formData.date ? "text-[#0A261F] font-medium" : "text-slate-400 font-normal"
-                            } focus:outline-none focus:ring-2 focus:ring-[#047857]/15 transition-all cursor-pointer`}
+                            onChange={(val) => setFormData({ ...formData, date: val })}
+                            minDate={todayStr}
+                            placeholder="Select Date"
+                            required
+                            align="right"
+                            theme="emerald"
                           />
                         </div>
 

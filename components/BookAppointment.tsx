@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, ArrowRight, ChevronDown, Check, MapPin, Navigation, ExternalLink } from "lucide-react";
 import { sendBookingEmail } from "@/lib/emailService";
+import CustomDatePicker from "@/components/CustomDatePicker";
 
 interface CustomSelectOption {
   value: string;
@@ -322,15 +323,14 @@ export default function BookAppointment({ onSuccess }: BookAppointmentProps) {
                   <label className="block text-[11px] font-bold text-[#085442] uppercase tracking-wider mb-1">
                     Date
                   </label>
-                  <input
-                    type="date"
-                    required
-                    min={todayStr}
+                  <CustomDatePicker
                     value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className={`w-full bg-[#FAF7F2] hover:bg-white focus:bg-white border border-[#E2DDD3] hover:border-[#085442]/60 focus:border-[#085442] rounded-xl px-3.5 py-2.5 text-xs sm:text-sm ${
-                      formData.date ? "text-[#092620] font-medium" : "text-slate-400 font-normal"
-                    } focus:outline-none focus:ring-2 focus:ring-[#085442]/15 hover:shadow-xs transition-all duration-200 cursor-pointer`}
+                    onChange={(val) => setFormData({ ...formData, date: val })}
+                    minDate={todayStr}
+                    placeholder="Select Date"
+                    required
+                    align="right"
+                    theme="deep-emerald"
                   />
                 </div>
 
