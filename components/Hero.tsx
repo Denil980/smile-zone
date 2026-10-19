@@ -163,7 +163,7 @@ export default function Hero({ onOpenVideoModal, onOpenBookingModal }: HeroProps
   return (
     <section
       id="hero"
-      className="relative bg-gradient-to-b from-[#FAF7F2]/80 via-[#F3F8F5]/60 to-[#FAF8F5]/80 text-[#092620] pt-32 sm:pt-40 lg:pt-44 pb-16 sm:pb-24 overflow-hidden"
+      className="relative bg-gradient-to-b from-[#FAF7F2]/80 via-[#F3F8F5]/60 to-[#FAF8F5]/80 text-[#092620] pt-36 sm:pt-48 lg:pt-56 xl:pt-60 pb-16 sm:pb-24 overflow-hidden"
     >
       {/* Ambient Atmospheric Luxury Glow Orbs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
