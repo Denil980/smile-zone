@@ -73,11 +73,11 @@ function CustomSelect({
         }}
         aria-haspopup={disabled ? undefined : "listbox"}
         aria-expanded={disabled ? undefined : isOpen}
-        className={`w-full flex items-center justify-between ${
+        className={`w-full flex items-center justify-between border ${
           disabled
-            ? "bg-[#FAF7F2]/90 border border-[#E7DFD5] cursor-not-allowed select-none"
+            ? "bg-[#FAF7F2]/90 border-[#E7DFD5] cursor-not-allowed select-none"
             : isOpen
-            ? "border-[#047857] ring-2 ring-[#047857]/15 bg-white shadow-sm"
+            ? "bg-white border-[#047857] ring-2 ring-[#047857]/15 shadow-sm"
             : "bg-[#FAF7F2] hover:bg-white focus:bg-white border-[#E7DFD5] hover:border-[#047857]/60 cursor-pointer"
         } rounded-xl px-3.5 py-2.5 text-xs sm:text-sm transition-all duration-200 text-left`}
       >
