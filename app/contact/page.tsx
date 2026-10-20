@@ -16,7 +16,6 @@ import {
   Navigation,
   ExternalLink,
   Send,
-  MessageSquare,
 } from "lucide-react";
 import { sendContactInquiryEmail } from "@/lib/emailService";
 
@@ -438,10 +437,6 @@ export default function ContactPage() {
                 ) : (
                   <>
                     <div className="mb-5 sm:mb-6">
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-[#047857] border border-[#047857]/20 text-xs font-bold uppercase tracking-wider mb-2">
-                        <MessageSquare className="w-3.5 h-3.5 text-[#047857]" />
-                        Get in Touch
-                      </div>
                       <h2 className="text-2xl sm:text-3xl font-black text-[#0A261F] leading-tight tracking-tight">
                         Send Us a Message
                       </h2>
