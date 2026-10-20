@@ -89,12 +89,7 @@ function CustomSelect({
           {selectedOption ? selectedOption.label : placeholder}
         </span>
         {disabled ? (
-          <div className="flex items-center gap-1.5 shrink-0">
-            <span className="hidden sm:inline-flex text-[10px] font-bold text-[#047857] bg-[#EAF6F0] px-2 py-0.5 rounded-full border border-[#C5E5D5] select-none">
-              Auto-Selected
-            </span>
-            <Lock className="w-3.5 h-3.5 text-[#047857]" />
-          </div>
+          <Lock className="w-4 h-4 text-[#047857] shrink-0" />
         ) : (
           <ChevronDown
             className={`w-4 h-4 text-[#047857] shrink-0 transition-transform duration-200 ${
