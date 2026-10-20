@@ -8,6 +8,7 @@ import {
   ChevronDown,
   Check,
   X,
+  Lock,
 } from "lucide-react";
 import { sendBookingEmail } from "@/lib/emailService";
 import CustomDatePicker from "@/components/CustomDatePicker";
@@ -23,6 +24,7 @@ interface CustomSelectProps {
   options: CustomSelectOption[];
   placeholder?: string;
   required?: boolean;
+  disabled?: boolean;
 }
 
 function CustomSelect({
@@ -31,6 +33,7 @@ function CustomSelect({
   options,
   placeholder = "Select an option",
   required = false,
+  disabled = false,
 }: CustomSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -64,86 +67,102 @@ function CustomSelect({
       {/* Trigger Button */}
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        className={`w-full flex items-center justify-between bg-[#FAF7F2] hover:bg-white focus:bg-white border ${
-          isOpen
+        disabled={disabled}
+        onClick={() => {
+          if (!disabled) setIsOpen(!isOpen);
+        }}
+        aria-haspopup={disabled ? undefined : "listbox"}
+        aria-expanded={disabled ? undefined : isOpen}
+        className={`w-full flex items-center justify-between ${
+          disabled
+            ? "bg-[#FAF7F2]/90 border border-[#E7DFD5] cursor-not-allowed select-none"
+            : isOpen
             ? "border-[#047857] ring-2 ring-[#047857]/15 bg-white shadow-sm"
-            : "border-[#E7DFD5] hover:border-[#047857]/60"
-        } rounded-xl px-3.5 py-2.5 text-xs sm:text-sm transition-all duration-200 cursor-pointer text-left`}
+            : "bg-[#FAF7F2] hover:bg-white focus:bg-white border-[#E7DFD5] hover:border-[#047857]/60 cursor-pointer"
+        } rounded-xl px-3.5 py-2.5 text-xs sm:text-sm transition-all duration-200 text-left`}
       >
         <span
           className={`truncate pr-2 ${
-            selectedOption ? "text-[#0A261F] font-medium" : "text-slate-400 font-normal"
+            selectedOption ? "text-[#0A261F] font-semibold" : "text-slate-400 font-normal"
           }`}
         >
           {selectedOption ? selectedOption.label : placeholder}
         </span>
-        <ChevronDown
-          className={`w-4 h-4 text-[#047857] shrink-0 transition-transform duration-200 ${
-            isOpen ? "rotate-180 text-[#047857]" : ""
-          }`}
-        />
+        {disabled ? (
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="hidden sm:inline-flex text-[10px] font-bold text-[#047857] bg-[#EAF6F0] px-2 py-0.5 rounded-full border border-[#C5E5D5] select-none">
+              Auto-Selected
+            </span>
+            <Lock className="w-3.5 h-3.5 text-[#047857]" />
+          </div>
+        ) : (
+          <ChevronDown
+            className={`w-4 h-4 text-[#047857] shrink-0 transition-transform duration-200 ${
+              isOpen ? "rotate-180 text-[#047857]" : ""
+            }`}
+          />
+        )}
       </button>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -6, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -6, scale: 0.98 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            role="listbox"
-            className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-[#E7DFD5] rounded-2xl shadow-luxury-hover p-1.5 max-h-56 overflow-y-auto no-scrollbar"
-          >
-            {/* Blank Placeholder Option */}
-            <button
-              type="button"
-              role="option"
-              aria-selected={!value}
-              onClick={() => {
-                onChange("");
-                setIsOpen(false);
-              }}
-              className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm text-left transition-all duration-150 cursor-pointer my-0.5 ${
-                !value
-                  ? "bg-[#eaf8f1] text-[#047857] font-bold"
-                  : "text-slate-400 hover:bg-[#FAF7F2] hover:text-[#047857] font-normal"
-              }`}
+      {!disabled && (
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -6, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -6, scale: 0.98 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
+              role="listbox"
+              className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-[#E7DFD5] rounded-2xl shadow-luxury-hover p-1.5 max-h-56 overflow-y-auto no-scrollbar"
             >
-              <span className="pr-2 leading-snug">{placeholder}</span>
-              {!value && <Check className="w-4 h-4 text-[#00b070] shrink-0 ml-2" />}
-            </button>
+              {/* Blank Placeholder Option */}
+              <button
+                type="button"
+                role="option"
+                aria-selected={!value}
+                onClick={() => {
+                  onChange("");
+                  setIsOpen(false);
+                }}
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm text-left transition-all duration-150 cursor-pointer my-0.5 ${
+                  !value
+                    ? "bg-[#eaf8f1] text-[#047857] font-bold"
+                    : "text-slate-400 hover:bg-[#FAF7F2] hover:text-[#047857] font-normal"
+                }`}
+              >
+                <span className="pr-2 leading-snug">{placeholder}</span>
+                {!value && <Check className="w-4 h-4 text-[#00b070] shrink-0 ml-2" />}
+              </button>
 
-            {options.map((opt) => {
-              const isSelected = opt.value === value;
-              return (
-                <button
-                  key={opt.value}
-                  type="button"
-                  role="option"
-                  aria-selected={isSelected}
-                  onClick={() => {
-                    onChange(opt.value);
-                    setIsOpen(false);
-                  }}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm text-left transition-all duration-150 cursor-pointer my-0.5 ${
-                    isSelected
-                      ? "bg-[#eaf8f1] text-[#047857] font-bold"
-                      : "text-[#0A261F] hover:bg-[#FAF7F2] hover:text-[#047857] font-medium"
-                  }`}
-                >
-                  <span className="pr-2 leading-snug">{opt.label}</span>
-                  {isSelected && (
-                    <Check className="w-4 h-4 text-[#00b070] shrink-0 ml-2" />
-                  )}
-                </button>
-              );
-            })}
-          </motion.div>
-        )}
-      </AnimatePresence>
+              {options.map((opt) => {
+                const isSelected = opt.value === value;
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    role="option"
+                    aria-selected={isSelected}
+                    onClick={() => {
+                      onChange(opt.value);
+                      setIsOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm text-left transition-all duration-150 cursor-pointer my-0.5 ${
+                      isSelected
+                        ? "bg-[#eaf8f1] text-[#047857] font-bold"
+                        : "text-[#0A261F] hover:bg-[#FAF7F2] hover:text-[#047857] font-medium"
+                    }`}
+                  >
+                    <span className="pr-2 leading-snug">{opt.label}</span>
+                    {isSelected && (
+                      <Check className="w-4 h-4 text-[#00b070] shrink-0 ml-2" />
+                    )}
+                  </button>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
     </div>
   );
 }
@@ -152,6 +171,7 @@ export interface BookingModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialTreatment?: string | null;
+  isTreatmentLocked?: boolean;
   onSuccess?: (bookingData: {
     treatment: string;
     name: string;
@@ -167,8 +187,10 @@ export default function BookingModal({
   isOpen,
   onClose,
   initialTreatment,
+  isTreatmentLocked,
   onSuccess,
 }: BookingModalProps) {
+  const isLocked = isTreatmentLocked ?? Boolean(initialTreatment && initialTreatment.trim() !== "");
   const todayStr = new Date().toISOString().split("T")[0];
 
   const treatmentOptions: CustomSelectOption[] = [
@@ -383,7 +405,7 @@ export default function BookingModal({
                       {/* Select Treatment */}
                       <div className="sm:col-span-2">
                         <label className="block text-[11px] font-bold text-[#047857] uppercase tracking-wider mb-1">
-                          Select Treatment
+                          {isLocked ? "Selected Treatment" : "Select Treatment"}
                         </label>
                         <CustomSelect
                           value={formData.treatment}
@@ -391,6 +413,7 @@ export default function BookingModal({
                           options={treatmentOptions}
                           placeholder="Select Treatment"
                           required
+                          disabled={isLocked}
                         />
                       </div>
 

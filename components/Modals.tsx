@@ -19,6 +19,7 @@ interface ModalsProps {
     message?: string;
   } | null;
   onCloseBooking: () => void;
+  onOpenBookingWithTreatment?: (treatment: string) => void;
 }
 
 export default function Modals({
@@ -28,6 +29,7 @@ export default function Modals({
   onCloseTreatment,
   bookingData,
   onCloseBooking,
+  onOpenBookingWithTreatment,
 }: ModalsProps) {
   const treatmentDetails: Record<string, string> = {
     "General Dentistry":
@@ -150,15 +152,31 @@ export default function Modals({
                 </div>
 
                 <div className="flex items-center gap-2.5 w-full sm:w-auto">
-                  <a
-                    href="#book-appointment"
-                    onClick={onCloseTreatment}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-[#085442] hover:bg-[#0b8064] text-white font-bold text-xs sm:text-sm transition-all shadow-[0_4px_16px_rgba(8,84,66,0.3)] hover:-translate-y-0.5 cursor-pointer shrink-0"
-                  >
-                    <Calendar className="w-4 h-4 text-mint" />
-                    <span>Book This Treatment</span>
-                    <ArrowRight className="w-4 h-4 text-mint" />
-                  </a>
+                  {onOpenBookingWithTreatment ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const tr = selectedTreatment || "General Dentistry";
+                        onCloseTreatment();
+                        onOpenBookingWithTreatment(tr);
+                      }}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-[#085442] hover:bg-[#0b8064] text-white font-bold text-xs sm:text-sm transition-all shadow-[0_4px_16px_rgba(8,84,66,0.3)] hover:-translate-y-0.5 cursor-pointer shrink-0"
+                    >
+                      <Calendar className="w-4 h-4 text-mint" />
+                      <span>Book This Treatment</span>
+                      <ArrowRight className="w-4 h-4 text-mint" />
+                    </button>
+                  ) : (
+                    <a
+                      href="#book-appointment"
+                      onClick={onCloseTreatment}
+                      className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-6 rounded-full bg-[#085442] hover:bg-[#0b8064] text-white font-bold text-xs sm:text-sm transition-all shadow-[0_4px_16px_rgba(8,84,66,0.3)] hover:-translate-y-0.5 cursor-pointer shrink-0"
+                    >
+                      <Calendar className="w-4 h-4 text-mint" />
+                      <span>Book This Treatment</span>
+                      <ArrowRight className="w-4 h-4 text-mint" />
+                    </a>
+                  )}
                   <button
                     onClick={onCloseTreatment}
                     className="p-3 rounded-full bg-white border border-[#d6ebe0] hover:border-[#085442] text-[#085442] hover:bg-[#FAF7F2] transition-all shrink-0 inline-flex items-center justify-center text-xs font-bold"

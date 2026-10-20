@@ -83,6 +83,10 @@ export default function Home() {
         onCloseTreatment={() => setSelectedTreatment(null)}
         bookingData={bookingData}
         onCloseBooking={() => setBookingData(null)}
+        onOpenBookingWithTreatment={(treatment) => {
+          setBookingModalTreatment(treatment);
+          setBookingModalOpen(true);
+        }}
       />
 
       {/* Booking Form Modal Pop-up */}
