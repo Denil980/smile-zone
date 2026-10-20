@@ -102,7 +102,7 @@ function CustomSelect({
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
             role="listbox"
-            className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-[#E7DFD5] rounded-2xl shadow-luxury-hover p-1.5 max-h-64 overflow-y-auto no-scrollbar"
+            className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-[#E7DFD5] rounded-2xl shadow-luxury-hover p-1.5 pr-2 max-h-64 overflow-y-auto custom-dropdown-scrollbar"
           >
             {/* Blank Placeholder Option */}
             <button

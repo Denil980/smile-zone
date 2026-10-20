@@ -75,6 +75,34 @@
   scrollbar-width: none;
 }
 
+/* Luxury Custom Scrollbar for Dropdowns & Popups */
+.custom-dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #047857 #F5EFEB;
+}
+
+.custom-dropdown-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-dropdown-scrollbar::-webkit-scrollbar-track {
+  background: #F5EFEB;
+  border-radius: 9999px;
+  margin: 6px 2px;
+}
+
+.custom-dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background: #047857;
+  border-radius: 9999px;
+  border: 1px solid #FAF7F2;
+}
+
+.custom-dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #00b070;
+}
+
+
 /* Crisp & luminous typewriter cursor blink */
 @keyframes typewriterBlink {
   0%, 45% {

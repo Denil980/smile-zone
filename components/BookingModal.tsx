@@ -108,7 +108,7 @@ function CustomSelect({
               exit={{ opacity: 0, y: -6, scale: 0.98 }}
               transition={{ duration: 0.15, ease: "easeOut" }}
               role="listbox"
-              className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-[#E7DFD5] rounded-2xl shadow-luxury-hover p-1.5 max-h-56 overflow-y-auto no-scrollbar"
+              className="absolute top-full left-0 right-0 mt-2 z-50 bg-white border border-[#E7DFD5] rounded-2xl shadow-luxury-hover p-1.5 pr-2 max-h-56 overflow-y-auto custom-dropdown-scrollbar"
             >
               {/* Blank Placeholder Option */}
               <button
@@ -325,7 +325,7 @@ export default function BookingModal({
             </button>
 
             {/* Form / Confirmation */}
-            <div className="w-full flex-1 min-h-0 p-6 sm:p-7 md:p-8 overflow-y-auto flex flex-col justify-start">
+            <div className="w-full flex-1 min-h-0 p-6 sm:p-7 md:p-8 overflow-y-auto custom-dropdown-scrollbar flex flex-col justify-start">
               {isSubmitted ? (
                 <div className="py-6 sm:py-8 text-center space-y-4">
                   <div className="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-[#00b070] flex items-center justify-center mx-auto text-[#00b070] shadow-[0_0_20px_rgba(0,176,112,0.2)]">

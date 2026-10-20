@@ -132,7 +132,7 @@ export default function Modals({
               </div>
 
               {/* Body */}
-              <div className="flex-1 min-h-0 p-5 sm:p-7 overflow-y-auto space-y-5 text-xs sm:text-sm text-slate-600 bg-white">
+              <div className="flex-1 min-h-0 p-5 sm:p-7 overflow-y-auto custom-dropdown-scrollbar space-y-5 text-xs sm:text-sm text-slate-600 bg-white">
                 <div className="p-4 sm:p-5 rounded-2xl bg-[#fbfdfc] border border-[#e2f1ea] shadow-xs">
                   <p className="text-slate-700 leading-relaxed font-normal text-xs sm:text-sm">
                     {treatmentDetails[selectedTreatment] || treatmentDetails["General Dentistry"]}
@@ -222,7 +222,7 @@ export default function Modals({
               </button>
 
               {/* Confirmation Content */}
-              <div className="w-full flex-1 min-h-0 p-6 sm:p-7 md:p-8 overflow-y-auto flex flex-col justify-start">
+              <div className="w-full flex-1 min-h-0 p-6 sm:p-7 md:p-8 overflow-y-auto custom-dropdown-scrollbar flex flex-col justify-start">
                 <div className="py-6 sm:py-8 text-center space-y-4">
                   <div className="w-16 h-16 rounded-full bg-emerald-500/10 border-2 border-[#00b070] flex items-center justify-center mx-auto text-[#00b070] shadow-[0_0_20px_rgba(0,176,112,0.2)]">
                     <Check className="w-8 h-8 stroke-[2.5]" />

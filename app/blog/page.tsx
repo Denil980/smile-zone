@@ -493,7 +493,7 @@ export default function BlogPage() {
               </div>
 
               {/* 2. MODAL BODY (Scrollable) */}
-              <div className="flex-1 min-h-0 p-5 sm:p-7 overflow-y-auto space-y-6 text-xs sm:text-sm text-slate-600 bg-white">
+              <div className="flex-1 min-h-0 p-5 sm:p-7 overflow-y-auto custom-dropdown-scrollbar space-y-6 text-xs sm:text-sm text-slate-600 bg-white">
                 {/* Article Image showcase matching Treatments photo display */}
                 <div className="flex justify-center">
                   <div className="relative w-52 h-52 sm:w-64 sm:h-64 rounded-2xl overflow-hidden border border-[#d6ebe0] shadow-md bg-[#f4faf7] p-3 flex items-center justify-center">
