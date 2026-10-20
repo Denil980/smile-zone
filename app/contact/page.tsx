@@ -456,7 +456,7 @@ export default function ContactPage() {
                             value={formData.inquiryRegarding}
                             onChange={(val) => setFormData({ ...formData, inquiryRegarding: val })}
                             options={inquiryOptions}
-                            placeholder="Select category (Doctor, Hospital, Clinic, Appointment, General Inquiry)"
+                            placeholder="Select category"
                             required
                           />
                         </div>
