@@ -108,3 +108,81 @@ export async function sendBookingEmail(data: BookingEmailData): Promise<{ succes
     return { success: false, error: error?.text || error?.message || error };
   }
 }
+
+export interface ContactInquiryData {
+  name: string;
+  phone: string;
+  email?: string;
+  inquiryRegarding: string;
+  message?: string;
+}
+
+/**
+ * Sends general contact inquiry from the Contact page to the clinic via EmailJS.
+ */
+export async function sendContactInquiryEmail(data: ContactInquiryData): Promise<{ success: boolean; status?: number; text?: string; error?: any }> {
+  try {
+    const templateParams: Record<string, any> = {
+      // Patient Name aliases
+      name: data.name,
+      from_name: data.name,
+      user_name: data.name,
+      patient_name: data.name,
+
+      // Phone aliases
+      phone: data.phone,
+      user_phone: data.phone,
+      phone_number: data.phone,
+      contact_number: data.phone,
+
+      // Clinic recipient email (ensures routing to clinic email)
+      to_email: "iamdenildaby@gmail.com",
+      recipient_email: "iamdenildaby@gmail.com",
+      receiver_email: "iamdenildaby@gmail.com",
+      clinic_email: "iamdenildaby@gmail.com",
+      admin_email: "iamdenildaby@gmail.com",
+      to: "iamdenildaby@gmail.com",
+      to_name: "SmileZone Dental Studio",
+
+      // Patient email & reply-to aliases
+      patient_email: data.email?.trim() || "Not provided",
+      email: data.email?.trim() || "iamdenildaby@gmail.com",
+      from_email: data.email?.trim() || "iamdenildaby@gmail.com",
+      user_email: data.email?.trim() || "Not provided",
+      reply_to: data.email?.trim() || "iamdenildaby@gmail.com",
+
+      // Inquiry topic aliases
+      inquiry_regarding: data.inquiryRegarding,
+      inquiry: data.inquiryRegarding,
+      treatment: `Inquiry Regarding: ${data.inquiryRegarding}`,
+      service: `Inquiry Regarding: ${data.inquiryRegarding}`,
+      subject: `New Inquiry Regarding ${data.inquiryRegarding} - ${data.name}`,
+
+      // Custom message aliases
+      custom_message: data.message?.trim() || "None",
+      patient_message: data.message?.trim() || "None",
+      user_message: data.message?.trim() || "None",
+      notes: data.message?.trim() || "None",
+
+      // Formatted summaries
+      message: `New Patient Inquiry Received:\n\n• Patient Name: ${data.name}\n• Phone Number: ${data.phone}\n• Email: ${data.email?.trim() || "Not provided"}\n• Inquiry Regarding: ${data.inquiryRegarding}\n• Message / Details: ${data.message?.trim() || "None"}`,
+      details: `Patient: ${data.name} | Phone: ${data.phone} | Regarding: ${data.inquiryRegarding}${data.message?.trim() ? ` | Message: ${data.message.trim()}` : ""}`,
+    };
+
+    console.log("[EmailJS] Sending contact inquiry email payload:", templateParams);
+
+    const response = await emailjs.send(
+      EMAILJS_CONFIG.serviceId,
+      EMAILJS_CONFIG.templateId,
+      templateParams,
+      EMAILJS_CONFIG.publicKey
+    );
+
+    console.log("[EmailJS] Send success response:", response.status, response.text);
+    return { success: response.status === 200, status: response.status, text: response.text };
+  } catch (error: any) {
+    console.error("[EmailJS] Send failure:", error);
+    return { success: false, error: error?.text || error?.message || error };
+  }
+}
+

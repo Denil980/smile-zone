@@ -4,20 +4,21 @@ import React, { useState, useRef, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageHeader from "@/components/PageHeader";
+import BookingModal from "@/components/BookingModal";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   MapPin,
   Phone,
   Clock,
-  Calendar,
   ArrowRight,
   ChevronDown,
   Check,
   Navigation,
   ExternalLink,
+  Send,
+  MessageSquare,
 } from "lucide-react";
-import { sendBookingEmail } from "@/lib/emailService";
-import CustomDatePicker from "@/components/CustomDatePicker";
+import { sendContactInquiryEmail } from "@/lib/emailService";
 
 interface CustomSelectOption {
   value: string;
@@ -78,11 +79,11 @@ function CustomSelect({
           isOpen
             ? "border-[#047857] ring-2 ring-[#047857]/15 bg-white shadow-sm"
             : "border-[#E7DFD5] hover:border-[#047857]/60"
-        } rounded-xl px-4 py-3 text-xs sm:text-sm transition-all duration-200 cursor-pointer text-left`}
+        } rounded-xl px-4 py-2.5 text-xs sm:text-sm transition-all duration-200 cursor-pointer text-left`}
       >
         <span
           className={`truncate pr-2 ${
-            selectedOption ? "text-[#0A261F] font-medium" : "text-slate-400 font-normal"
+            selectedOption ? "text-[#0A261F] font-semibold" : "text-slate-400 font-normal"
           }`}
         >
           {selectedOption ? selectedOption.label : placeholder}
@@ -113,7 +114,7 @@ function CustomSelect({
                 onChange("");
                 setIsOpen(false);
               }}
-              className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-left transition-all duration-150 cursor-pointer my-0.5 ${
+              className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs sm:text-sm text-left transition-all duration-150 cursor-pointer my-0.5 ${
                 !value
                   ? "bg-[#eaf8f1] text-[#047857] font-bold"
                   : "text-slate-400 hover:bg-[#FAF7F2] hover:text-[#047857] font-normal"
@@ -135,7 +136,7 @@ function CustomSelect({
                     onChange(opt.value);
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-sm text-left transition-all duration-150 cursor-pointer my-0.5 ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs sm:text-sm text-left transition-all duration-150 cursor-pointer my-0.5 ${
                     isSelected
                       ? "bg-[#eaf8f1] text-[#047857] font-bold"
                       : "text-[#0A261F] hover:bg-[#FAF7F2] hover:text-[#047857] font-medium"
@@ -156,32 +157,22 @@ function CustomSelect({
 }
 
 export default function ContactPage() {
-  const todayStr = new Date().toISOString().split("T")[0];
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
 
-  const treatmentOptions: CustomSelectOption[] = [
-    { value: "General Dentistry", label: "General Dentistry (Root Canal, Cleaning, Fillings)" },
-    { value: "Dental Implants", label: "Dental Implants" },
-    { value: "Cosmetic Dentistry", label: "Cosmetic Dentistry (Veneers, Whitening)" },
-    { value: "Braces & Aligners", label: "Braces & Aligners" },
-    { value: "Geriatric Dentistry", label: "Geriatric Dentistry (Dentures)" },
-    { value: "Pediatric Dentistry", label: "Pediatric Dentistry (Kids Care)" },
-    { value: "Digital Dentistry", label: "Digital Dentistry (3D Scanning & Design)" },
-  ];
-
-  const timeOptions: CustomSelectOption[] = [
-    { value: "Morning Slot (9:00 AM - 1:00 PM)", label: "Morning Slot (9:00 AM - 1:00 PM)" },
-    { value: "Evening Slot (5:00 PM - 9:00 PM)", label: "Evening Slot (5:00 PM - 9:00 PM)" },
+  const inquiryOptions: CustomSelectOption[] = [
+    { value: "Doctor", label: "Doctor" },
+    { value: "Hospital", label: "Hospital" },
+    { value: "Clinic", label: "Clinic" },
+    { value: "Appointment", label: "Appointment" },
+    { value: "General Inquiry", label: "General Inquiry" },
   ];
 
   const [formData, setFormData] = useState({
-    treatment: "",
     name: "",
     phone: "",
     email: "",
-    date: "",
-    time: "",
+    inquiryRegarding: "",
     message: "",
-    sendCopy: true,
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -190,24 +181,24 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone || !formData.treatment || !formData.date || !formData.time) return;
+    if (!formData.name.trim() || !formData.phone.trim() || !formData.inquiryRegarding) return;
 
     setIsSubmitting(true);
     setSubmitError("");
     try {
-      const res = await sendBookingEmail(formData);
+      const res = await sendContactInquiryEmail(formData);
       if (!res.success) {
         setSubmitError(
           typeof res.error === "string"
             ? `Email sending failed: ${res.error}`
-            : "Could not send booking email via EmailJS. Please check your EmailJS service or connection."
+            : "Could not send inquiry via EmailJS. Please check your connection or contact us directly."
         );
         return;
       }
       setIsSubmitted(true);
     } catch (err: any) {
-      console.error("Booking email dispatch failed:", err);
-      setSubmitError("Failed to send booking. Please try again.");
+      console.error("Contact inquiry dispatch failed:", err);
+      setSubmitError("Failed to submit inquiry. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -217,14 +208,11 @@ export default function ContactPage() {
     setIsSubmitted(false);
     setSubmitError("");
     setFormData({
-      treatment: "",
       name: "",
       phone: "",
       email: "",
-      date: "",
-      time: "",
+      inquiryRegarding: "",
       message: "",
-      sendCopy: true,
     });
   };
 
@@ -238,7 +226,7 @@ export default function ContactPage() {
       </div>
 
       {/* Floating Global Navbar */}
-      <Navbar />
+      <Navbar onOpenBookingModal={() => setBookingModalOpen(true)} />
 
       <main className="relative z-10">
         {/* Page Header Section */}
@@ -246,7 +234,7 @@ export default function ContactPage() {
           currentPage="Contact"
           title="Contact SmileZone"
           highlightWord="SmileZone"
-          description="Get in touch with SmileZone Dental Studio in Tilak Nagar, Chembur. Find clinic directions, consulting hours, phone numbers, or schedule your dental appointment."
+          description="Get in touch with SmileZone Dental Studio in Tilak Nagar, Chembur. Find clinic directions, consulting hours, phone numbers, or send an inquiry to our team."
         />
 
         {/* ========================================================= */}
@@ -384,9 +372,9 @@ export default function ContactPage() {
         </section>
 
         {/* ========================================================= */}
-        {/* INLINE APPOINTMENT BOOKING FORM                           */}
+        {/* CONTACT / INQUIRY FORM                                    */}
         {/* ========================================================= */}
-        <section id="book-form" className="py-12 sm:py-16">
+        <section id="contact-form" className="py-12 sm:py-16">
           <div className="max-w-[1240px] mx-auto px-4 sm:px-6">
             <div className="bg-white/95 backdrop-blur-md border border-[#E7DFD5] hover:border-[#085442] rounded-[32px] sm:rounded-[36px] overflow-hidden shadow-luxury hover:shadow-[0_16px_40px_rgba(8,84,66,0.08)] grid grid-cols-1 lg:grid-cols-2 items-stretch transition-all duration-300">
               
@@ -400,36 +388,38 @@ export default function ContactPage() {
 
                     <div>
                       <h3 className="text-2xl font-black text-[#0A261F] tracking-tight">
-                        Appointment Requested!
+                        Inquiry Submitted Successfully!
                       </h3>
                       <p className="text-xs sm:text-sm text-[#4A635B] mt-1 max-w-sm mx-auto">
-                        Thank you for choosing SmileZone Dental Studio. Our team will contact you shortly to confirm your slot.
+                        Thank you for reaching out to SmileZone Dental Studio. Our clinic team will review your inquiry and get back to you shortly.
                       </p>
                     </div>
 
                     {/* Summary Box */}
                     <div className="bg-[#FAF7F2] border border-[#E7DFD5] rounded-2xl p-4 sm:p-5 text-left text-xs space-y-2.5 max-w-md mx-auto">
                       <div className="flex items-center justify-between border-b border-[#F0EAE1] pb-2">
-                        <span className="text-[#6B857D] font-medium">Patient:</span>
+                        <span className="text-[#6B857D] font-medium">Patient Name:</span>
                         <strong className="text-[#0A261F]">{formData.name}</strong>
                       </div>
                       <div className="flex items-center justify-between border-b border-[#F0EAE1] pb-2">
                         <span className="text-[#6B857D] font-medium">Phone:</span>
                         <strong className="text-[#0A261F]">{formData.phone}</strong>
                       </div>
+                      {formData.email && (
+                        <div className="flex items-center justify-between border-b border-[#F0EAE1] pb-2">
+                          <span className="text-[#6B857D] font-medium">Email:</span>
+                          <strong className="text-[#0A261F]">{formData.email}</strong>
+                        </div>
+                      )}
                       <div className="flex items-center justify-between border-b border-[#F0EAE1] pb-2">
-                        <span className="text-[#6B857D] font-medium">Treatment:</span>
-                        <strong className="text-[#047857]">{formData.treatment}</strong>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#6B857D] font-medium">Preferred Slot:</span>
-                        <strong className="text-[#0A261F]">{formData.date} ({formData.time.split(" ")[0]})</strong>
+                        <span className="text-[#6B857D] font-medium">Inquiry Regarding:</span>
+                        <strong className="text-[#047857]">{formData.inquiryRegarding}</strong>
                       </div>
                       {formData.message && (
-                        <div className="flex flex-col border-t border-[#F0EAE1] pt-2 text-left">
-                          <span className="text-[#6B857D] font-medium text-[11px] mb-1">Notes / Message:</span>
+                        <div className="flex flex-col pt-1 text-left">
+                          <span className="text-[#6B857D] font-medium text-[11px] mb-1">Message:</span>
                           <p className="text-[#0A261F] text-xs italic bg-white/70 p-2.5 rounded-xl border border-[#E7DFD5] break-words whitespace-pre-wrap leading-relaxed">
-                            "{formData.message}"
+                            &ldquo;{formData.message}&rdquo;
                           </p>
                         </div>
                       )}
@@ -441,7 +431,7 @@ export default function ContactPage() {
                         onClick={handleReset}
                         className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] hover:shadow-[0_8px_24px_rgba(0,201,130,0.35)] text-white font-bold text-xs sm:text-sm transition-all cursor-pointer"
                       >
-                        <span>Book Another Appointment</span>
+                        <span>Submit Another Inquiry</span>
                       </button>
                     </div>
                   </div>
@@ -449,37 +439,37 @@ export default function ContactPage() {
                   <>
                     <div className="mb-5 sm:mb-6">
                       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-[#047857] border border-[#047857]/20 text-xs font-bold uppercase tracking-wider mb-2">
-                        <Calendar className="w-3.5 h-3.5 text-[#047857]" />
-                        Schedule Consultation
+                        <MessageSquare className="w-3.5 h-3.5 text-[#047857]" />
+                        Get in Touch
                       </div>
                       <h2 className="text-2xl sm:text-3xl font-black text-[#0A261F] leading-tight tracking-tight">
-                        Book Your Visit with Dr. Lajja Kamdar
+                        Send Us a Message
                       </h2>
                       <p className="text-xs sm:text-sm text-[#4A635B] mt-1">
-                        Fill in your details and preferred slot. We will confirm your timing promptly.
+                        Have a question, inquiry, or need information? Fill out the form below and our team will get back to you promptly.
                       </p>
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-3.5">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                        {/* Select Treatment */}
+                        {/* What is your inquiry regarding? */}
                         <div className="sm:col-span-2">
                           <label className="block text-[11px] font-bold text-[#047857] uppercase tracking-wider mb-1">
-                            Select Treatment
+                            What is your inquiry regarding?
                           </label>
                           <CustomSelect
-                            value={formData.treatment}
-                            onChange={(val) => setFormData({ ...formData, treatment: val })}
-                            options={treatmentOptions}
-                            placeholder="Select Treatment"
+                            value={formData.inquiryRegarding}
+                            onChange={(val) => setFormData({ ...formData, inquiryRegarding: val })}
+                            options={inquiryOptions}
+                            placeholder="Select category (Doctor, Hospital, Clinic, Appointment, General Inquiry)"
                             required
                           />
                         </div>
 
-                        {/* Name */}
+                        {/* Patient Name */}
                         <div>
                           <label className="block text-[11px] font-bold text-[#047857] uppercase tracking-wider mb-1">
-                            Your Name
+                            Patient Name
                           </label>
                           <input
                             type="text"
@@ -491,7 +481,7 @@ export default function ContactPage() {
                           />
                         </div>
 
-                        {/* Phone */}
+                        {/* Phone Number */}
                         <div>
                           <label className="block text-[11px] font-bold text-[#047857] uppercase tracking-wider mb-1">
                             Phone Number
@@ -506,75 +496,34 @@ export default function ContactPage() {
                           />
                         </div>
 
-                        {/* Email */}
-                        <div>
+                        {/* Email Address */}
+                        <div className="sm:col-span-2">
                           <label className="block text-[11px] font-bold text-[#047857] uppercase tracking-wider mb-1">
-                            Email Address
+                            Email Address <span className="text-slate-400 font-normal lowercase">(optional)</span>
                           </label>
                           <input
                             type="email"
-                            placeholder="Enter your email"
+                            placeholder="Enter your email address"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             className="w-full bg-[#FAF7F2] hover:bg-white focus:bg-white border border-[#E7DFD5] hover:border-[#047857]/60 focus:border-[#047857] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-[#0A261F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#047857]/15 transition-all"
                           />
                         </div>
 
-                        {/* Date */}
-                        <div>
-                          <label className="block text-[11px] font-bold text-[#047857] uppercase tracking-wider mb-1">
-                            Preferred Date
-                          </label>
-                          <CustomDatePicker
-                            value={formData.date}
-                            onChange={(val) => setFormData({ ...formData, date: val })}
-                            minDate={todayStr}
-                            placeholder="Select Date"
-                            required
-                            align="right"
-                            theme="emerald"
-                          />
-                        </div>
-
-                        {/* Time Slot */}
+                        {/* Message / Custom Textbox */}
                         <div className="sm:col-span-2">
                           <label className="block text-[11px] font-bold text-[#047857] uppercase tracking-wider mb-1">
-                            Preferred Time Slot
+                            Your Message / What You&apos;d Like to Talk About
                           </label>
-                          <CustomSelect
-                            value={formData.time}
-                            onChange={(val) => setFormData({ ...formData, time: val })}
-                            options={timeOptions}
-                            placeholder="Select Time Slot"
-                            required
-                          />
-                        </div>
-
-                        {/* Message / Concerns Input Box */}
-                        <div className="sm:col-span-2">
-                          <label className="block text-[11px] font-bold text-[#047857] uppercase tracking-wider mb-1">
-                            Message / Concerns <span className="text-slate-400 font-normal lowercase">(optional)</span>
-                          </label>
-                          <input
-                            type="text"
-                            placeholder="Type your message, concerns, or anything you'd like to share..."
+                          <textarea
+                            rows={3}
+                            placeholder="Type what you want to talk about or inform us (in two to three sentences)..."
                             value={formData.message}
                             onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                            className="w-full bg-[#FAF7F2] hover:bg-white focus:bg-white border border-[#E7DFD5] hover:border-[#047857]/60 focus:border-[#047857] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-[#0A261F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#047857]/15 transition-all"
+                            className="w-full bg-[#FAF7F2] hover:bg-white focus:bg-white border border-[#E7DFD5] hover:border-[#047857]/60 focus:border-[#047857] rounded-xl px-4 py-2.5 text-xs sm:text-sm text-[#0A261F] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#047857]/15 transition-all resize-none leading-relaxed"
                           />
                         </div>
                       </div>
-
-                      {/* Checkbox */}
-                      <label className="flex items-center gap-2 pt-1 cursor-pointer text-xs text-[#4A635B] hover:text-[#047857] select-none transition-colors">
-                        <input
-                          type="checkbox"
-                          checked={formData.sendCopy}
-                          onChange={(e) => setFormData({ ...formData, sendCopy: e.target.checked })}
-                          className="rounded text-[#00b070] focus:ring-[#00b070] accent-[#00b070] w-4 h-4 cursor-pointer"
-                        />
-                        <span>Send me confirmation copy via SMS / WhatsApp</span>
-                      </label>
 
                       {/* Error Notice */}
                       {submitError && (
@@ -590,9 +539,9 @@ export default function ContactPage() {
                           disabled={isSubmitting}
                           className="relative overflow-hidden group bg-gradient-to-r from-[#00c982] via-[#00b070] to-[#047857] text-white font-bold px-8 py-3.5 rounded-full flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(0,176,112,0.25)] hover:shadow-[0_10px_28px_rgba(0,201,130,0.45)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300 text-xs sm:text-sm cursor-pointer w-full sm:w-auto disabled:opacity-80 disabled:cursor-not-allowed"
                         >
-                          <Calendar className="w-4 h-4 text-white" />
+                          <Send className="w-4 h-4 text-white" />
                           <span>
-                            {isSubmitting ? "Confirming Appointment..." : "Confirm Appointment Request"}
+                            {isSubmitting ? "Submitting Inquiry..." : "Submit Inquiry"}
                           </span>
                           {!isSubmitting && (
                             <ArrowRight className="w-4 h-4 text-white group-hover:translate-x-1 transition-transform" />
@@ -649,17 +598,17 @@ export default function ContactPage() {
                 </a>
               </div>
 
-              {/* Map Iframe */}
-              <div className="relative w-full h-[360px] sm:h-[440px] bg-[#FAF8F5]">
+              {/* Map Embed Frame */}
+              <div className="relative w-full h-[400px] sm:h-[480px] bg-slate-100">
                 <iframe
-                  src="https://maps.google.com/maps?q=SmileZone+Dental+Studio,+Shop+No.+14,+Building+No.+83,+Sindhoo+CHS,+Sainath+Mandir+Chowk,+Chembur+West,+Tilak+Nagar,+Chembur,+Mumbai,+Maharashtra+400089&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                  title="SmileZone Dental Studio Tilak Nagar Chembur Location Map"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3770.8225574347596!2d72.89443997596568!3d19.070736382132644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c89dc14b5451%3A0x7c5b10c1e51e5905!2sSmileZone%20Dental%20Studio!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
-                  allowFullScreen={false}
+                  allowFullScreen
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="SmileZone Dental Studio Google Map Location"
                   className="w-full h-full filter saturate-[1.05] contrast-[1.02]"
                 />
               </div>
@@ -668,6 +617,13 @@ export default function ContactPage() {
         </section>
       </main>
 
+      {/* Booking Form Modal Pop-up (for Navbar button) */}
+      <BookingModal
+        isOpen={bookingModalOpen}
+        onClose={() => setBookingModalOpen(false)}
+      />
+
+      {/* Clinic Footer */}
       <Footer />
     </div>
   );
